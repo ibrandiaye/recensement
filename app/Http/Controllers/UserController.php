@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Repositories\ArrondissementRepository;
 use App\Repositories\DepartementRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
@@ -13,10 +14,13 @@ class UserController extends Controller
 {
     protected $userRepository;
     protected $departementRepository;
+    protected $arrondissementRepository;
 
-    public function __construct(UserRepository $userRepository, DepartementRepository $departementRepository){
+    public function __construct(UserRepository $userRepository, DepartementRepository $departementRepository,
+    ArrondissementRepository $arrondissementRepository){
         $this->userRepository =$userRepository;
         $this->departementRepository = $departementRepository;
+        $this->arrondissementRepository =$arrondissementRepository;
     }
 
     /**
@@ -72,7 +76,9 @@ class UserController extends Controller
          
             'password' => Hash::make($request['password']),
             'role'=>$request['role'],
-            'departement_id'=>$request['departement_id']
+            'departement_id'=>$request['departement_id'],
+            'arrondissement_id'=>$request['arrondissement_id']
+
         ]);
         return redirect('user');
 

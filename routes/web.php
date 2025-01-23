@@ -5,7 +5,9 @@ use App\Http\Controllers\CarteController;
 use App\Http\Controllers\CentrevoteController;
 use App\Http\Controllers\ChangementController;
 use App\Http\Controllers\CommuneController;
+use App\Http\Controllers\ComptageController;
 use App\Http\Controllers\DepartementController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IdentificationController;
 use App\Http\Controllers\InscriptionController;
 use App\Http\Controllers\ModificationController;
@@ -24,10 +26,10 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-})->middleware(['auth']);
+Route::get('/', [HomeController::class,'index'])->middleware(['auth']);
+/* Route::get('/', function () {
+    return view('home');
+})->middleware(['auth']); */
 Route::resource('region', RegionController::class)->middleware(['auth']);
 Route::resource('departement', DepartementController::class)->middleware(['auth']);
 Route::resource('arrondissement', ArrondissementController::class)->middleware(['auth']);
@@ -41,6 +43,7 @@ Route::resource('inscription', InscriptionController::class)->middleware(['auth'
 Route::resource('modification', ModificationController::class)->middleware(['auth']);
 Route::resource('radiation', RadiationController::class)->middleware(['auth']);
 Route::resource('changement', ChangementController::class)->middleware(['auth']);
+Route::resource('comptage', ComptageController::class)->middleware(['auth']);
 
 Route::get('/modifier/motdepasse',[UserController::class,'modifierMotDePasse'])->name("modifier.motdepasse")->middleware(['auth']);
 Route::post('/importer/region',[RegionController::class,'importExcel'])->name("importer.region")->middleware(['auth']);//->middleware(['auth', 'admin', 'checkMaxSessions']);
@@ -65,3 +68,9 @@ Route::get('/centrevote/by/commune/{commune}',[CentrevoteController::class,'getB
 
 Route::get('/commune/by/arrondissement/{arrondissement}',[CommuneController::class,'getByArrondissement'])->name('rts.national.departement')->middleware("auth");
 Route::get('/arrondissement/by/departement/{departement}',[ArrondissementController::class,'getByDepartement'])->name('rts.national.departement')->middleware("auth");
+Route::get('/bordereau', function () {
+    $comptage = null;
+    return view('comptage.bordereau',compact("comptage"));
+})->middleware(['auth']);
+
+Route::get('/stat/by/commune/{commune}',[HomeController::class,'statByCommune'])->middleware("auth");

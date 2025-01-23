@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\ComptageRepository;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -11,9 +12,12 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
+
+    protected $comptageRepository; 
+    public function __construct(ComptageRepository $comptageRepository)
     {
         $this->middleware('auth');
+        $this->comptageRepository = $comptageRepository;
     }
 
     /**
@@ -23,6 +27,19 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $inscription = $this->comptageRepository->nbGroupByInscription();
+        $modification = $this->comptageRepository->nbGroupByModification();
+
+        $changement = $this->comptageRepository->nbGroupByChangement();
+
+        $radiation = $this->comptageRepository->nbGroupRadiation();
+
+        return view('home',compact("inscription","modification","changement","radiation"));
+    }
+
+    public function statByCommune($commune)
+    {
+       $data = $this->comptageRepository->getById($commune);
+        return response()->json($data);
     }
 }

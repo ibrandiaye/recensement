@@ -119,7 +119,14 @@
                         <ul class="metismenu" id="side-menu">
 
                             <li class="menu-title">Menu</li>
-
+                            <li>
+                                <a href="{{ route('home') }}" class="waves-effect waves-light">
+                                    <i class="mdi mdi-gauge"></i>
+                                    <span> Tableau de bords </span>
+                                </a>
+                              
+                            </li>
+                            @if (Auth::user()=="admin")
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
                                     <i class="mdi mdi-google-pages"></i>
@@ -175,6 +182,21 @@
                                     <li><a href="{{ route('centrevote.index') }}">Liste des Centres de vote</a></li>
                                 </ul>
                             </li>
+                            @endif
+                          
+                            <li>
+                                <a href="javascript: void(0);" class="waves-effect waves-light">
+                                    <i class="mdi mdi-google-pages"></i>
+                                    <span> Comptage </span>
+                                    <span class="menu-arrow"></span>
+                                </a>
+                                <ul class="nav-second-level" aria-expanded="false">
+                                    <li><a href="{{ route('comptage.create') }}">Ajouter Comptage</a></li>
+                                    <li><a href="{{ route('comptage.index') }}">Liste des Comptages</a></li>
+                                </ul>
+                            </li>
+                            @if (Auth::user()=="admin")
+
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
                                     <i class="mdi mdi-account"></i>
@@ -241,6 +263,7 @@
                                     <li><a href="{{ route('radiation.index') }}">Liste des radiations</a></li>
                                 </ul>
                             </li>
+                            @endif
 
                         </ul>
 

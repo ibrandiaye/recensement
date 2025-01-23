@@ -61,7 +61,7 @@
                     
                         <div class="col-lg-6">
                             <label>Departement</label>
-                            <select class="form-control" name="departement_id" >
+                            <select class="form-control" id="departement_id" name="departement_id" >
                                 <option value="">Selectionner</option>
                                 @foreach ($departements as $departement)
                                 <option value="{{$departement->id}}">{{$departement->nom}}</option>
@@ -70,12 +70,18 @@
                             </select>
                         </div>
                         <div class="col-lg-6">
+                            <label>Arrondissement</label>
+                            <select class="form-control" name="arrondissement_id" id="arrondissement_id">
+
+                            </select>
+                        </div>
+                        <div class="col-lg-6">
                             <label>Role</label>
                             <select class="form-control" name="role" required="">
                                 <option value="">Selectionner</option>
                                 <option value="admin">Admin</option>
-                                <option value="candidats">candidats</option> 
-                                <option value="controlleur">controlleur</option>
+                                <option value="prefet">Prefet</option> 
+                                <option value="sous_prefet">Sous Prefet</option>
                             </select>
                         </div>
 
@@ -95,3 +101,33 @@
 @endsection
 
 
+@section("js")
+<script>
+      url_app = '{{ config('app.url') }}';
+    $("#departement_id").change(function () {
+        $("#arrondissement_id").empty();
+        var departement_id =  $("#departement_id").children("option:selected").val();
+        $(".departement").val(departement_id);
+        var arrondissement = "<option value=''>Veuillez selectionner</option>";
+        $.ajax({
+            type:'GET',
+            url:url_app+'/arrondissement/by/departement/'+departement_id,
+            data:'_token = <?php echo csrf_token() ?>',
+            success:function(data) {
+                console.log(data)
+                $.each(data,function(index,row){
+                    //alert(row.nomd);
+                    arrondissement +="<option value="+row.id+">"+row.nom+"</option>";
+
+                });
+
+            
+
+
+                $("#arrondissement_id").append(arrondissement);
+            }
+        });
+    });
+</script>
+
+@endsection

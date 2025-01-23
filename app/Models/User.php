@@ -22,7 +22,8 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'departement_id'
+        'departement_id',
+        "arrondissement_id"
     ];
 
     /**
@@ -44,4 +45,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function departement()
+    {
+        return $this->belongsTo(Departement::class);
+    }
+    public function arrondissement()
+    {
+        return $this->belongsTo(Arrondissement::class);
+    }
 }
