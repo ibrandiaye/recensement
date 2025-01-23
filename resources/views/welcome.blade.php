@@ -126,7 +126,7 @@
                                 </a>
                               
                             </li>
-                            @if (Auth::user()=="admin")
+                            @if (Auth::user()->role=="admin")
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
                                     <i class="mdi mdi-google-pages"></i>
@@ -195,7 +195,7 @@
                                     <li><a href="{{ route('comptage.index') }}">Liste des Comptages</a></li>
                                 </ul>
                             </li>
-                            @if (Auth::user()=="admin")
+                            @if (Auth::user()->role=="admin")
 
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
