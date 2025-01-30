@@ -15,4 +15,8 @@ class Arrondissement extends Model
     {
         return $this->belongsTo(Departement::class);
     }
+    public function communes()
+    {
+        return $this->hasMany(Commune::class);
+    }
 }

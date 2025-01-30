@@ -63,8 +63,8 @@
                                 <button class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
                                 {!! Form::close() !!}
 
-                                <a href="{{ route('comptage.show', $comptage->id) }}" role="button" class="btn btn-warning"><i class="fas fa-file"></i></a>
 
+                                <a href="{{ route('comptage.show', $comptage->id) }}" role="button" class="btn btn-warning"><i toolip="B" class="fas fa-file"></i></a>
 
                             </td>
 

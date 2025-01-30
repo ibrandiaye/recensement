@@ -10,9 +10,11 @@ use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IdentificationController;
 use App\Http\Controllers\InscriptionController;
+use App\Http\Controllers\LotController;
 use App\Http\Controllers\ModificationController;
 use App\Http\Controllers\RadiationController;
 use App\Http\Controllers\RegionController;
+use App\Http\Controllers\SemaineController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +46,8 @@ Route::resource('modification', ModificationController::class)->middleware(['aut
 Route::resource('radiation', RadiationController::class)->middleware(['auth']);
 Route::resource('changement', ChangementController::class)->middleware(['auth']);
 Route::resource('comptage', ComptageController::class)->middleware(['auth']);
+Route::resource('semaine', SemaineController::class)->middleware(['auth']);
+Route::resource('lot', LotController::class)->middleware(['auth']);
 
 Route::get('/modifier/motdepasse',[UserController::class,'modifierMotDePasse'])->name("modifier.motdepasse")->middleware(['auth']);
 Route::post('/importer/region',[RegionController::class,'importExcel'])->name("importer.region")->middleware(['auth']);//->middleware(['auth', 'admin', 'checkMaxSessions']);
@@ -74,3 +78,18 @@ Route::get('/bordereau', function () {
 })->middleware(['auth']);
 
 Route::get('/stat/by/commune/{commune}',[HomeController::class,'statByCommune'])->middleware("auth");
+
+
+Route::get('/api/by/departement/{id}',[HomeController::class,'byDepartement'])->name('rts.national.departement')->middleware("auth");
+Route::get('/api/by/commune/{id}',[HomeController::class,'byCommune'])->name('rts.national.departement')->middleware("auth");
+
+Route::get('/api/by/arrondissement/{id}',[HomeController::class,'byArrondissement'])->name('rts.national.departement')->middleware("auth");
+Route::get('/api/by/region/{id}',[HomeController::class,'byRegion'])->name('rts.national.departement')->middleware("auth");
+
+Route::get('/test', function () {
+    return view('situation.par_arrondissement');
+})->middleware(['auth']);
+
+Route::get('/message/arrondissement/{id}/{date}',[HomeController::class,'messageByArrondissement'])->name('message.arrondissement')->middleware("auth");
+
+Route::get('/message/departement/{id}/{date}',[HomeController::class,'messageByDepartement'])->name('message.departement')->middleware("auth");

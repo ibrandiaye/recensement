@@ -29,11 +29,17 @@ class DepartementRepository extends RessourceRepository{
         return DB::table("departements")
         ->delete();
        }
-       public function getOrbyRegion()
-       {
+    public function getOrbyRegion()
+    {
         return DB::table('departements')
         ->join("regions","departements.region_id","=","regions.id")
         ->select("departements.*") ->orderBy("departements.is_diaspora",'asc')
         ->orderBy("regions.nom",'asc')->orderBy("departements.nom","asc")->get();
-       }
+    }
+
+    public function getOneWithRelation($id)
+    {
+        return Departement::with(["region","arrondissements","arrondissements.communes"])
+        ->find($id);
+    }
 }

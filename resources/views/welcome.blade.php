@@ -182,6 +182,28 @@
                                     <li><a href="{{ route('centrevote.index') }}">Liste des Centres de vote</a></li>
                                 </ul>
                             </li>
+                            <li>
+                                <a href="javascript: void(0);" class="waves-effect waves-light">
+                                    <i class="mdi mdi-calendar"></i>
+                                    <span> Semaine </span>
+                                    <span class="menu-arrow"></span>
+                                </a>
+                                <ul class="nav-second-level" aria-expanded="false">
+                                    <li><a href="{{ route('semaine.create') }}">Ajouter Semaine</a></li>
+                                    <li><a href="{{ route('semaine.index') }}">Liste des Semaines</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript: void(0);" class="waves-effect waves-light">
+                                    <i class="mdi mdi-database"></i>
+                                    <span> Lot </span>
+                                    <span class="menu-arrow"></span>
+                                </a>
+                                <ul class="nav-second-level" aria-expanded="false">
+                                    <li><a href="{{ route('lot.create') }}">Ajouter Semaine</a></li>
+                                    <li><a href="{{ route('lot.index') }}">Liste des Semaines</a></li>
+                                </ul>
+                            </li>
                             @endif
                           
                             <li>
@@ -264,6 +286,13 @@
                                 </ul>
                             </li>
                             @endif
+                            <li>
+                                <a href="{{ route('semaine.index') }}" class="waves-effect waves-light">
+                                    <i class="mdi mdi-calendar"></i>
+                                    <span> Message </span>
+                                </a>
+                              
+                            </li>
 
                         </ul>
 

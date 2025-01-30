@@ -5,14 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Lot extends Model
+class Semaine extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'numero','nombre','commune_id'];
+        'nom','debut','fin'
+    ];
 
-        public function commune()
-        {
-            return $this->belongsTo(Commune::class);
-        }
 }

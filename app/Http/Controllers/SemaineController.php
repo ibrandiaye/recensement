@@ -2,18 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\CommuneRepository;
-use App\Repositories\LotRepository;
+use App\Repositories\SemaineRepository;
 use Illuminate\Http\Request;
 
-class LotController extends Controller
+class SemaineController extends Controller
 {
-    protected $lotRepository;
-    protected $communeRepository;
+    protected $semaineRepository;
 
-    public function __construct(LotRepository $lotRepository, CommuneRepository $communeRepository){
-        $this->lotRepository =$lotRepository;
-        $this->communeRepository = $communeRepository;
+    public function __construct(SemaineRepository $semaineRepository){
+        $this->semaineRepository =$semaineRepository;
     }
 
     /**
@@ -23,8 +20,9 @@ class LotController extends Controller
      */
     public function index()
     {
-        $lots = $this->lotRepository->getAll();
-        return view('lot.index',compact('lots'));
+       
+        $semaines = $this->semaineRepository->getAll();
+        return view('semaine.index',compact('semaines'));
     }
 
     /**
@@ -34,8 +32,7 @@ class LotController extends Controller
      */
     public function create()
     {
-        $communes = $this->communeRepository->getAll();
-        return view('lot.add',compact('communes'));
+        return view('semaine.add');
     }
 
     /**
@@ -46,8 +43,8 @@ class LotController extends Controller
      */
     public function store(Request $request)
     {
-        $lots = $this->lotRepository->store($request->all());
-        return redirect('lot');
+        $semaines = $this->semaineRepository->store($request->all());
+        return redirect('semaine');
 
     }
 
@@ -59,8 +56,8 @@ class LotController extends Controller
      */
     public function show($id)
     {
-        $lot = $this->lotRepository->getById($id);
-        return view('lot.show',compact('lot'));
+        $semaine = $this->semaineRepository->getById($id);
+        return view('semaine.show',compact('semaine'));
     }
 
     /**
@@ -71,9 +68,8 @@ class LotController extends Controller
      */
     public function edit($id)
     {
-        $communes = $this->communeRepository->getAll();
-        $lot = $this->lotRepository->getById($id);
-        return view('lot.edit',compact('lot','communes'));
+        $semaine = $this->semaineRepository->getById($id);
+        return view('semaine.edit',compact('semaine'));
     }
 
     /**
@@ -85,8 +81,8 @@ class LotController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->lotRepository->update($id, $request->all());
-        return redirect('lot');
+        $this->semaineRepository->update($id, $request->all());
+        return redirect('semaine');
     }
 
     /**
@@ -97,12 +93,8 @@ class LotController extends Controller
      */
     public function destroy($id)
     {
-        $this->lotRepository->destroy($id);
-        return redirect('lot');
-    }
-    public function    byCommune($commune){
-        $lots = $this->lotRepository->getByCommune($commune);
-        return response()->json($lots);
+        $this->semaineRepository->destroy($id);
+        return redirect('semaine');
     }
 
 }

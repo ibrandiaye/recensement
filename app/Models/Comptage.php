@@ -9,11 +9,15 @@ class Comptage extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'debut','fin','inscription','modification','changement','radiation','commune_id',
-        'arrondissement_id'];
+       /* 'debut','fin',*/'inscription','modification','changement','radiation','commune_id',
+        'arrondissement_id','semaine_id'];
 
         public function commune()
         {
             return $this->belongsTo(Commune::class);
+        }
+        public function semaine()
+        {
+            return $this->belongsTo(Semaine::class);
         }
 }

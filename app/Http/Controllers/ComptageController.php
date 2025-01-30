@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\CommuneRepository;
 use App\Repositories\ComptageRepository;
+use App\Repositories\SemaineRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,10 +12,13 @@ class ComptageController extends Controller
 {
     protected $comptageRepository;
     protected $communeRepository;
+    protected $semaineRepository;
 
-    public function __construct(ComptageRepository $comptageRepository, CommuneRepository $communeRepository){
+    public function __construct(ComptageRepository $comptageRepository, CommuneRepository $communeRepository,
+    SemaineRepository $semaineRepository){
         $this->comptageRepository =$comptageRepository;
         $this->communeRepository = $communeRepository;
+        $this->semaineRepository = $semaineRepository;
     }
 
     /**
@@ -37,7 +41,8 @@ class ComptageController extends Controller
     {
         $communes = $this->communeRepository->getByArrondissement(Auth::user()->arrondissement_id);
       //  dd(Auth::user()->arrondissement_id);
-        return view('comptage.add',compact('communes'));
+      $semaines = $this->semaineRepository->getAll();
+        return view('comptage.add',compact('communes','semaines'));
     }
 
     /**
@@ -48,6 +53,12 @@ class ComptageController extends Controller
      */
     public function store(Request $request)
     {
+        $comptage = $this->comptageRepository->getOneBySemaineAndCommune($request->semaine_id,$request->commune_id);
+       // dd($comptage);
+        if($comptage)
+        {
+            return redirect()->back()->withErrors('Vous avez déja saisi la commune pour cette semaine ')->withInput();
+        }
         $comptages = $this->comptageRepository->store($request->all());
         return redirect('comptage');
 
