@@ -11,17 +11,17 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Tableau de bord</a></li>
-                    <li class="breadcrumb-item active"><a href="javascript: void(0);">Lot </a></li>
+                    <li class="breadcrumb-item active"><a href="javascript: void(0);">Pointage </a></li>
                 </ol>
             </div>
-            <h4 class="page-title">Modifier un Lot</h4>
+            <h4 class="page-title">Modifier un Pointage</h4>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-12">
 
-        {!! Form::model($lot, ['method'=>'PATCH','route'=>['lot.update', $lot->id]]) !!}
+        {!! Form::model($pointage, ['method'=>'PATCH','route'=>['pointage.update', $pointage->id]]) !!}
             @csrf
              <div class="card ">
                 <div class="card-header text-center">FORMULAIRE DE MODIFICATION Département</div>
@@ -39,23 +39,18 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label>Numero</label>
-                            <input type="number" name="numero"  value="{{ $lot->numero }}" class="form-control" min="1" required>
+                            <input type="number" name="numero"  value="{{ $pointage->numero }}" class="form-control" min="1" required>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Nombre</label>
-                            <input type="number" name="nombre"  value="{{ $lot->nombre }}" class="form-control" min="1" required>
-                        </div>
-                    </div>
+                 
             
                     <div class="col-lg-6">
-                        <label>Commune</label>
-                        <select class="form-control" name="commune_id" required="">
+                        <label>Lot</label>
+                        <select class="form-control" name="lot_id" required="">
                             <option value="">Veuilez Selectionner</option>
-                            @foreach ($communes as $commune)
-                            <option {{old('commune_id', $lot->commune_id) == $commune->id ? 'selected' : ''}}
-                                value="{{$commune->id}}">{{$commune->nom}}</option>
+                            @foreach ($lots as $lot)
+                            <option {{old('lot_id', $pointage->lot_id) == $lot->id ? 'selected' : ''}}
+                                value="{{$lot->id}}">{{$lot->nom}}</option>
                                 @endforeach
 
                         </select>

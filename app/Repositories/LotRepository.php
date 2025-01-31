@@ -10,5 +10,8 @@ class LotRepository extends RessourceRepository{
         $this->model = $lot;
     }
 
-
+    public function getBiId($id)
+    {
+        return DB::table("lots")->where("id",$id)->first();
+    }
 }

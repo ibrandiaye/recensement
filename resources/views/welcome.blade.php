@@ -204,6 +204,17 @@
                                     <li><a href="{{ route('lot.index') }}">Liste des Semaines</a></li>
                                 </ul>
                             </li>
+                            <li>
+                                <a href="javascript: void(0);" class="waves-effect waves-light">
+                                    <i class="mdi mdi-database"></i>
+                                    <span> Pointage </span>
+                                    <span class="menu-arrow"></span>
+                                </a>
+                                <ul class="nav-second-level" aria-expanded="false">
+                                    <li><a href="{{ route('pointage.create') }}">Ajouter Poitnage</a></li>
+                                    <li><a href="{{ route('pointage.index') }}">Liste des Pointage</a></li>
+                                </ul>
+                            </li>
                             @endif
                           
                             <li>

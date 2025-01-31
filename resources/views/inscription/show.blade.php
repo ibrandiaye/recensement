@@ -58,7 +58,8 @@
         <hr>
         <div class="sub-header">
             <h4>FORMULAIRE D'INSCRIPTION SUR LES LISTES ELECTORALES</h4>
-            <h4>Numéro de la demande :  {{$inscription->id}} <span style="text-align: right ;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $qrcode }}</span> </h4>
+            <h4>Numéro de la demande :  {{$inscription->id}} <span style="text-align: right ;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{-- {{ $qrcode }} --}}    <p><img src="data:image/png;base64,{{ DNS1D::getBarcodePNG('1234567890', 'C128') }}" alt="Code-barres"></p>
+</span> </h4>
         </div>
 
         <!-- Identification de la commission -->

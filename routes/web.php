@@ -12,6 +12,7 @@ use App\Http\Controllers\IdentificationController;
 use App\Http\Controllers\InscriptionController;
 use App\Http\Controllers\LotController;
 use App\Http\Controllers\ModificationController;
+use App\Http\Controllers\PointageController;
 use App\Http\Controllers\RadiationController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\SemaineController;
@@ -48,6 +49,7 @@ Route::resource('changement', ChangementController::class)->middleware(['auth'])
 Route::resource('comptage', ComptageController::class)->middleware(['auth']);
 Route::resource('semaine', SemaineController::class)->middleware(['auth']);
 Route::resource('lot', LotController::class)->middleware(['auth']);
+Route::resource('pointage', PointageController::class)->middleware(['auth']);
 
 Route::get('/modifier/motdepasse',[UserController::class,'modifierMotDePasse'])->name("modifier.motdepasse")->middleware(['auth']);
 Route::post('/importer/region',[RegionController::class,'importExcel'])->name("importer.region")->middleware(['auth']);//->middleware(['auth', 'admin', 'checkMaxSessions']);
@@ -93,3 +95,5 @@ Route::get('/test', function () {
 Route::get('/message/arrondissement/{id}/{date}',[HomeController::class,'messageByArrondissement'])->name('message.arrondissement')->middleware("auth");
 
 Route::get('/message/departement/{id}/{date}',[HomeController::class,'messageByDepartement'])->name('message.departement')->middleware("auth");
+
+Route::get('/pointage/create/{lot}',[PointageController::class,'create_lot'])->name('pointage.create.lot')->middleware("auth");

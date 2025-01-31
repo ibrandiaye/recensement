@@ -1,5 +1,5 @@
 @extends('welcome')
-@section('title', '| lot')
+@section('title', '| pointage')
 
 
 @section('content')
@@ -10,10 +10,10 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Tableau de bord</a></li>
-                    <li class="breadcrumb-item active"><a href="javascript: void(0);">Lot </a></li>
+                    <li class="breadcrumb-item active"><a href="javascript: void(0);">Pointage </a></li>
                 </ol>
             </div>
-            <h4 class="page-title">Liste Lot</h4>
+            <h4 class="page-title">Liste Pointage</h4>
         </div>
     </div>
 </div>
@@ -40,26 +40,25 @@
                         <tr>
                             <th>#</th>
                             <th>Numéro</th>
-                            <th>Nombre</th>
+                            <th>lot</th>
                             <th>Commune</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach ($lots as $lot)
+                    @foreach ($pointages as $pointage)
                         <tr>
-                            <td>{{ $lot->id }}</td>
-                            <td>{{ $lot->numero }}</td>
-                            <td>{{ $lot->nombre }}</td>
-                            <td>{{ $lot->commune->nom }}</td>
+                            <td>{{ $pointage->id }}</td>
+                            <td>{{ $pointage->numero }}</td>
+                            <td>{{ $pointage->lot->numero }}</td>
+                            <td>{{ $pointage->lot->commune->nom }}</td>
                             <td>
-                                <a href="{{ route('lot.edit', $lot->id) }}" role="button" class="btn btn-primary"><i class="fas fa-edit"></i></a>
-                                {!! Form::open(['method' => 'DELETE', 'route'=>['lot.destroy', $lot->id], 'style'=> 'display:inline', 'onclick'=>"if(!confirm('Êtes-vous sûr de vouloir supprimer cet enregistrement ?')) { return false; }"]) !!}
+                                <a href="{{ route('pointage.edit', $pointage->id) }}" role="button" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                {!! Form::open(['method' => 'DELETE', 'route'=>['pointage.destroy', $pointage->id], 'style'=> 'display:inline', 'onclick'=>"if(!confirm('Êtes-vous sûr de vouloir supprimer cet enregistrement ?')) { return false; }"]) !!}
                                 <button class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
                                 {!! Form::close() !!}
-                                <a href="{{ route('pointage.create.lot', $lot->id) }}" role="button" class="btn btn-info"><i class="fas fa-database"></i></a>
 
-                                
+
 
                             </td>
 
