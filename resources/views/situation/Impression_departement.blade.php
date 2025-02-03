@@ -66,12 +66,10 @@
             <h4><b>DESTINATAIRE  : </b>GOUVERNEUR DU REGION DE {{$departement->region->nom}} </h4>
             <h4><b>NUMERO : ..................................</b></h4>
         </div>
-        <div class="sub-header">
-            <h4>Texte</h4>
-        </div> 
-        <p>ENEXECUTION DES INSTRUCTIONS RELATIVES A LA REVISION EXCEPTIONNELLE DES LISTE ELECTORALES POUR LES LEGISLATIVES DU 31 JUILLET 
-            2022– STOP- VOUS FAIS PARVENIR SITUATION STATISTIQUES STOP- VALABLE A LA DATE  DU LUNDI 28 MARS 2022 -STOP-</p>       
-        
+       
+       <center> <p>EN EXECUTION DES INSTRUCTIONS RELATIVES A LA REVISION ORDINAIRE DES LISTE ELECTORALES. 
+            ON VOUS FAIS PARVENIR SITUATION STATISTIQUES VALABLE A LA DATE  DU {{ date('d/m/Y', strtotime($semaine->debut)) }} AU {{ date('d/m/Y', strtotime($semaine->fin)) }} </p>       
+       </center>
        
             <table id="example1" class="table table-bordered table-responsive table-striped text-center">
                 <thead>
@@ -100,10 +98,17 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                     $totald = 0;
+                    @endphp
                     @foreach ($departement->arrondissements as $arrondissement)
                         <tr>
                             <td colspan="16">Arrondissement de {{$arrondissement->nom}}</td>
                         </tr>
+                        @php
+                        $totala = 0;
+                       
+                        @endphp
                         @foreach ($arrondissement->communes as $value)
                         <tr>
                             <td>{{ $value->data->commune }}</td>
@@ -124,11 +129,23 @@
                             <td>{{ $value->data->cumulrad }}</td>
                             <td>
                               {{$value->data->cumulrad + $value->data->cumulchan +  $value->data->cumulmod + $value->data->cumulins }}
+                              @php
+                                $totala = $totala +$value->data->cumulrad + $value->data->cumulchan +  $value->data->cumulmod + $value->data->cumulins  ;
+                                $totald = $totald + $value->data->cumulrad + $value->data->cumulchan +  $value->data->cumulmod + $value->data->cumulins ;
+                              @endphp
                             </td>
 
                         </tr>
                         @endforeach
+                        <tr>
+                            <td>total</td>
+                            <td colspan="15" style="text-align: right;">{{$totala   }}</td>
+                        </tr>
                     @endforeach
+                    <tr>
+                        <td>total</td>
+                        <td colspan="15" style="text-align: right;">{{$totald }}</td>
+                    </tr>
               
                 </tbody>
             </table>

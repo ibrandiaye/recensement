@@ -7,6 +7,7 @@ use App\Repositories\CommuneRepository;
 use App\Repositories\ComptageRepository;
 use App\Repositories\DepartementRepository;
 use App\Repositories\RegionRepository;
+use App\Repositories\SemaineRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,9 +24,11 @@ class HomeController extends Controller
     protected $communeRepository;
     protected $departementRepository;
     protected $arrondissementRepository;
+    protected $semaineRepository;
 
     public function __construct(ComptageRepository $comptageRepository,RegionRepository $regionRepository,CommuneRepository $communeRepository,
-    DepartementRepository $departementRepository,ArrondissementRepository $arrondissementRepository)
+    DepartementRepository $departementRepository,ArrondissementRepository $arrondissementRepository,
+    SemaineRepository $semaineRepository)
     {
         $this->middleware('auth');
         $this->comptageRepository = $comptageRepository;
@@ -33,6 +36,7 @@ class HomeController extends Controller
         $this->communeRepository = $communeRepository;
         $this->departementRepository = $departementRepository;
         $this->arrondissementRepository= $arrondissementRepository;
+        $this->semaineRepository  = $semaineRepository;
     }
 
     /**
@@ -197,8 +201,9 @@ class HomeController extends Controller
         //dd($data);
       //  return view("situation.par_arrondissement",compact("data"));
       $arrondissement = $this->arrondissementRepository->getOneArrondissementWithdepartementAndRegion($id);
+      $semaine = $this->semaineRepository->getOneByDebut($date);
 
-      return view("situation.impression_arrondissement",compact("data","arrondissement"));
+      return view("situation.impression_arrondissement",compact("data","arrondissement","semaine"));
       
 
     }
@@ -208,6 +213,7 @@ class HomeController extends Controller
         $departement = $this->departementRepository->getOneWithRelation($id);
         $situationSemaine = $this->comptageRepository->situationActuelleByDepartement($id,$date);
         $situationAncienne = $this->comptageRepository->situationAncieneByDepartement($id,$date);
+       $semaine = $this->semaineRepository->getOneByDebut($date);
         $data=array($situationSemaine,$situationAncienne);
         $index = 0;
      //  dd($situationSemaine,$situationSemaine,$departement);
@@ -270,7 +276,7 @@ class HomeController extends Controller
            
         }
         //dd($departement);
-        return view("situation.impression_departement",compact("departement"));
+        return view("situation.impression_departement",compact("departement","semaine"));
 
     }
 }

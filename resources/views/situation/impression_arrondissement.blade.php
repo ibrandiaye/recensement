@@ -67,12 +67,10 @@
             <h4><b>DESTINATAIRE  : </b>PREFET DEPARTEMENT DE {{$arrondissement->departement->nom}} </h4>
             <h4><b>NUMERO : ..................................</b></h4>
         </div>
-        <div class="sub-header">
-            <h4>Texte</h4>
-        </div> 
-        <p>ENEXECUTION DES INSTRUCTIONS RELATIVES A LA REVISION EXCEPTIONNELLE DES LISTE ELECTORALES POUR LES LEGISLATIVES DU 31 JUILLET 
-            2022– STOP- VOUS FAIS PARVENIR SITUATION STATISTIQUES STOP- VALABLE A LA DATE  DU LUNDI 28 MARS 2022 -STOP-</p>       
         
+        <center> <p>EN EXECUTION DES INSTRUCTIONS RELATIVES A LA REVISION ORDINAIRE DES LISTE ELECTORALES. 
+            ON VOUS FAIS PARVENIR SITUATION STATISTIQUES VALABLE A LA DATE  DU {{ date('d/m/Y', strtotime($semaine->debut)) }} AU {{ date('d/m/Y', strtotime($semaine->fin)) }} </p>       
+       </center>
        
             <table id="example1" class="table table-bordered table-responsive table-striped text-center">
                 <thead>
@@ -100,6 +98,9 @@
                         <td>cumul</td>
                     </tr>
                 </thead>
+                @php
+                 $total = 0;
+                @endphp
                 <tbody>
                  @foreach ($data as $value)
                     <tr>
@@ -121,10 +122,17 @@
                         <td>{{ $value->cumulrad }}</td>
                         <td>
                           {{$value->cumulrad + $value->cumulchan +  $value->cumulmod + $value->cumulins }}
+                          @php
+                           $total = $total +$value->cumulrad + $value->cumulchan +  $value->cumulmod + $value->cumulins;
+                          @endphp
                         </td>
 
                     </tr>
                     @endforeach 
+                    <tr>
+                        <td>total</td>
+                        <td colspan="15" style="text-align: right;">{{$total            }}</td>
+                    </tr>
 
                 </tbody>
             </table>
