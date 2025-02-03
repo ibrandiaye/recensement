@@ -23,7 +23,9 @@
     <!-- Begin page -->
     <div id="wrapper">
 
-
+        @php
+            $user = Auth::user();
+        @endphp
         <!-- Topbar Start -->
         <div class="navbar-custom">
             <ul class="list-unstyled topnav-menu float-right mb-0">
@@ -33,7 +35,7 @@
                 <li class="dropdown notification-list">
                     <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                         <img src="{{ asset('assets/images/users/avatar-1.jpg') }}" alt="user-image" class="rounded-circle">
-                        <span class="d-none d-sm-inline-block ml-1">{{Auth::user()->name}}</span>
+                        <span class="d-none d-sm-inline-block ml-1">{{$user->name}}</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                         <!-- item-->
@@ -112,7 +114,7 @@
         <div class="left-side-menu">
 
                 <div class="slimscroll-menu">
-
+                  
                     <!--- Sidemenu -->
                     <div id="sidebar-menu">
 
@@ -126,7 +128,8 @@
                                 </a>
                               
                             </li>
-                            @if (Auth::user()->role=="admin")
+                           
+                            @if ($user->role=="admin")
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
                                     <i class="mdi mdi-google-pages"></i>
@@ -216,7 +219,7 @@
                                 </ul>
                             </li>
                             @endif
-                          
+                            @if ($user->role=="sous_prefet")
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
                                     <i class="mdi mdi-google-pages"></i>
@@ -228,7 +231,8 @@
                                     <li><a href="{{ route('comptage.index') }}">Liste des Comptages</a></li>
                                 </ul>
                             </li>
-                            @if (Auth::user()->role=="admin")
+                            @endif
+                            @if ($user->role=="admin")
 
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
