@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Repositories\ArrondissementRepository;
 use App\Repositories\DepartementRepository;
+use App\Repositories\RegionRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,12 +16,14 @@ class UserController extends Controller
     protected $userRepository;
     protected $departementRepository;
     protected $arrondissementRepository;
+    protected $regionRepository;
 
     public function __construct(UserRepository $userRepository, DepartementRepository $departementRepository,
-    ArrondissementRepository $arrondissementRepository){
+    ArrondissementRepository $arrondissementRepository,RegionRepository $regionRepository){
         $this->userRepository =$userRepository;
         $this->departementRepository = $departementRepository;
         $this->arrondissementRepository =$arrondissementRepository;
+        $this->regionRepository = $regionRepository;
     }
 
     /**
@@ -41,8 +44,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        $departements = $this->departementRepository->getAll();
-        return view('user.add',compact('departements'));
+        $regions = $this->regionRepository->getAll();
+        return view('user.add',compact('regions'));
     }
 
     /**
@@ -77,7 +80,8 @@ class UserController extends Controller
             'password' => Hash::make($request['password']),
             'role'=>$request['role'],
             'departement_id'=>$request['departement_id'],
-            'arrondissement_id'=>$request['arrondissement_id']
+            'arrondissement_id'=>$request['arrondissement_id'],
+            'region_id'=>$request['region_id']
 
         ]);
         return redirect('user');
@@ -104,9 +108,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $departements = $this->departementRepository->getAll();
+        $regions = $this->regionRepository->getAll();
         $user = $this->userRepository->getById($id);
-        return view('user.edit',compact('user','departements'));
+        return view('user.edit',compact('user','regions'));
     }
 
     /**

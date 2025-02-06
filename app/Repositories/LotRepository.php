@@ -14,4 +14,30 @@ class LotRepository extends RessourceRepository{
     {
         return DB::table("lots")->where("id",$id)->first();
     }
+    public function updateVerif($id,$etat)
+    {
+        return DB::table("lots")
+        ->where("id",$id)
+        ->update(["verification"=>$etat]);
+    }
+    public function updateretour($id,$etat)
+    {
+        return DB::table("lots")
+        ->where("id",$id)
+        ->update(["retour"=>$etat]);
+    }
+    public function updateValidation($id,$etat)
+    {
+        return DB::table("lots")
+        ->where("id",$id)
+        ->update(["validation"=>$etat]);
+    }
+    public function updateCommentaire($id,$commentaire)
+    {
+        return DB::table("lots")
+        ->where("id",$id)
+        ->update(["commentaire"=>$commentaire]);
+    }
+
+
 }

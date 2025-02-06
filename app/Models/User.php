@@ -23,7 +23,8 @@ class User extends Authenticatable
         'password',
         'role',
         'departement_id',
-        "arrondissement_id"
+        "arrondissement_id",
+        "region_id"
     ];
 
     /**

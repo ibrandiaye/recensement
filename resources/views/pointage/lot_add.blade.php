@@ -14,7 +14,13 @@
                     <li class="breadcrumb-item active"><a href="javascript: void(0);">Pointage </a></li>
                 </ol>
             </div>
-            <h4 class="page-title">Enregistrer un Pointage</h4>
+            <div class="page-title">@if ($oneLot->nombre==$nbPointage && $oneLot->validation==0 )
+                <a href="{{ route('update.validation', ['id'=>1,"etat"=>1]) }}" class="btn btn-success" onclick="if(!confirm('Êtes-vous sûr de vouloir supprimer cet enregistrement ?')) { return false; }">Valider</a>
+            @endif
+            @if ($oneLot->nombre==$nbPointage && $oneLot->validation==1)
+                <span class="badge badge-success">déjà Validé</span>
+            @endif   
+        </div>
         </div>
     </div>
 </div>
@@ -23,6 +29,7 @@
     <p>{{ $message }}</p>
 </div>
 @endif
+
 <div class="row">
    
     <div class="col-xl-4 col-md-6">

@@ -203,8 +203,8 @@
                                     <span class="menu-arrow"></span>
                                 </a>
                                 <ul class="nav-second-level" aria-expanded="false">
-                                    <li><a href="{{ route('lot.create') }}">Ajouter Semaine</a></li>
-                                    <li><a href="{{ route('lot.index') }}">Liste des Semaines</a></li>
+                                    <li><a href="{{ route('lot.create') }}">Ajouter Lot</a></li>
+                                    <li><a href="{{ route('lot.index') }}">Liste des Lots</a></li>
                                 </ul>
                             </li>
                             <li>

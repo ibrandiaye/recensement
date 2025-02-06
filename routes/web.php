@@ -96,4 +96,14 @@ Route::get('/message/arrondissement/{id}/{date}',[HomeController::class,'message
 
 Route::get('/message/departement/{id}/{date}',[HomeController::class,'messageByDepartement'])->name('message.departement')->middleware("auth");
 
+Route::get('/message/region/{id}/{date}',[HomeController::class,'messageByRegion'])->name('message.region')->middleware("auth");
+
 Route::get('/pointage/create/{lot}',[PointageController::class,'create_lot'])->name('pointage.create.lot')->middleware("auth");
+
+
+Route::get('/update/retour/{id}/{etat}',[LotController::class,'updateretour'])->name('update.retour')->middleware("auth");
+
+Route::get('/update/validation/{id}/{etat}',[LotController::class,'updateValidation'])->name('update.validation')->middleware("auth");
+
+Route::get('/update/commentaire/{id}/{commentaire}',[LotController::class,'updateCommentaire'])->name('update.commentaire')->middleware("auth");
+

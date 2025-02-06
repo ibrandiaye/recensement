@@ -61,6 +61,14 @@ class ComptageRepository extends RessourceRepository{
             ->where("communes.departement_id",$user->departement_id)
             ->sum("comptages.inscription"); 
         }
+        elseif ($user->role=="gouverneur") {
+            return  DB::table("comptages")
+            ->join("communes","comptages.commune_id","=","communes.id")
+            ->join("departements","communes.departement_id","=","departements.id")
+
+            ->where("departements.region_id",$user->region_id)
+            ->sum("comptages.inscription"); 
+        }
 
     }
     public function nbGroupByChangement(){
@@ -80,6 +88,13 @@ class ComptageRepository extends RessourceRepository{
             return  DB::table("comptages")
             ->join("communes","comptages.commune_id","=","communes.id")
             ->where("communes.departement_id",$user->departement_id)
+            ->sum("comptages.changement"); 
+        }
+        elseif ($user->role=="gouverneur") {
+            return  DB::table("comptages")
+            ->join("communes","comptages.commune_id","=","communes.id")
+            ->join("departements","communes.departement_id","=","departements.id")
+            ->where("departements.region_id",$user->region_id)            
             ->sum("comptages.changement"); 
         }
 
@@ -103,6 +118,15 @@ class ComptageRepository extends RessourceRepository{
             ->where("communes.departement_id",$user->departement_id)
             ->sum("comptages.modification"); 
         }
+        elseif ($user->role=="gouverneur") {
+            return  DB::table("comptages")
+            ->join("communes","comptages.commune_id","=","communes.id")
+            ->where("communes.departement_id",$user->departement_id)
+            ->join("departements","communes.departement_id","=","departements.id")
+
+            ->where("departements.region_id",$user->region_id)
+            ->sum("comptages.modification"); 
+        }
 
     }
     public function nbGroupRadiation(){
@@ -122,6 +146,14 @@ class ComptageRepository extends RessourceRepository{
             return  DB::table("comptages")
             ->join("communes","comptages.commune_id","=","communes.id")
             ->where("communes.departement_id",$user->departement_id)
+            ->sum("comptages.radiation"); 
+        }
+        elseif ($user->role=="gouverneur") {
+            return  DB::table("comptages")
+            ->join("communes","comptages.commune_id","=","communes.id")
+            ->join("departements","communes.departement_id","=","departements.id")
+
+            ->where("departements.region_id",$user->region_id)
             ->sum("comptages.radiation"); 
         }
 
@@ -359,5 +391,48 @@ class ComptageRepository extends RessourceRepository{
         ->where("semaine_id",$semaine)
         ->where("commune_id",$commune)
         ->first();
+    }
+
+    public function situationAncieneByRegion($region,$semaine)
+    {
+        return DB::table("comptages")
+        ->join("communes","comptages.commune_id","=","communes.id")
+        ->join("arrondissements","communes.arrondissement_id","=","arrondissements.id")
+        ->join("departements","arrondissements.departement_id","=","departements.id")
+        ->join("semaines","comptages.semaine_id","=","semaines.id")
+
+        ->select(
+            'communes.nom',
+            DB::raw('SUM(comptages.inscription) as inscription'),
+            DB::raw('SUM(comptages.modification) as modification'),
+            DB::raw('SUM(comptages.changement) as changement'),
+            DB::raw('SUM(comptages.radiation) as radiation')
+        )
+        ->where("departements.region_id",$region)
+        ->whereDate("semaines.debut","<", $semaine) // Filtre par une date spécifique
+
+        ->groupBy('communes.nom')
+        ->get();
+    }
+    public function situationActuelleByRegion($region,$semaine)
+    {
+        return DB::table("comptages")
+        ->join("communes", "comptages.commune_id", "=", "communes.id")
+        ->join("arrondissements","communes.arrondissement_id","=","arrondissements.id")        
+        ->join("departements","arrondissements.departement_id","=","departements.id")
+
+        ->join("semaines","comptages.semaine_id","=","semaines.id")
+
+        ->select(
+            'communes.nom',
+            DB::raw('SUM(comptages.inscription) as inscription'),
+            DB::raw('SUM(comptages.modification) as modification'),
+            DB::raw('SUM(comptages.changement) as changement'),
+            DB::raw('SUM(comptages.radiation) as radiation')
+        )
+        ->where("departements.region_id",$region)
+        ->whereDate("semaines.debut", $semaine) // Filtre par une date spécifique
+        ->groupBy('communes.nom')
+        ->get();
     }
 }

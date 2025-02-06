@@ -20,5 +20,10 @@ class RegionRepository extends RessourceRepository{
         return DB::table("regions")
         ->delete();
        }
+       public function getOneWithRelation($id)
+    {
+        return Region::with(["departements","departements.arrondissements","departements.arrondissements.communes"])
+        ->find($id);
+    }
 
 }

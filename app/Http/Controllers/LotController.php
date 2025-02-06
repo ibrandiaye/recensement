@@ -105,4 +105,21 @@ class LotController extends Controller
         return response()->json($lots);
     }
 
+    public function updateretour($id,$etat)
+    {
+        $this->lotRepository->updateretour($id,$etat);
+        return redirect()->back();
+    }
+    public function updateValidation($id)
+    {
+        $this->lotRepository->updateValidation($id,1);
+        return redirect()->back();
+    }
+    public function updateCommentaire($id,$commentaire)
+    {
+        $this->lotRepository->updateCommentaire($id,$commentaire);
+        return redirect()->back();
+    }
+
+
 }

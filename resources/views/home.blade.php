@@ -98,16 +98,20 @@
 
                     </select>
                 </div>
+                
+                @endif
+                @if (Auth::user()->role=="admin"  || Auth::user()->role=="gouverneur" )
                 <div class="col-lg-3">
                     <label>Departement</label>
                     <select class="form-control" name="departement_id" id="departement_id" required="">
+                        <option value="">Selectionner</option>
                         @foreach ($departements as $departement)
                             <option value="{{$departement->id}}">{{$departement->nom}}</option>
                         @endforeach
                     </select>
                 </div>
                 @endif
-                @if (Auth::user()->role=="admin" || Auth::user()->role=="prefet" )
+                @if (Auth::user()->role=="admin" || Auth::user()->role=="prefet" || Auth::user()->role=="gouverneur" )
                 <div class="col-lg-3">
                     <label>Arrondissement</label>
                     <select class="form-control" name="arrondissement_id" id="arrondissement_id" required="">

@@ -58,14 +58,20 @@
                             <input id="password-confirm" type="password"  name="password_confirmation" value="{{ old('name') }}" class="form-control"required>
                         </div>
                     </div>
-                    
+                    <div class="col-lg-6">
+                        <label>Region</label>
+                        <select class="form-control" name="region_id" id="region_id" required="">
+                            <option value="">Selectionnez</option>
+                            @foreach ($regions as $region)
+                            <option value="{{$region->id}}">{{$region->nom}}</option>
+                                @endforeach
+
+                        </select>
+                    </div>
                         <div class="col-lg-6">
                             <label>Departement</label>
                             <select class="form-control" id="departement_id" name="departement_id" >
-                                <option value="">Selectionner</option>
-                                @foreach ($departements as $departement)
-                                <option value="{{$departement->id}}">{{$departement->nom}}</option>
-                                    @endforeach
+                              
 
                             </select>
                         </div>
@@ -82,6 +88,7 @@
                                 <option value="admin">Admin</option>
                                 <option value="prefet">Prefet</option> 
                                 <option value="sous_prefet">Sous Prefet</option>
+                                <option value="gouverneur">gouverneur</option>
                             </select>
                         </div>
 
@@ -104,6 +111,28 @@
 @section("js")
 <script>
       url_app = '{{ config('app.url') }}';
+      $("#region_id").change(function () {
+        // alert("ibra");
+        var region_id =  $("#region_id").children("option:selected").val();
+       
+            var departement = "<option value=''>Veuillez selectionner</option>";
+            $.ajax({
+                type:'GET',
+                url:url_app+'/departement/by/region/'+region_id,
+                data:'_token = <?php echo csrf_token() ?>',
+                success:function(data) {
+
+                    $.each(data,function(index,row){
+                        //alert(row.nomd);
+                        departement +="<option value="+row.id+">"+row.nom+"</option>";
+
+                    });
+
+                    $("#departement_id").empty();
+                    $("#departement_id").append(departement);
+                }
+            });
+        });
     $("#departement_id").change(function () {
         $("#arrondissement_id").empty();
         var departement_id =  $("#departement_id").children("option:selected").val();

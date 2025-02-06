@@ -68,6 +68,8 @@
                                 <a href="{{ route('message.arrondissement', ["id"=>$user->arrondissement_id,"date"=>$semaine->debut]) }}" role="button" class="btn btn-info"><i toolip="BORDEREAU DE TRANSMISSION" class="fas fa-file"></i></a>
                                 @elseif($user->role=='prefet')
                                 <a href="{{ route('message.departement', ["id"=>$user->departement_id,"date"=>$semaine->debut]) }}" role="button" class="btn btn-info"><i toolip="BORDEREAU DE TRANSMISSION" class="fas fa-file"></i></a>
+                                @elseif($user->role=='gouverneur')
+                                <a href="{{ route('message.region', ["id"=>$user->region_id,"date"=>$semaine->debut]) }}" role="button" class="btn btn-info"><i toolip="BORDEREAU DE TRANSMISSION" class="fas fa-file"></i></a>
 
                                 @endif
 

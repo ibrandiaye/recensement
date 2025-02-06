@@ -12,4 +12,9 @@ class Region extends Model
         'nom'
     ];
 
+    public function departements()
+    {
+        return $this->hasMany(Departement::class);
+    }
+
 }

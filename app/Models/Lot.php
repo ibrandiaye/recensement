@@ -9,7 +9,7 @@ class Lot extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'numero','nombre','commune_id'];
+        'numero','nombre','commune_id','verification','validation','retour','commentaire'];
 
         public function commune()
         {
