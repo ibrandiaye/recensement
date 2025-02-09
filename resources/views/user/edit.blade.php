@@ -50,22 +50,41 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <label>Departement</label>
-                        <select class="form-control" name="departement_id" required="">
-                            @foreach ($departements as $departement)
-                            <option {{old('departement_id', $user->departement_id) == $departement->id ? 'selected' : ''}}
-                                value="{{$departement->id}}">{{$departement->nom}}</option>
+                        <label>Region</label>
+                        <select class="form-control" name="region_id" id="region_id">
+                            <option value="">Selectionnez</option>
+                            @foreach ($regions as $region)
+                            <option value="{{$region->id}}" {{$region->id==$user->region_id  ? 'selected' : ''}}>{{$region->nom}}</option>
                                 @endforeach
 
                         </select>
                     </div>
+                        <div class="col-lg-6">
+                            <label>Departement</label>
+                            <select class="form-control" id="departement_id" name="departement_id" >
+                                <option value="">Selectionnez</option>
+                                @foreach ($departements as $departement)
+                                <option value="{{$departement->id}}" {{$departement->id==$user->departement_id ? 'selected' : ''}}>{{$departement->nom}}</option>
+                                    @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-6">
+                            <label>Arrondissement</label>
+                            <select class="form-control" name="arrondissement_id" id="arrondissement_id">
+                                <option value="">Selectionnez</option>
+                                @foreach ($arrondissements as $arrondissement)
+                                <option value="{{$arrondissement->id}}" {{$arrondissement->id==$user->arrondissement_id ? 'selected' : ''}}>{{$arrondissement->nom}}</option>
+                                    @endforeach
+                            </select>
+                        </div>
                     <div class="col-lg-6">
                         <label>Role</label>
                         <select class="form-control" name="role" required="">
                             <option value="">Selectionner</option>
                             <option value="admin" {{$user->role=="admin" ? 'selected' : ''}}>Admin</option>
-                            <option value="candidats"  {{$user->role=="candidats" ? 'selected' : ''}}>candidats</option> 
-                        </select>
+                            <option value="prefet" {{$user->role=="prefet" ? 'selected' : ''}}>Prefet</option> 
+                            <option value="sous_prefet" {{$user->role=="sous_prefet" ? 'selected' : ''}}>Sous Prefet</option>
+                            <option value="gouverneur" {{$user->role=="gouverneur" ? 'selected' : ''}}>gouverneur</option>                        </select>
                     </div>
 
                     <div>

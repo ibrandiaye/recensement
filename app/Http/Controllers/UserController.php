@@ -108,9 +108,11 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $regions = $this->regionRepository->getAll();
+        $regions = $this->regionRepository->getAllOnly();
+        $departements = $this->departementRepository->getAllOnLy();
         $user = $this->userRepository->getById($id);
-        return view('user.edit',compact('user','regions'));
+        $arrondissements = $this->arrondissementRepository->getAllOnLy();
+        return view('user.edit',compact('user','regions','departements','arrondissements'));
     }
 
     /**

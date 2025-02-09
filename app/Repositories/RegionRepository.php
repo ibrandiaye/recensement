@@ -25,5 +25,9 @@ class RegionRepository extends RessourceRepository{
         return Region::with(["departements","departements.arrondissements","departements.arrondissements.communes"])
         ->find($id);
     }
+    public function getAllOnly(){
+        return DB::table("regions")
+        ->get();
+       }
 
 }
