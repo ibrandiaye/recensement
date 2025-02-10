@@ -120,7 +120,7 @@ class ArrondissementController extends Controller
        //  dd($data);
         return redirect()->back()->with('success', 'Données importées avec succès.'); */
 
-        $this->validate($request, [
+      /*   $this->validate($request, [
             'file' => 'bail|required|file|mimes:xlsx'
         ]);
 
@@ -143,14 +143,54 @@ class ArrondissementController extends Controller
             if($arrondissement["departement"]==$departement->nom){
                 Arrondissement::create([
                     "nom"=>$arrondissement['arrondissement'],
-                    "departement_id"=>$departement->id/* ,
-                    "latitude"=>$arrondissement['latitude'],
-        "longitude"=>$arrondissement['longitude'] */
+                    "departement_id"=>$departement->id
                 ]);
             }
         }
 
-    }
+    } */
+   // 1. Vérification et déplacement du fichier uploadé
+        if (!$request->hasFile('file')) {
+                return response()->json(['error' => 'Aucun fichier trouvé'], 400);
+        }
+
+            $file = $request->file('file');
+            $filePath = public_path($file->hashName());
+            $file->move(public_path(), $file->hashName());
+
+            // 2. Lecture du fichier avec Spatie SimpleExcelReader
+            $reader = SimpleExcelReader::create($filePath);
+            $rows = $reader->getRows(); // Illuminate\Support\LazyCollection
+
+            // 3. Récupération des données existantes
+            $arrondissements = $this->arrondissementRepository->getAllOnLy()->pluck('nom')->map(fn($n) => trim(strtolower($n)))->toArray();
+            $departements = $this->departementRepository->getAll()->keyBy(fn($d) => trim(strtolower($d->nom)));
+
+            $nouveauxArrondissements = [];
+
+            // 4. Traitement des données
+            foreach ($rows as $arrondissement) {
+                $nomArrondissement = trim(strtolower($arrondissement['arrondissement']));
+                $nomDepartement = trim(strtolower($arrondissement['departement']));
+
+                // Vérifier si l'arrondissement existe déjà
+                if (!in_array($nomArrondissement, $arrondissements)) {
+                    // Vérifier si le département existe
+                    if (isset($departements[$nomDepartement])) {
+                        $nouveauxArrondissements[] = [
+                            'nom' => $arrondissement['arrondissement'],
+                            'departement_id' => $departements[$nomDepartement]->id,
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ];
+                    }
+                }
+            }
+
+                        // 5. Insertion en base de données en une seule requête
+            if (!empty($nouveauxArrondissements)) {
+                Arrondissement::insert($nouveauxArrondissements);
+            }
             // 5. On supprime le fichier uploadé
             $reader->close(); // On ferme le $reader
            // unlink($fichier);

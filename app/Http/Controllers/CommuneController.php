@@ -150,8 +150,7 @@ class CommuneController extends Controller
             {
                 if($commune["arrondissement"]==$arrondissement->nom)
                 {
-                    Commune
-                    ::create([
+                    Commune::create([
                         "nom"=>$commune['commune'],
                         "departement_id"=>$arrondissement->departement_id ,
                         "arrondissement_id"=>$arrondissement->id

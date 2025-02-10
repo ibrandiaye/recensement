@@ -219,7 +219,7 @@
                                 </ul>
                             </li>
                             @endif
-                            @if ($user->role=="sous_prefet")
+                            @if ($user->role=="sous_prefet" || $user->role=="prefet")
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
                                     <i class="mdi mdi-google-pages"></i>

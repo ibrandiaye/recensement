@@ -42,14 +42,20 @@
                                 </div>
                                     <div class="col-lg-6">
                                         <label>Nom Département</label>
-                                        <select class="form-control" name="departement_id" required="">
+                                        <select class="form-control" id="departement_id" name="departement_id" required="">
+                                            <option value="">Selectionner</option>
                                             @foreach ($departements as $departement)
                                             <option value="{{$departement->id}}">{{$departement->nom}}</option>
                                                 @endforeach
 
                                         </select>
                                     </div>
-
+                                    <div class="col-lg-6">
+                                        <label>Arrondissement</label>
+                                        <select class="form-control" name="arrondissement_id" id="arrondissement_id" required="">
+        
+                                        </select>
+                                    </div>
                                 <div>
                                     <center>
                                         <button type="submit" class="btn btn-success btn btn-lg "> ENREGISTRER</button>
@@ -67,4 +73,42 @@
 
 @endsection
 
+@section('js')
+    <script>
+        url_app = '{{ config('app.url') }}';
+        url_api = '{{ config('app.api') }}';
+       
+        $("#departement_id").change(function () {
+          
+            $("#arrondissement_id").empty();
+            var departement_id =  $("#departement_id").children("option:selected").val();
+            $(".departement").val(departement_id);
+           var arrondissement = "<option value=''>Veuillez selectionner</option>";
+          
+            $.ajax({
+                type:'GET',
+                url:url_app+'/arrondissement/by/departement/'+departement_id,
+                data:'_token = <?php echo csrf_token() ?>',
+                success:function(data) {
+                    console.log(data)
+                    $.each(data,function(index,row){
+                        //alert(row.nomd);
+                        arrondissement +="<option value="+row.id+">"+row.nom+"</option>";
 
+                    });
+
+                 
+
+
+                    $("#arrondissement_id").append(arrondissement);
+                }
+            });
+        });
+
+      
+      
+
+       
+       
+    </script>
+@endsection
