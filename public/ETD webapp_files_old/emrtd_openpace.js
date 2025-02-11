@@ -1,35 +1,12 @@
+function check(val, ref) {
+    if (val === ref) {
+        console.log("Error: " + val + " is " + ref);
+        return -1;
+    }
+    return 0;
+}
+
 class OpenPace {
-
-    check(val, ref) {
-        if (val === ref) {
-            console.log(`Error: ${val} is ${ref}`);
-            return -1;
-        }
-        return 0;
-    }
-
-    init() {
-        try {
-            if (this.check(Module, undefined) === -1)
-                return -1;
-            return Module["_Eac_init"]();
-        } catch (e) {
-            console.log(e);
-            return -1;
-        }
-    }
-
-    ConfigureDetailedLogging(value) {
-        try {
-            if (this.check(Module, undefined) === -1)
-                return -1;
-            return Module["_ConfigureDetailedLogging"](value);
-        } catch (e) {
-            console.log(e);
-            return -1;
-        }
-    }
-
     /**
      * send EF.card access data and length.
      * openpace will parse the data and fetch OID and
@@ -37,13 +14,13 @@ class OpenPace {
      */
     efCardAccess(data, length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
             const buffer = Module._malloc(length);
-            if (this.check(buffer, null) === -1)
+            if (check (buffer, null) === -1)
                 return -1;
             Module.HEAPU8.set(data, buffer);
-            let ret = Module["_ef_cardaccess_parsing"](buffer, length);
+            var ret = Module["_ef_cardaccess_parsing"](buffer, length);
             Module._free(buffer);
             return ret;
         } catch (e) {
@@ -54,9 +31,9 @@ class OpenPace {
 
     getPaceParameterId() {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            return Module._Pace_get_parameter_id(1);
+            return Module["_Pace_get_parameter_id"](1);
         } catch (e) {
             console.log(e);
             return -1;
@@ -66,11 +43,12 @@ class OpenPace {
     // Collect generated mapping data from openpace.
     getCaEphemeralPubKey(length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let ca_ephemeral_pubKey = Module.cwrap('Ca_get_ephemeral_pubkey', 'number', [])
-            let ptr_from_wasm = ca_ephemeral_pubKey(length);
-            return Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            var ca_ephemeral_pubKey = Module.cwrap('Ca_get_ephemeral_pubkey', 'number', [])
+            var ptr_from_wasm = ca_ephemeral_pubKey(length);
+            var js_array = Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            return js_array;
         } catch (e) {
             console.log(e);
             return -1;
@@ -81,9 +59,10 @@ class OpenPace {
     // Get CA algorithm.
     getCaAlgorithmId() {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            return Module._Ca_get_alg_id(1);
+            var algId = Module["_Ca_get_alg_id"](1);
+            return algId;
         } catch (e) {
             console.log(e);
             return -1;
@@ -93,9 +72,10 @@ class OpenPace {
     // Get CA OID.
     getCaOid() {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            return Module._Ca_get_oid(1);
+            var oid = Module["_Ca_get_oid"](1);
+            return oid;
         } catch (e) {
             console.log(e);
             return -1;
@@ -105,9 +85,10 @@ class OpenPace {
     // Set SSC for CA.
     setCaSsc() {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            return Module["_Ca_init_secure_channel"](1);
+            var result = Module["_Ca_init_secure_channel"](1);
+            return result;
         } catch (e) {
             console.log(e);
             return -1;
@@ -123,17 +104,17 @@ class OpenPace {
      */
     initPace(secret, size, type, encnonce, length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
             const bufferSecret = Module._malloc(size);
-            if (this.check(bufferSecret, null) === -1)
+            if (check (bufferSecret, null) === -1)
                 return -1;
             Module.HEAPU8.set(secret, bufferSecret);
             const bufferEncNonce = Module._malloc(length);
-            if (this.check(bufferEncNonce, null) === -1)
+            if (check (bufferEncNonce, null) === -1)
                 return -1;
             Module.HEAPU8.set(encnonce, bufferEncNonce);
-            let ret = Module["_Pace_init"](bufferSecret, size, type, bufferEncNonce, length);
+            var ret = Module["_Pace_init"](bufferSecret, size, type, bufferEncNonce, length);
             Module._free(bufferSecret);
             Module._free(bufferEncNonce);
             return ret;
@@ -146,11 +127,12 @@ class OpenPace {
     // Collect generated mapping data from openpace.
     getPaceMapData(length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let bufferMappingData = Module.cwrap('Pace_get_mapping_data', 'number', [])
-            let ptr_from_wasm = bufferMappingData(length);
-            return Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            var bufferMappingData = Module.cwrap('Pace_get_mapping_data', 'number', [])
+            var ptr_from_wasm = bufferMappingData(length);
+            var js_array = Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            return js_array;
         } catch (e) {
             console.log(e);
             return -1;
@@ -160,13 +142,13 @@ class OpenPace {
     // Collect mapping generator value.
     getPaceMapGenerator(mapPiccData, length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
             const bufferMapGeneratorData = Module._malloc(length);
-            if (this.check(bufferMapGeneratorData, null) === -1)
+            if (check (bufferMapGeneratorData, null) === -1)
                 return -1;
             Module.HEAPU8.set(mapPiccData, bufferMapGeneratorData);
-            let ret = Module._Pace_generate_ephemeral_key(bufferMapGeneratorData, length);
+            var ret = Module["_Pace_generate_ephemeral_key"](bufferMapGeneratorData, length);
             Module._free(bufferMapGeneratorData);
             return ret;
         } catch (e) {
@@ -178,11 +160,12 @@ class OpenPace {
     // Collect ephemeral pubKey from openpace.
     getPaceEphemeralPubKeyPcdData(length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let bufferEphemeralPubKey = Module.cwrap('Pace_get_ephemeral_key', 'number', [])
-            let ptr_from_wasm = bufferEphemeralPubKey(length);
-            return Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            var bufferEphemeralPubKey = Module.cwrap('Pace_get_ephemeral_key', 'number', [])
+            var ptr_from_wasm = bufferEphemeralPubKey(length);
+            var js_array = Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            return js_array;
         } catch (e) {
             console.log(e);
             return -1;
@@ -192,13 +175,13 @@ class OpenPace {
     // Compute shared secret.
     computeSharedSecret(sharedSecret, length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
             const bufferSharedSecretData = Module._malloc(length);
-            if (this.check(bufferSharedSecretData, null) === -1)
+            if (check (bufferSharedSecretData, null) === -1)
                 return -1;
             Module.HEAPU8.set(sharedSecret, bufferSharedSecretData);
-            let ret = Module._Pace_compute_authentication_token(bufferSharedSecretData, length);
+            var ret = Module["_Pace_compute_authentication_token"](bufferSharedSecretData, length);
             Module._free(bufferSharedSecretData);
             return ret;
         } catch (e) {
@@ -209,17 +192,17 @@ class OpenPace {
 
     doPaceCam(aic, efCardSecurity) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
             const bufferAicData = Module._malloc(aic.length);
-            if (this.check(bufferAicData, null) === -1)
+            if (check (bufferAicData, null) === -1)
                 return -1;
             Module.HEAPU8.set(aic, bufferAicData);
             const bufferEfCardSecurityData = Module._malloc(efCardSecurity.length);
-            if (this.check(bufferEfCardSecurityData, null) === -1)
+            if (check (bufferEfCardSecurityData, null) === -1)
                 return -1;
             Module.HEAPU8.set(efCardSecurity, bufferEfCardSecurityData);
-            let ret = Module["_Pace_perform_paceCam"](bufferAicData, aic.length, bufferEfCardSecurityData, efCardSecurity.length)
+            var ret = Module["_Pace_perform_paceCam"](bufferAicData, aic.length, bufferEfCardSecurityData, efCardSecurity.length)
             Module._free(bufferAicData);
             Module._free(bufferEfCardSecurityData);
             return ret;
@@ -231,39 +214,36 @@ class OpenPace {
 
     doPassiveAuthentication(efSodBuffer, cscaCertBuffer, dsCertBuffer) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let bufferEfSodData;
-            let bufferCscaCertData;
-            let bufferDsCertData;
-            let bufferEfSodLength = 0;
-            let bufferCscaCertLength = 0;
-            let bufferDsCertLength = 0;
+            this.startTime = new Date().getTime();
+            var bufferEfSodData, bufferCscaCertData, bufferDsCertData;
+            var bufferEfSodLength = 0, bufferCscaCertLength = 0, bufferDsCertLength = 0;
 
             if (efSodBuffer != null) {
                 bufferEfSodLength = efSodBuffer.length;
                 bufferEfSodData = Module._malloc(bufferEfSodLength);
-                if (this.check(bufferEfSodData, null) === -1)
+                if (check (bufferEfSodData, null) === -1)
                     return -1;
                 Module.HEAPU8.set(efSodBuffer, bufferEfSodData);
             }
             if (cscaCertBuffer != null) {
                 bufferCscaCertLength = cscaCertBuffer.length;
                 bufferCscaCertData = Module._malloc(bufferCscaCertLength);
-                if (this.check(bufferCscaCertData, null) === -1)
+                if (check (bufferCscaCertData, null) === -1)
                     return -1;
                 Module.HEAPU8.set(cscaCertBuffer, bufferCscaCertData);
             }
             if (dsCertBuffer != null) {
                 bufferDsCertLength = dsCertBuffer.length;
                 bufferDsCertData = Module._malloc(bufferDsCertLength);
-                if (this.check(bufferDsCertData, null) === -1)
+                if (check (bufferDsCertData, null) === -1)
                     return -1;
                 Module.HEAPU8.set(dsCertBuffer, bufferDsCertData);
             }
-            let ret = Module["_Pa_perform_passive_auth"](bufferEfSodData, bufferEfSodLength,
-                bufferCscaCertData, bufferCscaCertLength,
-                bufferDsCertData, bufferDsCertLength);
+            var ret = Module["_Pa_perform_passive_auth"](bufferEfSodData, bufferEfSodLength,
+                                                     bufferCscaCertData, bufferCscaCertLength,
+                                                     bufferDsCertData, bufferDsCertLength);
             Module._free(bufferEfSodData);
             Module._free(bufferCscaCertData);
             Module._free(bufferDsCertData);
@@ -276,13 +256,13 @@ class OpenPace {
 
     doHashVerification(dsData, dgNum) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
             const bufferDgData = Module._malloc(dsData.length);
-            if (this.check(bufferDgData, null) === -1)
+            if (check (bufferDgData, null) === -1)
                 return -1;
             Module.HEAPU8.set(dsData, bufferDgData);
-            let ret = Module["_Pa_verify_hash"](bufferDgData, dsData.length, dgNum);
+            var ret = Module["_Pa_verify_hash"](bufferDgData, dsData.length, dgNum);
             Module._free(bufferDgData);
             return ret;
         } catch (e) {
@@ -296,13 +276,13 @@ class OpenPace {
      */
     doChipAuthentication(data, length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
             const buffer = Module._malloc(length);
-            if (this.check(buffer, null) === -1)
+            if (check (buffer, null) === -1)
                 return -1;
             Module.HEAPU8.set(data, buffer);
-            let ret = Module["_Perform_Chip_Auth"](buffer, length);
+            var ret = Module["_Perform_Chip_Auth"](buffer, length);
             Module._free(buffer);
             return ret;
         } catch (e) {
@@ -311,20 +291,19 @@ class OpenPace {
         }
     }
 
-    doPsoVerifyCertificate(certBuffer, certId) {
+    doPsoVerifyCertificate (certBuffer, certId) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let bufferCertData;
-            let bufferCertLength;
+            var bufferCertData, bufferCertLength;
             if (certBuffer != null) {
                 bufferCertLength = certBuffer.length;
                 bufferCertData = Module._malloc(bufferCertLength);
-                if (this.check(bufferCertData, null) === -1)
+                if (check (bufferCertData, null) === -1)
                     return -1;
                 Module.HEAPU8.set(certBuffer, bufferCertData);
             }
-            let ret = Module["_Ta_perform_pso_verify_certificate"](bufferCertData, bufferCertLength, certId);
+            var ret = Module["_Ta_perform_pso_verify_certificate"](bufferCertData, bufferCertLength, certId);
             Module._free(bufferCertData);
             return ret;
         } catch (e) {
@@ -333,44 +312,47 @@ class OpenPace {
         }
     }
 
-    getCvcBodyLength() {
+    getcvcBodyLength() {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            return Module._Ta_get_cvc_body_length(1);
+            var cvcBodyLength = Module["_Ta_get_cvc_body_length"](1);
+            return cvcBodyLength;
         } catch (e) {
             console.log(e);
             return -1;
         }
     }
 
-    getCvcSignatureLength() {
+    getcvcsignatureLength() {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            return Module._Ta_get_cvc_signature_length(1);
+            var cvcsignatureLength = Module["_Ta_get_cvc_signature_length"](1);
+            return cvcsignatureLength;
         } catch (e) {
             console.log(e);
             return -1;
         }
     }
 
-    getCvcChrLength() {
+    getcvcChrLength() {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            return Module._Ta_get_cvc_chr_length(1);
+            var cvcchrLength = Module["_Ta_get_cvc_chr_length"](1);
+            return cvcchrLength;
         } catch (e) {
             console.log(e);
             return -1;
         }
     }
 
-    getTaSignedDataLength() {
+    getTaSignedDataLength () {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let signedDataLength = Module._Ta_get_signed_data_Length(1);
+            var signedDataLength = Module["_Ta_get_signed_data_Length"](1);
             console.log("signedDataLength ", signedDataLength);
             return signedDataLength;
         } catch (e) {
@@ -379,79 +361,78 @@ class OpenPace {
         }
     }
 
-    getCvcBody(length) {
+    getCvcBody (length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let bufferCvcBodyData = Module.cwrap('Ta_get_cvc_body', 'number', []);
-            let ptr_from_wasm = bufferCvcBodyData(length);
-            return Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            var buffercvcBodyData = Module.cwrap('Ta_get_cvc_body', 'number', []);
+            var ptr_from_wasm = buffercvcBodyData(length);
+            var js_array = Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            return js_array;
         } catch (e) {
             console.log(e);
             return -1;
         }
     }
 
-    getCvcSignature(length) {
+    getCvcSignature (length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let bufferCvcSignatureData = Module.cwrap('Ta_get_cvc_signature', 'number', []);
-            let ptr_from_wasm = bufferCvcSignatureData(length);
-            return Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            var bufferCvcSignatureData = Module.cwrap('Ta_get_cvc_signature', 'number', []);
+            var ptr_from_wasm = bufferCvcSignatureData(length);
+            var js_array = Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            return js_array;
         } catch (e) {
             console.log(e);
             return -1;
         }
     }
 
-    getCvcChr(length) {
+    getCvcChr (length){
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let bufferCvcChrData = Module.cwrap('Ta_get_cvc_chr', 'number', []);
-            let ptr_from_wasm = bufferCvcChrData(length);
-            return Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            var bufferCvcChrData = Module.cwrap('Ta_get_cvc_chr', 'number', []);
+            var ptr_from_wasm = bufferCvcChrData(length);
+            var js_array = Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            return js_array;
         } catch (e) {
             console.log(e);
             return -1;
         }
     }
 
-    taSignData(pksc_cert, nonceBuffer, is_cert) {
+    taSignData (pksc_cert, nonceBuffer, is_cert) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let bufferPkscData;
-            let bufferPkscLength;
-            let bufferNonceData;
-            let bufferNonceLength;
-            let bufferIsData;
-            let bufferIsLength;
+            var bufferPkscData, bufferPkscLength,bufferNonceData, bufferNonceLength, bufferIsData, bufferIsLength;
             if (pksc_cert != null) {
                 bufferPkscLength = pksc_cert.length;
                 bufferPkscData = Module._malloc(bufferPkscLength);
-                if (this.check(bufferPkscData, null) === -1)
+                if (check (bufferPkscData, null) === -1)
                     return -1;
-                Module.HEAPU8.set(pksc_cert, bufferPkscData);
+                Module.HEAPU8.set(pksc_cert, bufferPkscData);    
             }
             if (nonceBuffer != null) {
                 bufferNonceLength = nonceBuffer.length;
                 bufferNonceData = Module._malloc(bufferNonceLength);
-                if (this.check(bufferNonceData, null) === -1)
+                if (check (bufferNonceData, null) === -1)
                     return -1;
                 Module.HEAPU8.set(nonceBuffer, bufferNonceData);
             }
             if (is_cert != null) {
                 bufferIsLength = is_cert.length;
                 bufferIsData = Module._malloc(bufferIsLength);
-                if (this.check(bufferIsData, null) === -1)
+                if (check (bufferIsData, null) === -1)
                     return -1;
                 Module.HEAPU8.set(is_cert, bufferIsData);
             }
-            let ret = Module._Ta_sign_data(bufferPkscData, bufferPkscLength,
-                bufferNonceData, bufferNonceLength,
-                bufferIsData, bufferIsLength);
+            var ret = Module["_Ta_sign_data"](bufferPkscData, bufferPkscLength,
+                                              bufferNonceData, bufferNonceLength,
+                                              bufferIsData, bufferIsLength
+                                             );
             Module._free(bufferPkscData);
             Module._free(bufferNonceData);
             Module._free(bufferIsData);
@@ -459,16 +440,17 @@ class OpenPace {
         } catch (e) {
             console.log(e);
             return -1;
-        }
+        }   
     }
 
-    getTaSignedData(length) {
+    getTaSignedData (length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let bufferSignedData = Module.cwrap('Ta_get_signed_data', 'number', []);
-            let ptr_from_wasm = bufferSignedData(length);
-            return Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            var bufferSignedData = Module.cwrap('Ta_get_signed_data', 'number', []);
+            var ptr_from_wasm = bufferSignedData(length);
+            var js_array = Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            return js_array;
         } catch (e) {
             console.log(e);
             return -1;
@@ -478,78 +460,73 @@ class OpenPace {
     // Generate random from IFD
     getIfdRnd() {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let length = 8;
-            let bufferIfdRndData = Module.cwrap('Get_ifd_rnd', 'number', []);
-            let ptr_from_wasm = bufferIfdRndData(length);
-            return Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            var length = 8;
+            var bufferIfdRndeData = Module.cwrap('Get_ifd_rnd', 'number', []);
+            var ptr_from_wasm = bufferIfdRndeData(length);
+            var js_array = Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            return js_array;
         } catch (e) {
             console.log(e);
             return -1;
         }
     }
 
-    // Check if AA-ECDSA is required
-    getAaKeyType(publicKeyData) {
+    // Check if AA - ECDSA is required
+    getAaEcdsaStatus() {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let bufferPublicKeyData;
-            let bufferPublicKeyDataLength;
-            if (publicKeyData != null) {
-                bufferPublicKeyDataLength = publicKeyData.length;
-                bufferPublicKeyData = Module._malloc(bufferPublicKeyDataLength);
-                if (this.check(bufferPublicKeyData, null) === -1)
-                    return -1;
-                Module.HEAPU8.set(publicKeyData, bufferPublicKeyData);
-            }
-            let ret = Module._Aa_get_ecdsa_status(bufferPublicKeyData, bufferPublicKeyDataLength);
-            Module._free(bufferPublicKeyData);
-            return ret;
-        } catch (e) {
-            console.log(e);
-            return -1;
-        }
+            var bufferDg15Data, bufferDg15Length;
+           if (dg15Data != null) {
+               bufferDg15Length = dg15Data.length;
+               bufferDg15Data = Module._malloc(bufferDg15Length);
+               if (check (bufferDg15Data, null) === -1)
+                   return -1;
+               Module.HEAPU8.set(dg15Data, bufferDg15Data);
+           }
+           var ret = Module["_Aa_get_ecdsa_status"](bufferDg15Data, bufferDg15Length);
+           Module._free(bufferDg15Data);
+           return ret;
+       } catch (e) {
+           console.log(e);
+           return -1;
+       }
     }
 
     // Perform ActiveAuth.
-    performActiveAuth(publicKeyData, signedData, dg14Data) {
+    performActiveAuth(dg14Data, dg15Data, SignedData) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let bufferDg14Data;
-            let bufferPublicKeyData;
-            let bufferSignedData;
-            let bufferDg14Length = 0;
-            let bufferPublicKeyDataLength;
-            let bufferSignedLength;
+            var bufferDg14Data, bufferDg15Data, bufferSignedData, bufferDg14Length = 0, bufferDg15Length, bufferSignedLength;
             if (dg14Data != null) {
                 bufferDg14Length = dg14Data.length;
                 bufferDg14Data = Module._malloc(bufferDg14Length);
-                if (this.check(bufferDg14Data, null) === -1)
+                if (check (bufferDg14Data, null) === -1)
                     return -1;
                 Module.HEAPU8.set(dg14Data, bufferDg14Data);
             }
-            if (publicKeyData != null) {
-                bufferPublicKeyDataLength = publicKeyData.length;
-                bufferPublicKeyData = Module._malloc(bufferPublicKeyDataLength);
-                if (this.check(bufferPublicKeyData, null) === -1)
+            if (dg15Data != null) {
+                bufferDg15Length = dg15Data.length;
+                bufferDg15Data = Module._malloc(bufferDg15Length);
+                if (check (bufferDg15Data, null) === -1)
                     return -1;
-                Module.HEAPU8.set(publicKeyData, bufferPublicKeyData);
+                Module.HEAPU8.set(dg15Data, bufferDg15Data);
             }
-            if (signedData != null) {
-                bufferSignedLength = signedData.length;
+            if (SignedData != null) {
+                bufferSignedLength = SignedData.length;
                 bufferSignedData = Module._malloc(bufferSignedLength);
-                if (this.check(bufferSignedData, null) === -1)
+                if (check (bufferSignedData, null) === -1)
                     return -1;
-                Module.HEAPU8.set(signedData, bufferSignedData);
+                Module.HEAPU8.set(SignedData, bufferSignedData);
             }
-            let ret = Module["_Perform_Active_auth"](bufferDg14Data, bufferDg14Length,
-                bufferPublicKeyData, bufferPublicKeyDataLength,
-                bufferSignedData, bufferSignedLength);
+            var ret = Module["_Perform_Active_auth"](bufferDg14Data, bufferDg14Length,
+                                                        bufferDg15Data, bufferDg15Length,
+                                                        bufferSignedData, bufferSignedLength);
             Module._free(bufferDg14Data);
-            Module._free(bufferPublicKeyData);
+            Module._free(bufferDg15Data);
             Module._free(bufferSignedData);
             return ret;
         } catch (e) {
@@ -561,11 +538,12 @@ class OpenPace {
     // Collect mutual authenticate token.
     getPaceAuthenticateToken(length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let token = Module.cwrap('Pace_get_authenticate_token', 'number', [])
-            let ptr_from_wasm = token(length);
-            return Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            var token = Module.cwrap('Pace_get_authenticate_token', 'number', [])
+            var ptr_from_wasm = token(length);
+            var js_array = Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            return js_array;
         } catch (e) {
             console.log(e);
             return -1;
@@ -575,13 +553,13 @@ class OpenPace {
     // Openpace will encrypt the given buffer and length.
     encrypt(plainData, length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
             const bufferPlainData = Module._malloc(length);
-            if (this.check(bufferPlainData, null) === -1)
+            if (check (bufferPlainData, null) === -1)
                 return -1;
             Module.HEAPU8.set(plainData, bufferPlainData);
-            let ret = Module._Eac_encrypt(bufferPlainData, length);
+            var ret = Module["_Eac_encrypt"](bufferPlainData, length);
             Module._free(bufferPlainData);
             return ret;
         } catch (e) {
@@ -593,11 +571,12 @@ class OpenPace {
     // Collect encrypted data.
     getPaceEncryptedData(length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let bufferEncBuffer = Module.cwrap('Eac_get_encrypted_data', 'number', [])
-            let ptr_from_wasm = bufferEncBuffer(length);
-            return Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            var bufferEncBuffer = Module.cwrap('Eac_get_encrypted_data', 'number', [])
+            var ptr_from_wasm = bufferEncBuffer(length);
+            var js_array = Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            return js_array;
         } catch (e) {
             console.log(e);
             return -1;
@@ -607,13 +586,13 @@ class OpenPace {
     // Authenticate the given buffer.
     authenticate(plainData, length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
             const bufferPlainData = Module._malloc(length);
-            if (this.check(bufferPlainData, null) === -1)
+            if (check (bufferPlainData, null) === -1)
                 return -1;
             Module.HEAPU8.set(plainData, bufferPlainData);
-            let ret = Module._Eac_authenticate(bufferPlainData, length);
+            var ret = Module["_Eac_authenticate"](bufferPlainData, length);
             Module._free(bufferPlainData);
             return ret;
         } catch (e) {
@@ -625,11 +604,12 @@ class OpenPace {
     // Collect authenticated data.
     getAuthenticatedData(length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let authenticatedBuffer = Module.cwrap('Eac_get_mac_data', 'number', [])
-            let ptr_from_wasm = authenticatedBuffer(length);
-            return Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            var authenticatedBuffer = Module.cwrap('Eac_get_mac_data', 'number', [])
+            var ptr_from_wasm = authenticatedBuffer(length);
+            var js_array = Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            return js_array;
         } catch (e) {
             console.log(e);
             return -1;
@@ -639,13 +619,13 @@ class OpenPace {
     // Add padding to given buffer
     addPadding(plainData, length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
             const bufferPlainData = Module._malloc(length);
-            if (this.check(bufferPlainData, null) === -1)
+            if (check (bufferPlainData, null) === -1)
                 return -1;
             Module.HEAPU8.set(plainData, bufferPlainData);
-            let ret = Module._Eac_addpad(bufferPlainData, length);
+            var ret = Module["_Eac_addpad"](bufferPlainData, length);
             Module._free(bufferPlainData);
             return ret;
         } catch (e) {
@@ -657,11 +637,12 @@ class OpenPace {
     // Collect padded buffer from openpace.
     getPaddedData(length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let bufferPaddedData = Module.cwrap('Eac_padded_data', 'number', [])
-            let ptr_from_wasm = bufferPaddedData(length);
-            return Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            var bufferPaddedData = Module.cwrap('Eac_padded_data', 'number', [])
+            var ptr_from_wasm = bufferPaddedData(length);
+            var js_array = Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            return js_array;
         } catch (e) {
             console.log(e);
             return -1;
@@ -671,13 +652,13 @@ class OpenPace {
     // Decrypt the given buffer.
     decrypt(encryptedData, length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
             const bufferEncryptedData = Module._malloc(length);
-            if (this.check(bufferEncryptedData, null) === -1)
+            if (check (bufferEncryptedData, null) === -1)
                 return -1;
             Module.HEAPU8.set(encryptedData, bufferEncryptedData);
-            let ret = Module._Eac_decrypt(bufferEncryptedData, length);
+            var ret = Module["_Eac_decrypt"](bufferEncryptedData, length);
             Module._free(bufferEncryptedData);
             return ret;
         } catch (e) {
@@ -689,11 +670,12 @@ class OpenPace {
     // Collect decrypted buffer.
     getDecryptedData(length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let bufferDecryptedData = Module.cwrap('Eac_get_decrypted_data', 'number', []);
-            let ptr_from_wasm = bufferDecryptedData(length);
-            return Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            var bufferDecryptedData = Module.cwrap('Eac_get_decrypted_data', 'number', []);
+            var ptr_from_wasm = bufferDecryptedData(length);
+            var js_array = Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            return js_array;
         } catch (e) {
             console.log(e);
             return -1;
@@ -702,11 +684,12 @@ class OpenPace {
 
     // Input values are no longer used,
     // It is automatically incremented by openpace.
-    incrementSsc() {
+    incrementSsc(value) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            return Module["_Eac_increment_ssc"]();
+            var ret = Module["_Eac_increment_ssc"](value);
+            return ret;
         } catch (e) {
             console.log(e);
             return -1;
@@ -716,9 +699,10 @@ class OpenPace {
     // Initialize BAC 
     initBac() {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            return Module["_Bac_init"](1);
+            var ret = Module["_Bac_init"](1);
+            return ret;
         } catch (e) {
             console.log(e);
             return -1;
@@ -726,22 +710,22 @@ class OpenPace {
     }
 
     // Get challenge for the given buffer.
-    getBacChallenge(encryptedData, length, secret, size, auth) {
+    getChallenge(encryptedData, length, secret, size, auth) {
         try {
             const AUTH_BAC_ID = 1;
             const AUTH_BAP_ID = 2;
-            let authId = (auth == AuthType.BAP) ? AUTH_BAP_ID : AUTH_BAC_ID;
-            if (this.check(Module, undefined) === -1)
+            var authId = (auth == AUTH_BAP) ? AUTH_BAP_ID : AUTH_BAC_ID;
+            if (check (Module, undefined) === -1)
                 return -1;
             const bufferData = Module._malloc(length);
-            if (this.check(bufferData, null) === -1)
+            if (check (bufferData, null) === -1)
                 return -1;
             Module.HEAPU8.set(encryptedData, bufferData);
             const mrzData = Module._malloc(size);
-            if (this.check(mrzData, null) === -1)
+            if (check (mrzData, null) === -1)
                 return -1;
             Module.HEAPU8.set(secret, mrzData);
-            let ret = Module._Bac_get_challenge(bufferData, length, mrzData, size, authId);
+            var ret = Module["_Bac_get_challenge"](bufferData, length, mrzData, size, authId);
             Module._free(bufferData);
             Module._free(mrzData);
             return ret;
@@ -754,11 +738,12 @@ class OpenPace {
     // Collect external authenticate buffer.
     getExternalAuthenticateData(length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            let bufferExternalAuthenticateData = Module.cwrap('Bac_get_ext_auth_command_data', 'number', []);
-            let ptr_from_wasm = bufferExternalAuthenticateData(length);
-            return Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            var bufferExternalAuthenticateData = Module.cwrap('Bac_get_ext_auth_command_data', 'number', []);
+            var ptr_from_wasm = bufferExternalAuthenticateData(length);
+            var js_array = Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + length);
+            return js_array;
         } catch (e) {
             console.log(e);
             return -1;
@@ -768,13 +753,13 @@ class OpenPace {
     // Decrypt cryptogram in the given buffer.
     decryptCryptogram(encryptedData, length) {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
             const bufferEncryptedData = Module._malloc(length);
-            if (this.check(bufferEncryptedData, null) === -1)
+            if (check (bufferEncryptedData, null) === -1)
                 return -1;
             Module.HEAPU8.set(encryptedData, bufferEncryptedData);
-            let ret = Module["_Bac_verify_and_decrypt_cryptogram"](bufferEncryptedData, length);
+            var ret = Module["_Bac_verify_and_decrypt_cryptogram"](bufferEncryptedData, length);
             Module._free(bufferEncryptedData);
             return ret;
         } catch (e) {
@@ -786,9 +771,10 @@ class OpenPace {
     // Get PACE OID.
     getPaceOid() {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            return Module._Pace_get_oid(1);
+            var algorithm = Module["_Pace_get_oid"](1);
+            return algorithm;
         } catch (e) {
             console.log(e);
             return -1;
@@ -798,9 +784,10 @@ class OpenPace {
     // Get PACE algorithm.
     getPaceMappingId() {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            return Module["_Pace_get_mapping_id"](1);
+            var algorithm = Module["_Pace_get_mapping_id"](1);
+            return algorithm;
         } catch (e) {
             console.log(e);
             return -1;
@@ -810,14 +797,12 @@ class OpenPace {
     // Get OpenPACE version.
     getOpenpaceVersion() {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            const ptr_from_wasm = Module.cwrap('Eac_openPACE_version', 'number', [])();
-            let i = 0;
-            while (Module.HEAPU8[ptr_from_wasm + i] != 0) {
-                i++;
-            }
-            return Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + i);
+            var ret = Module.cwrap('Eac_openPACE_version', 'number', []);
+            var ptr_from_wasm = ret(5);
+            var js_array = Module.HEAPU8.subarray(ptr_from_wasm, ptr_from_wasm + 5);
+            return js_array;
         } catch (e) {
             console.log(e);
             return -1;
@@ -827,9 +812,10 @@ class OpenPace {
     // Cleanup memory of openpace library.
     cleanup() {
         try {
-            if (this.check(Module, undefined) === -1)
+            if (check (Module, undefined) === -1)
                 return -1;
-            return Module["_Eac_deinit"](1);
+            Module["_Eac_deinit"](1);
+            return util.reloadOpenPaceModule();
         } catch (e) {
             console.log(e);
             return -1;

@@ -1,40 +1,39 @@
+var deviceInfos =  null;
+var deviceIndex = 0;
+var gPreviewFaileCount = 0;
+var pageID, gIsCaptureEnd, gIsFingeOn = false, gLfdScore;
+var urlStr = "http://localhost:8084";
+var aLoopflag;
+var bioScannerHandle, bioScannerType = null, bioScannerName = null;
+var decodedWsqData = null;
+var wsqImageCount = 0;
+let listOfIndices = [];
+
 class BioMini {
-    deviceInfos =  null;
-    deviceIndex = 0;
-    gPreviewFailCount = 0;
-    pageID;
-    gIsCaptureEnd;
-    gIsFingerOn = false;
-    urlStr = "http://localhost:8084";
-    bioScannerHandle;
-    bioScannerType = null;
-    bioScannerName = null;
-    decodedWsqData = null;
-    listOfIndices = [];
 
     // Init BioMini Scanner
     initBioScanner() {
         console_ely.logFuncName(this.initBioScanner.name);
-        this.pageID = Math.random();
+        pageID = Math.random();
         return new Promise((resolve, reject) => {
             jQuery.ajax({
                 type : "GET",
-                url : `${this.urlStr}/api/initDevice?dummy=${Math.random()}`,
+                url : urlStr + "/api/initDevice?dummy=" + Math.random(),
                 dataType : "json",
-                success : (msg) => {
-                    console_ely.log(`Init: ${msg.retString}`);
+                success : function(msg) {
+                    console_ely.log("Init: " + msg.retString);
                     if(msg.retValue == 0) {
-                        this.deviceInfos = msg.ScannerInfos;
-                        this.bioScannerType = this.deviceInfos[this.deviceIndex].DeviceType;
-                        this.bioScannerName = this.deviceInfos[this.deviceIndex].ScannerName;
-                        this.bioScannerHandle = this.deviceInfos[this.deviceIndex].DeviceHandle;
-                        console_ely.log("DeviceInfos:");
-                        console_ely.log("   DeviceHandle: ", this.bioScannerHandle);
-                        console_ely.log("   DeviceType: ", this.bioScannerType);
-                        console_ely.log("   ScannerName: ", this.bioScannerName);
+                        deviceInfos = msg.ScannerInfos;
+                        bioScannerType = deviceInfos[deviceIndex].DeviceType;
+                        bioScannerName = deviceInfos[deviceIndex].ScannerName;
+                        bioScannerHandle = deviceInfos[deviceIndex].DeviceHandle;
+                        console.log("DeviceInfos:");
+                        console.log("   DeviceHandle: ", bioScannerHandle);
+                        console.log("   DeviceType: ", bioScannerType);
+                        console.log("   ScannerName: ", bioScannerName);
                         resolve("success");
                     } else {
-                        console_ely.log("Error: initBioScanner failed");
+                        console.log("Error: initBioScanner failed");
                         resolve("error");
                     }
                 },
@@ -54,22 +53,22 @@ class BioMini {
         return new Promise((resolve, reject) => {
             jQuery.ajax({
                 type : "GET",
-                url : `${this.urlStr}/api/getScannerStatus?dummy=${Math.random()}`,
+                url : urlStr + "/api/getScannerStatus?dummy=" + Math.random(),
                 dataType : "json",
                 data : {
-                    sHandle: this.bioScannerHandle,
-                    sIndex: this.deviceInfos[this.deviceIndex].DeviceIndex
+                    sHandle: bioScannerHandle,
+                    sIndex: deviceInfos[deviceIndex].DeviceIndex
                 },
-                success : (msg) => {
-                    console_ely.log(`getScannerStatus: ${msg.retString}`);
+                success : function(msg) {
+                    console_ely.log("getScannerStatus: " + msg.retString);
                     if(msg.retValue == 0) {
-                        console_ely.log("   SensorValid: ", msg.SensorValid);
-                        console_ely.log("   SensorOn: ", msg.SensorOn);
-                        console_ely.log("   IsCapturing: ", msg.IsCapturing);
-                        console_ely.log("   IsFingerOn: ", msg.IsFingerOn);
+                        console.log("   SensorValid: ", msg.SensorValid);
+                        console.log("   SensorOn: ", msg.SensorOn);
+                        console.log("   IsCapturing: ", msg.IsCapturing);
+                        console.log("   IsFingerOn: ", msg.IsFingerOn);
                         resolve("success");
                     } else {
-                        console_ely.log("Error: getScannerDetails failed");
+                        console.log("Error: getScannerDetails failed");
                         resolve("error");
                     }
                 },
@@ -89,10 +88,10 @@ class BioMini {
         return new Promise((resolve, reject) => {
             jQuery.ajax({
                 type : "GET",
-                url : `${this.urlStr}/api/uninitDevice?dummy=${Math.random()}`,
+                url : urlStr + "/api/uninitDevice?dummy=" + Math.random(),
                 dataType : "json",
-                success : (msg) => {
-                    this.deviceInfos = null;
+                success : function(msg) {
+                    deviceInfos = null;
                     resolve("success");
                 },
                 error : function(request, status, error) {
@@ -111,14 +110,20 @@ class BioMini {
         return new Promise((resolve, reject) => {
             jQuery.ajax({
                 type : "GET",
-                url : `${this.urlStr}/api/autoCapture?dummy=${Math.random()}`,
+                url : urlStr + "/api/autoCapture?dummy=" + Math.random(),
                 data : {
-                    sHandle: this.bioScannerHandle,
-                    id: this.pageID
+                    sHandle: bioScannerHandle,
+                    id: pageID
                 },
-                success : (msg) => {
-                    console_ely.log(`Auto capture:${msg.retString}`);
-                    resolve("success");
+                success : function(msg)
+                {
+                    console_ely.log("Auto capture:" + msg.retString);
+                    //if (msg.retValue == 0) {
+                        resolve("success");
+                    /*} else {
+                        console.log("Error: autoCapture failed");
+                        resolve("error");
+                    }*/
                 },
                 error : function(request, status, error) {
                     console.log("Error: request ", request);
@@ -133,20 +138,19 @@ class BioMini {
     // Auto capture loop
     async autoCaptureLoop() {
         console_ely.logFuncName(this.autoCaptureLoop.name);
-        let loopFlag;
         return new Promise((resolve, reject) => {
             const checkFinger = () => {
                 this.getCaptureEnd();
-                if (this.gIsFingerOn) {
+                if (gIsFingeOn) {
                     console_ely.log("Auto Capture detected a finger.");
-                    this.gIsFingerOn = false;
-                    this.gPreviewFailCount = 0;
+                    gIsFingeOn = false;
+                    gPreviewFaileCount = 0;
                     resolve("success");
-                } else if (this.gPreviewFailCount < 30) {
-                    loopFlag = setTimeout(checkFinger, 1000);
-                    this.gPreviewFailCount++;
+                } else if (gPreviewFaileCount < 30) {
+                    aLoopflag = setTimeout(checkFinger, 1000);
+                    gPreviewFaileCount++;
                 } else {
-                    this.gPreviewFailCount = 0;
+                    gPreviewFaileCount = 0;
                     console_ely.log("Error: 30s timeout. End autoCaptureLoop()");
                     resolve("timeout");
                 }
@@ -159,19 +163,18 @@ class BioMini {
     // Get capture end
     async getCaptureEnd() {
         console_ely.logFuncName(this.getCaptureEnd.name);
-        let gLfdScore;
         jQuery.ajax({
             type : "GET",
-            url : `${this.urlStr}/api/getCaptureEnd?dummy=${Math.random()}`,
+            url : urlStr + "/api/getCaptureEnd?dummy=" + Math.random(),
             dataType : "json",
             async: false,
             data : {
-                sHandle: this.bioScannerHandle,
-                id: this.pageID
+                sHandle: bioScannerHandle,
+                id: pageID
             },
-            success : (msg) => {
-                this.gIsFingerOn = msg.IsFingerOn;
-                this.gIsCaptureEnd = msg.captureEnd;
+            success : function(msg) {
+                gIsFingeOn = msg.IsFingerOn;
+                gIsCaptureEnd = msg.captureEnd;
                 gLfdScore = msg.lfdScore;
             },
             error : function(request, status, error) {
@@ -185,17 +188,17 @@ class BioMini {
     // Abort capture
     abortCapture() {
         console_ely.logFuncName(this.abortCapture.name);
-        let delayVal = 30000;
+        var delayVal = 30000;
         return new Promise((resolve, reject) => {
             jQuery.ajax({
                 type : "GET",
-                url : `${this.urlStr}/api/abortCapture?dummy=${Math.random()}`,
+                url : urlStr + "/api/abortCapture?dummy=" + Math.random(),
                 dataType : "json",
                 data : {
-                    sHandle: this.bioScannerHandle,
+                    sHandle: bioScannerHandle,
                     resetTimer: delayVal
                 }, 
-                success : (msg) => {
+                success : function(msg) {
                     resolve("success");
                 },
                 error : function(request, status, error) {
@@ -218,30 +221,30 @@ class BioMini {
         console_ely.logFuncName(this.verifyWithImageFile.name);
 
         // Convert array to Uint8Array
-        let uint8Array = new Uint8Array(data);
+        var uint8Array = new Uint8Array(data);
         // Create a Blob from Uint8Array
-        let blob = new Blob([uint8Array]);
+        var blob = new Blob([uint8Array]);
         // Return a Promise for asynchronous handling
         return new Promise((resolve, reject) => {
-            let jsonData = {
+            var jsonData = {
                 'dummy': Math.random(),
-                'HND': this.bioScannerHandle,
-                'ID': this.pageID,
+                'HND': bioScannerHandle,
+                'ID': pageID,
                 'IMG_TYP' : 2
             };
             // Create a FormData object and append the image blob and JSON data to it.
-            let formData = new FormData();
+            var formData = new FormData();
             formData.append('file', blob);
             formData.append('param', JSON.stringify(jsonData));
             jQuery.ajax({
                 type : "POST",
-                url: `${this.urlStr}/api/VerifyWithImageFile`,
+                url: urlStr + "/api/VerifyWithImageFile",
                 data : formData,
                 processData:false,
                 contentType:false,
-                success : (msg) => {
-                    console_ely.log(`Verify result : ${msg.verifySucceed}`);
-                    console_ely.log(`Verify score : ${msg.score}`);
+                success : function(msg) {
+                    console_ely.log("Verify result : " + msg.verifySucceed);
+                    console_ely.log("Verify score : " + msg.score);
                      if(msg.retValue == 0) {
                         resolve((msg.verifySucceed == 1) ? "success" : "error");
                     } else {
@@ -267,36 +270,36 @@ class BioMini {
      */
     wsqToImageBuffer(wsqData) {
         console_ely.logFuncName(this.wsqToImageBuffer.name);
-        this.decodedWsqData = null;    
+        decodedWsqData = null;    
         // Convert array to Uint8Array
-        let uint8Array = new Uint8Array(wsqData);
+        var uint8Array = new Uint8Array(wsqData);
         // Create a Blob from Uint8Array
-        let wsqBlobData = new Blob([uint8Array]);
+        var wsqBlobData = new Blob([uint8Array]);
         // Return a Promise for asynchronous handling
         return new Promise((resolve,reject)=>{
             // Prepare JSON data to be sent along with the WSQ blob
-            let jsonData = {
+            var jsonData = {
                 'dummy': Math.random(),
-                'HND': this.bioScannerHandle,
-                'ID': this.pageID,
+                'HND': bioScannerHandle,
+                'ID': pageID,
                 'IMG_TYP': 3 //jpg
             };
-            let formData = new FormData();
+            var formData = new FormData();
             formData.append('file', wsqBlobData);
             formData.append('param', JSON.stringify(jsonData));
     
             jQuery.ajax({
                 type: "POST",
-                url: `${this.urlStr}/api/wsqFileToImageBufferByType`,
+                url: urlStr + "/api/wsqFileToImageBufferByType",
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: (msg) => {
-                    console_ely.log(`WSQ to image buffer result ${msg.retValue}`);
-                    console_ely.log(`WSQ to image buffer message ${msg.retString}`);
+                success: function(msg) {
+                    console_ely.log("WSQ to image buffer result " + msg.retValue);
+                    console_ely.log("WSQ to image buffer message " + msg.retString);
                     if (msg.retValue == 0) {
-                        this.decodedWsqData = msg.B64_IMG;
-                        console_ely.log(`decodedWsqData : ${this.decodedWsqData}`);
+                        decodedWsqData = msg.B64_IMG;
+                        console_ely.log("decodedWsqData : " + decodedWsqData);
                         // Resolve the Promise with 'success'
                         resolve("success");
                     } else {
@@ -355,38 +358,37 @@ class BioMini {
         let imageCount = 0;
 
         // Variables to keep track of the image count and list of start and end indices
-        this.listOfIndices = [];
+        listOfIndices = [];
 
         // Check if the data array is not null
-        if (dataArray === null) {
-            return;
-        }
-        const wsqTagSoi = [0xFF, 0xA0]; // WSQ tag for Start of Image
-        const wsqTagEoi = [0xFF, 0xA1]; // WSQ tag for End of Image
+        if (dataArray !== null) {
+            const wsqTagSoi = [0xFF, 0xA0]; // WSQ tag for Start of Image
+            const wsqTagEoi = [0xFF, 0xA1]; // WSQ tag for End of Image
     
-        let position = this.findIndices(dataArray, wsqTagSoi);
+            let position = this.findIndices(dataArray, wsqTagSoi);
     
-        // Loop through the array to find WSQ image start and end tags
-        while (position !== -1) {
-            index.push(position);
-            position = this.findIndices(dataArray, wsqTagEoi, position);
-    
-            // If the end tag is found, update indices and increment image count
-            if (position !== -1) {
-                position = position + 1;
+            // Loop through the array to find WSQ image start and end tags
+            while (position !== -1) {
                 index.push(position);
-                this.listOfIndices.push(index);
-                index = [];
-                imageCount++;
+                position = this.findIndices(dataArray, wsqTagEoi, position);
+    
+                // If the end tag is found, update indices and increment image count
+                if (position !== -1) {
+                    position = position + 1;
+                    index.push(position);
+                    listOfIndices.push(index);
+                    index = [];
+                    imageCount++;
+                }
+    
+                // Find the next WSQ image start tag
+                position = this.findIndices(dataArray, wsqTagSoi, position);
             }
     
-            // Find the next WSQ image start tag
-            position = this.findIndices(dataArray, wsqTagSoi, position);
+            // Return the count of WSQ images
+            console.log("Num WSQ images: ", imageCount);
+            return imageCount;
         }
-    
-        // Return the count of WSQ images
-        console.log("Num WSQ images: ", imageCount);
-        return imageCount;
     }
 
     /**
@@ -425,13 +427,12 @@ class BioMini {
      */
     retrieveWsqData(data) {
         console_ely.logFuncName(this.retrieveWsqData.name);
-        let wsqImageCount = 0;
 
         // Get WSQ image count and list of indices
         wsqImageCount = this.getWsqImageCount(data);
-        if (wsqImageCount > 0 && this.listOfIndices.length > 0) {
+        if (wsqImageCount > 0 && listOfIndices.length > 0) {
             // Retrieve and log WSQ data from the specified indices
-            let wsqData = this.retrieveDataFromIndices(data, this.listOfIndices);
+            var wsqData = this.retrieveDataFromIndices(data, listOfIndices);
             return wsqData;
         }
 

@@ -33,6 +33,10 @@ Route::get('/', [HomeController::class,'index'])->middleware(['auth']);
 /* Route::get('/', function () {
     return view('home');
 })->middleware(['auth']); */
+
+Route::get('/teste', function () {
+    return view('test');
+})->middleware(['auth']);
 Route::resource('region', RegionController::class)->middleware(['auth']);
 Route::resource('departement', DepartementController::class)->middleware(['auth']);
 Route::resource('arrondissement', ArrondissementController::class)->middleware(['auth']);

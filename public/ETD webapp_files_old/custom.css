@@ -7327,74 +7327,6 @@ a.navbar-item:focus, a.navbar-item:focus-within, a.navbar-item:hover, a.navbar-i
   }
 }
 
-/* Additional styles for numeric keyboard */
-.num-keyboard {
-  display: none;
-  position: fixed;
-  top: 25%;
-  left: 70%;
-  width: 290px;
-  height: 253px;
-  transform: translateX(-50%);
-  padding: 10px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  z-index: 1000;
-}
-
-/* Style for numeric keypad buttons */
-.num-key {
-  display: inline-block;
-  width: 45px;
-  height: 45px;
-  margin: 5px;
-  text-align: center;
-  cursor: pointer;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.num-key-zero {
-  margin-left: 58px;
-}
-
-.num-key-opt {
-  display: inline-block;
-  width: 82px;
-  height: 45px;
-  margin: 5px;
-  text-align: center;
-  cursor: pointer;
-  background-color: #5C821A;
-  border-color: transparent;
-  color: #fff;
-  border-radius: 5px;
-}
-
-/* popup box */
-.options-popup {
-  display: none;
-  position: fixed;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  border: 1px solid #ccc;
-  padding: 20px;
-  z-index: 999;
-  max-width: 100%;
-  max-height: 80%;
-  overflow: auto;
-}
-
-.options-popup.show {
-  display: block;
-}
-
-/* blur background   */
-.options-popup-background-blur {
-  filter: blur(5px);
-}
-
 .hero.is-fullheight-with-navbar {
   min-height: calc(100vh - 3.25rem);
 }
@@ -10635,14 +10567,6 @@ label.panel-block:hover {
 /* Additional styles from ELYCTIS */
 
 /* OCRB font */
-/*@font-face {
-  font-family: 'OCRB';
-  src: url("/fonts/OCRB.woff") format('woff');
-}*/
-/*@font-face {
-  font-family: 'OCRB Regular';
-  src: url("/fonts/OCRB\ Regular.woff") format('woff');
-}*/
 @font-face {
   font-family: 'OCRB Regular';
   font-weight: normal;

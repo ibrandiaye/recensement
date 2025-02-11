@@ -6,75 +6,75 @@ class Log {
     }
 
     header(msg) {
-        $("#log").append("<h2 class='has-text-primary title is-5' id='titleh2'>" + msg + "</h2>");
+        $("#log").append(`<h2 class='has-text-primary title is-5' id='titleh2'>${msg}</h2>`);
     }
 
     subHeader(msg) {
         this.log(msg);
-        $("#log").append("<div class='is-medium'><h3 class='has-text-primary subtitle is-5'>" + msg + '\n' + "</h3></div>");
+        $("#log").append(`<div class='is-medium'><h3 class='has-text-primary subtitle is-5'>${msg}\n</h3></div>`);
     }
 
     cApdu(msg) {
         var cApdu = util.formatHexPattern(util.uint8ArrayToHexString(msg, true))
-        if (isLogEnabled == webapp_config.ENABLED)
-            $("#log").append("<div class='is-large'><h3 id='apdu' style='color: orange'>" + cApdu + "</h3></div>");
+        if (isLogEnabled)
+            $("#log").append(`<div class='is-large'><h3 id='apdu' style='color: orange'>${cApdu}</h3></div>`);
     }
 
     rApdu(msg) {
         var rApdu = util.formatHexPattern(util.uint8ArrayToHexString(msg, true));
-        if (isLogEnabled == webapp_config.ENABLED) {
-            $("#log").append("<div style='text-align:right;'><h3 id='apdu' class='has-text-info'>" + rApdu + "</h3></div>");
+        if (isLogEnabled) {
+            $("#log").append(`<div style='text-align:right;'><h3 id='apdu' class='has-text-info'>${rApdu}</h3></div>`);
             $("#log").append("<br>");
         }
     }
 
     status(msg) {
-        if (isLogEnabled == webapp_config.ENABLED) {
-            $("#log").append("<div style='text-align:right;'><h3 id='apdu' class='has-text-info'>" + msg + "</h3></div>");
+        if (isLogEnabled) {
+            $("#log").append(`<div style='text-align:right;'><h3 id='apdu' class='has-text-info'>${msg}</h3></div>`);
             $("#log").append("<br>");
         }
     }
 
     timeTaken(msg) {
-        if (isLogEnabled == webapp_config.ENABLED) {
-            $("#log").append("<div style='text-align:right;'><h3 id='apdu' class='has-text-info'>" + msg + "</h3></div>");
+        if (isLogEnabled) {
+            $("#log").append(`<div style='text-align:right;'><h3 id='apdu' class='has-text-info'>${msg}</h3></div>`);
             $("#log").append("<br>");
         }
     }
 
     errorResponse(msg) {
-        if (isLogEnabled == webapp_config.ENABLED) {
-            $("#log").append("<div style='text-align:right;'><h3 id='apdu' class='has-text-danger'>" + msg + "</h3></div>");
+        if (isLogEnabled) {
+            $("#log").append(`<div style='text-align:right;'><h3 id='apdu' class='has-text-danger'>${msg}</h3></div>`);
             $("#log").append("<br>");
         }
     }
 
     log(info, style) {
-        if (isLogEnabled == webapp_config.ENABLED) {
+        if (isLogEnabled) {
             switch (style) {
                 case 1: {
-                    console.log("%c" + info, "color:orange; font-size:13px");
+                    console.log(`%c${info}`, "color:orange; font-size:13px");
                     break;
                 }
                 case 2: {
-                    console.log("%c" + info, "color:blue; font-size:13px");
+                    console.log(`%c${info}`, "color:blue; font-size:13px");
                     break;
                 }
                 case 3: {
-                    console.log("%c" + info, "color:green; font-size:13px");
+                    console.log(`%c${info}`, "color:green; font-size:13px");
                     break;
                 }
                 case 4: {
-                    console.log("%c" + info, "color:red; font-size:13px");
+                    console.log(`%c${info}`, "color:red; font-size:13px");
                     break;
                 }
                 case 5: {
-                    console.log("%c" + info, "color:green; font-size:14px");
+                    console.log(`%c${info}`, "color:green; font-size:14px");
                     break;
                 }
                 default: {
-                    if (isDetailedLogEnabled == webapp_config.ENABLED) {
-                        console.log("%c" + info, "color:gray; font-size:10px");
+                    if (isDetailedLogEnabled) {
+                        console.log(`%c${info}`, "color:gray; font-size:10px");
                         break;
                     }
                 }
@@ -90,7 +90,7 @@ class Log {
             return;
         if (!length)
             length = abyData.length;
-        this.log(msg + " (" + length + " bytes): " + util.toHexString(abyData));
+        this.log(`${msg} (${length} bytes): ${util.toHexString(abyData)}`);
     }
 
     /*
@@ -99,6 +99,6 @@ class Log {
     logFuncName(funcName) {
         if (funcName == null)
             return;
-        this.log("--> " + funcName + "()");
+        this.log(`--> ${funcName}()`);
     }
 }

@@ -1,31 +1,32 @@
-socket = 0;
-resetSession = true;
-updateReaderFwVer = true;
-readerFwVer = '';
-
-/*
+/**
  * WebSocketEly class provides websocket interface to access winscard APIs on the client machine.
  * It builds a custom JSON message wrapping the required PC/SC function (to be invoked on the
  * the client machine) and exchanges with the websocket.
  * Pre-requisite: The python script websocket_0.x.py (developed by ELYCTIS) must be running
  * on the client machine. 
  */
-class WebSocketEly {
-    open(dev) {
-        device = dev;
+class WebSocketEly
+{
+    constructor(webEventsObj) {
+        this.webEvents = webEventsObj;
+        this.socket = 0;
+        this.readerName = "";
+        this.cmd;
+    }
+
+    open() {
         if (urlparams_socket == null)
             urlparams_socket = "8085";
-        this.openSocket("ws://localhost:" + urlparams_socket);
-        var obj = this;
+        this.openSocket(`ws://localhost:${urlparams_socket}`);
     }
 
     openSocket(url) {
-        socket = new WebSocket(url);
-        socket.addEventListener("open", (evt) => {
+        this.socket = new WebSocket(url);
+        this.socket.addEventListener("open", (evt) => {
             //console_ely.log("WebSocket connection found");
         });
-        socket.addEventListener("close", (evt) => {
-            // socket.close(code, reason)
+        this.socket.addEventListener("close", (evt) => {
+            // this.socket.close(code, reason)
             /*if (evt.wasClean) {
                 //alert(`[close] Connection closed cleanly, code=${evt.code} reason=${evt.reason}`);
                 console_ely.log(`[close] Connection closed cleanly, code=${evt.code} reason=${evt.reason}` );
@@ -35,186 +36,133 @@ class WebSocketEly {
                 console_ely.log('[close] Connection died');
             }*/
         });
-        socket.addEventListener("error", (error) => {
-           // alert("WebAgent connection error at " + url);
-            gui.update(guiEvents.GUI_RUN_ENABLE);
+        this.socket.addEventListener("error", (error) => {
+            alert(`WebAgent connection error at ${url}`);
+            gui.update(GUI.RUN_ENABLE);
         });
-        socket.addEventListener('message', this.readIncomingMessage);
+        this.socket.addEventListener('message', (event) => { this.webEvents.scardResponseHandler(event); });
     }
 
     getPrintData(json) {
-        if (isDetailedLogEnabled != webapp_config.ENABLED) {
-            let obj = JSON.parse(json);
-            let objstr = JSON.stringify(obj, null, 2);
-            if (objstr.includes("Parameter"))
-                return (objstr.includes("C-APDU") ? obj.Parameter['C-APDU'] : obj.Function);
-            else if (objstr.includes("Status"))
-                return (objstr.includes("R-APDU") ? obj.Return['R-APDU'] : obj.Return['Status']);
+        if (!isDetailedLogEnabled) {
+            const obj = JSON.parse(json);
+            const objStr = JSON.stringify(obj, null, 2);
+            if (objStr.includes("Parameter"))
+                return (objStr.includes("C-APDU") ? obj.Parameter['C-APDU'] : obj.Function);
+            else if (objStr.includes("Status"))
+                return (objStr.includes("R-APDU") ? obj.Return['R-APDU'] : obj.Return['Status']);
         }
         return json;
     }
 
-    readIncomingMessage(event) {
-        console_ely.log("<== (Websocket) : " + websock.getPrintData(event.data), 3);
-        const obj = JSON.parse(event.data);
-        var triggerResponseHandler = 0;
-        console_ely.log("currentEvent: " + currentEvent);
-        console_ely.status(obj.Return.Status);
-        switch (currentEvent) {
-            case events.EVENT_PERFORM_SCARD_ESTABLISHCONTEXT:
-                if (obj.Return.Status == "OK") {
-                    device.setEvent(events.EVENT_PERFORM_SCARD_LISTREADERS);
-                }
-                break;
-            case events.EVENT_PERFORM_SCARD_LISTREADERS:
-                if (obj.Return.Status == "OK") {
-                    readerName = util.getPreferredReaderName(obj.Return.Readers);
-                    updateReaderFwVer = ($("#scardReaderDetails").text().match(readerName) == null);
-                    if (updateReaderFwVer) {
-                        gui.update(guiEvents.GUI_READER_PRESENT, readerName);
-                    }
-                    device.setEvent(events.EVENT_PERFORM_SCARD_GETSLOTSTATUS);
-                }
-                break;
-            case events.EVENT_PERFORM_SCARD_GETSLOTSTATUS:
-                if (obj.Return.Status == "Card present") {
-                    resetSession = true;
-                    device.setEvent(events.EVENT_PERFORM_SCARD_CONNECT);
-                }
-                break;
-            case events.EVENT_PERFORM_SCARD_CONNECT:
-                if (obj.Return.Status == "OK") {
-                    gui.update(guiEvents.GUI_ATR, obj.Return.ATR);
-                    if (resetSession) { device.setEvent (events.EVENT_PERFORM_SCARD_DISCONNECT); }
-                    else if (updateReaderFwVer) { device.setEvent (events.EVENT_PERFORM_SCARD_GETVERSION); }
-                    else {
-                        device.setEvent(((authTypeSelected == PACE) || (authTypeSelected == AUTO)) ?
-                            events.EVENT_SELECT_EF_CARD_ACCESS :
-                            events.EVENT_SELECT_AID);
-                    }
-                } else {
-                    device.setEvent(events.EVENT_PERFORM_SCARD_RELEASECONTEXT);
-                }
-                break;
-            case events.EVENT_PERFORM_SCARD_GETVERSION:
-                if (obj.Return.Status == "OK") {
-                    var version = obj.Return["R-APDU"];
-                    version = util.getVersionString (readerName,
-                        version.substring(10, 12), version.substring(8, 10), version.substring(6, 8))
-                    console_ely.log(version);
-                    gui.update(guiEvents.GUI_READER_PRESENT, version);
-                    updateReaderFwVer = false;
-                }
-                device.setEvent(((authTypeSelected == PACE) || (authTypeSelected == AUTO)) ?
-                    events.EVENT_SELECT_EF_CARD_ACCESS :
-                    events.EVENT_SELECT_AID);
-                break;
-            case events.EVENT_PERFORM_SCARD_DISCONNECT:
-                if (obj.Return.Status == "OK") {
-                    if (resetSession === true) {
-                        resetSession = false;
-                        device.setEvent(events.EVENT_PERFORM_SCARD_CONNECT);
-                    } else
-                        device.setEvent(events.EVENT_PERFORM_SCARD_RELEASECONTEXT);
-                }
-                break;
-            case events.EVENT_PERFORM_SCARD_RELEASECONTEXT:
-                if (obj.Return.Status == "OK") {
-                    device.setEvent(events.EVENT_FINAL);
-                }
-                break;
-            default:
-                if (obj.Return.Status == "OK") {
-                    const fromHexString = (hexString) => Uint8Array.from(
-                        hexString.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
-                    var rApdu = fromHexString(obj.Return["R-APDU"]);
-                    console_ely.rApdu(rApdu);
-                }
-                triggerResponseHandler = 1;
-                break;
+    setReaderName(readerName) {
+        this.readerName = readerName;
+    }
+
+    getParsedResponse(wsResponse) {
+        console_ely.log(`<== : ${this.getPrintData(wsResponse.data)}`);
+        let parseResponse = JSON.parse(wsResponse.data);
+        var status = ((parseResponse.Return.Status == "OK") ||
+            (parseResponse.Return.Status == "Card present") ||
+            (parseResponse.Return.Status == "Card absent")) ? "success" : "failed";
+
+        // Convert hex string to Uint8Array if "R-APDU" exists, otherwise set data to null
+        var data = null;
+        if (parseResponse.Return && parseResponse.Return["R-APDU"]) {
+            const fromHexString = (hexString) => Uint8Array.from(
+                hexString.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
+            );
+            data = fromHexString(parseResponse.Return["R-APDU"]);
+        } else if (parseResponse.Return && parseResponse.Return.Readers) {
+            data = parseResponse.Return.Readers;
+        } else if (parseResponse.Return && parseResponse.Return["ATR"]) {
+            data = parseResponse.Return["ATR"];
+        } else if (parseResponse.Return.Status) {
+            data = parseResponse.Return.Status;
+        } else {
+            data = null;
         }
-        var promise = Promise.resolve(currentEvent);
-        if (triggerResponseHandler === 0)
-            promise.then(device.eventHandler());
-        else {
-            if (rApdu && rApdu.length)
-                promise.then(device.responseHandler(rApdu, rApdu.length));
-            else
-                device.setEvent(events.EVENT_FINAL);
-        }
+        return { Status: status, data: data };
     }
 
     async send(json) {
         this.start = new Date().getTime();
-        console_ely.log("==> (Websocket) : " + this.getPrintData(json), 2);
-        if (socket.readyState === WebSocket.CLOSED) {
+        console_ely.log(`==> : ${this.getPrintData(json)}`);
+        this.cmd = (JSON.parse(json).Function == "SCardTransmit") ? (JSON.parse(json).Parameter['C-APDU']) : json;
+        if (this.socket.readyState === WebSocket.CLOSED) {
             console_ely.log("Waiting to open");
-            await this.openSocket("ws://localhost:" + urlparams_socket);
+            await this.openSocket(`ws://localhost:${urlparams_socket}`);
         }
-        if (socket.readyState === WebSocket.OPEN) {
-            //console_ely.log("Already open");
-            //socket.send(json); // todo: socket seems to be old. fixme
-            socket.close();
-            await this.openSocket("ws://localhost:" + urlparams_socket);
+        if (this.socket.readyState === WebSocket.OPEN) {
+            this.socket.close();
+            await this.openSocket(`ws://localhost:${urlparams_socket}`);
         }
-        //else {
-        //    console_ely.log("Neither open nor closed");
-        //}
-        socket.onopen = () => socket.send(json);
+        this.socket.onopen = () => this.socket.send(json);
     }
 
-    /*
+    getCommand() {
+        return this.cmd;
+    }
+
+    isReaderAvailable() {
+        return (this.readerName?.length > 0);
+    }
+
+    /**
      * Perform SCardEstablishContext through websocket
      */
     scardEstablishContext() {
-        device.send("{\"Function\": \"SCardEstablishContext\", \"Parameter\": {\"Option\": \"SCOPE_USER\"}}");
+        this.send(`{"Function": "SCardEstablishContext", "Parameter": {"Option": "SCOPE_USER"}}`);
     }
 
-    /*
+    /**
      * Perform SCardListReaders through websocket
      */
     scardListReaders() {
-        device.send("{\"Function\": \"SCardListReaders\", \"Parameter\": {\"Option\": \"SCARD_AUTOALLOCATE\"}}");
+        this.send(`{"Function": "SCardListReaders", "Parameter": {"Option": "SCARD_AUTOALLOCATE"}}`);
     }
 
-    /*
+    /**
      * Perform SCardGetStatus through websocket
      */
     scardGetSlotStatus() {
-        device.send("{\"Function\": \"SCardGetStatus\", \"Parameter\": {\"ReaderName\": \"" + readerName + "\"}}");
+        this.send(`{"Function": "SCardGetStatus", "Parameter": {"ReaderName": "${this.readerName}"}}`);
     }
 
-    /*
+    /**
      * Perform SCardConnect through websocket
      */
     scardConnect() {
-        device.send("{\"Function\": \"SCardConnect\", \"Parameter\": {\"ReaderName\": \"" + readerName + "\", \"Mode\": \"SCARD_SHARE_SHARED\", \"Protocol\":\"T=0|1\"}}");
+        this.send(`{"Function": "SCardConnect", "Parameter": {"ReaderName": "${this.readerName}", "Mode": "SCARD_SHARE_SHARED", "Protocol":"T=0|1"}}`);
     }
 
-    /*
+    /**
      * Perform SCardDisconnect through websocket
      */
     scardDisconnect() {
-        device.send("{\"Function\": \"SCardDisconnect\", \"Parameter\": {\"ReaderName\": \"" + readerName + "\", \"Option\": \"RESET\"}}");
+        this.send(`{"Function": "SCardDisconnect", "Parameter": {"ReaderName": "${this.readerName}", "Option": "RESET"}}`);
     }
 
-    /*
+    /**
      * Perform SCardReleaseContext through websocket
      */
     scardReleaseContext() {
-        device.send("{\"Function\": \"SCardReleaseContext\", \"Parameter\": {\"Option\": \"None\"}}");
+        this.send(`{"Function": "SCardReleaseContext", "Parameter": {"Option": "None"}}`);
     }
 
-    /*
+    /**
      * Perform SCardTransmit through websocket
      */
     scardTransmit(cmd) {
-        var cApdu = util.uint8ArrayToHexString(cmd, false);
-        device.send("{\"Function\": \"SCardTransmit\", \"Parameter\": {\"ReaderName\": \"" + readerName + "\", \"C-APDU\": \"" + cApdu + "\"}}");
+        const cApdu = util.uint8ArrayToHexString(cmd, false);
+        this.send(`{"Function": "SCardTransmit", "Parameter": {"ReaderName": "${this.readerName}", "C-APDU": "${cApdu}"}}`);
     }
 
+    /**
+     * Get FW version of the scard reader
+     */
     scardGetFwVersion() {
-        var cApdu = "FF0000000301080008";
-        device.send("{\"Function\": \"SCardTransmit\", \"Parameter\": {\"ReaderName\": \"" + readerName + "\", \"C-APDU\": \"" + cApdu + "\"}}");
+        const cApdu = "FF0000000301080008";
+        this.send(`{"Function": "SCardTransmit", "Parameter": {"ReaderName": "${this.readerName}", "C-APDU": "${cApdu}"}}`);
     }
 }

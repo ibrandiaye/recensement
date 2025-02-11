@@ -1,9 +1,12 @@
+let Module = null;
+let scriptElement = null;
+
 class Util {
 
     /* load external scripts like, emscripten openpace.js and openjpeg.js.*/
     loadJS(file) {
         // DOM: Create the script element
-        var jsElm = document.createElement("script");
+        let jsElm = document.createElement("script");
         // set the type attribute
         jsElm.type = "application/javascript";
         // make the script element load file
@@ -14,17 +17,17 @@ class Util {
 
     /* remove external scripts like, emscripten openpace.js and openjpeg.js.*/
     removeJS(fileName, fileType) {
-        var targetElement = (fileType == "js") ? "script" : ((fileType == "css") ? "link" : "none"); // determine element type to create nodelist from
-        var targetAttr = (fileType == "js") ? "src" : ((fileType == "css") ? "href" : "none"); // determine corresponding attribute to test for
-        var elements = document.getElementsByTagName(targetElement)
-        for (var i = elements.length; i >= 0; i--) { // search backwards within nodelist for matching elements to remove
-            if (elements[i] && elements[i].getAttribute(targetAttr) !== null && elements[i].getAttribute(targetAttr).indexOf(fileName) != -1)
+        let targetElement = (fileType == "js") ? "script" : ((fileType == "css") ? "link" : "none"); // determine element type to create nodelist from
+        let targetAttr = (fileType == "js") ? "src" : ((fileType == "css") ? "href" : "none"); // determine corresponding attribute to test for
+        let elements = document.getElementsByTagName(targetElement)
+        for (let i = elements.length; i >= 0; i--) { // search backwards within nodelist for matching elements to remove
+            if (elements[i] && elements[i].getAttribute(targetAttr) !== null && elements[i].getAttribute(targetAttr).includes(fileName))
                 elements[i].parentNode.removeChild(elements[i]) // remove element by calling parentNode.removeChild()
         }
     }
 
     byteToHexStr(byData) {
-        return ('0' + (byData & 0xFF).toString(16)).slice(-2);
+        return (`0${(byData & 0xFF).toString(16)}`).slice(-2);
     }
 
     hexStrToInt(str) {
@@ -32,13 +35,13 @@ class Util {
     }
 
     hexStrToIntStr(str) {
-        return (('0' + this.hexStrToInt(str)).slice(-2).toString());
+        return ((`0${this.hexStrToInt(str)}`).slice(-2).toString());
     }
 
     byteArrayToInt(byteArray) {
-        var val = 0;
+        let val = 0;
         if ((byteArray != null) && (byteArray.length > 0)) {
-            for (var i = (byteArray.length - 1), j = 0; i >= 0; --i, j++)
+            for (let i = (byteArray.length - 1), j = 0; i >= 0; --i, j++)
                 val += (byteArray[i] << (j * 8));
         }
         return val;
@@ -46,28 +49,23 @@ class Util {
 
     // convert byte array into hexadecimal string
     toHexStringCa(byteArray) {
-        return Array.prototype.map.call(byteArray, function (byte) {
-            return ('0' + (byte & 0xFF).toString(16)).slice(-2);
-        }).join('');
+        return Array.prototype.map.call(byteArray, (byte) => (`0${(byte & 0xFF).toString(16)}`).slice(-2)).join('');
     }
 
     // convert byte array into hexadecimal string
     toHexString(byteArray, delimiter = ' ', len = 0) {
-        if (byteArray && byteArray.length) {
+        if (byteArray?.length) {
             if (len && (len < byteArray.length)) {
                 byteArray = byteArray.slice(0, len);
             }
-            return Array.prototype.map.call(byteArray, function (byte) {
-                return ('0' + (byte & 0xFF).toString(16)).slice(-2);
-            }).join(delimiter);
+            return Array.prototype.map.call(byteArray, (byte) => (`0${(byte & 0xFF).toString(16)}`).slice(-2)).join(delimiter);
         }
         return "";
     }
 
     // convert byte array into hexadecimal string
     strToByteArray(byteStr) {
-        let u8Array = new TextEncoder("utf-8").encode(byteStr);
-        return u8Array;
+        return new TextEncoder("utf-8").encode(byteStr);
     }
 
     // convert ASCII string to hex string
@@ -75,9 +73,9 @@ class Util {
         return this.asciiToHex(asciiStr).join(' ');
     }
     asciiToHex(str) {
-        var arr = [];
-        for (var n = 0, l = str.length; n < l; n++) {
-            var hex = Number(str.toString().charCodeAt(n)).toString(16);
+        let arr = [];
+        for (let n = 0, l = str.length; n < l; n++) {
+            let hex = Number(str.toString().charCodeAt(n)).toString(16);
             arr.push(hex);
         }
         return arr;
@@ -89,26 +87,26 @@ class Util {
 
     hexToAscii(hex) {
         if (hex == undefined) { return ""; }
-        var hexStr = hex.toString(); //force conversion
-        var str = '';
-        for (var i = 0;
+        let hexStr = hex.toString(); //force conversion
+        let str = '';
+        for (let i = 0;
             (i < hexStr.length && hexStr.substr(i, 2) !== '00'); i += 2)
             str += String.fromCharCode(parseInt(hexStr.substr(i, 2), 16));
         return str;
     }
 
     toUtf8Array(str) {
-        var utf8 = [];
-        for (var i = 0; i < str.length; i++) {
-            var charcode = str.charCodeAt(i);
-            if (charcode < 0x80) utf8.push(charcode);
-            else if (charcode < 0x800) {
-                utf8.push(0xc0 | (charcode >> 6),
-                    0x80 | (charcode & 0x3f));
-            } else if (charcode < 0xd800 || charcode >= 0xe000) {
-                utf8.push(0xe0 | (charcode >> 12),
-                    0x80 | ((charcode >> 6) & 0x3f),
-                    0x80 | (charcode & 0x3f));
+        let utf8 = [];
+        for (let i = 0; i < str.length; i++) {
+            let charCode = str.charCodeAt(i);
+            if (charCode < 0x80) utf8.push(charCode);
+            else if (charCode < 0x800) {
+                utf8.push(0xc0 | (charCode >> 6),
+                    0x80 | (charCode & 0x3f));
+            } else if (charCode < 0xd800 || charCode >= 0xe000) {
+                utf8.push(0xe0 | (charCode >> 12),
+                    0x80 | ((charCode >> 6) & 0x3f),
+                    0x80 | (charCode & 0x3f));
             }
             // surrogate pair
             else {
@@ -116,24 +114,25 @@ class Util {
                 // UTF-16 encodes 0x10000-0x10FFFF by
                 // subtracting 0x10000 and splitting the
                 // 20 bits of 0x0-0xFFFFF into two halves
-                charcode = 0x10000 + (((charcode & 0x3ff) << 10) |
+                charCode = 0x10000 + (((charCode & 0x3ff) << 10) |
                     (str.charCodeAt(i) & 0x3ff));
-                utf8.push(0xf0 | (charcode >> 18),
-                    0x80 | ((charcode >> 12) & 0x3f),
-                    0x80 | ((charcode >> 6) & 0x3f),
-                    0x80 | (charcode & 0x3f));
+                utf8.push(0xf0 | (charCode >> 18),
+                    0x80 | ((charCode >> 12) & 0x3f),
+                    0x80 | ((charCode >> 6) & 0x3f),
+                    0x80 | (charCode & 0x3f));
             }
         }
         return utf8;
     }
 
     fromUtf8Array(data, len = 0) { // array of bytes
-        var str = '', i;
-        if (!len)
-            len = data.length;
+        let str = '';
 
-        for (i = 0; i < len; i++) {
-            var value = data[i];
+        if (!len)
+            len = data?.length;
+
+        for (let i = 0; i < len; i++) {
+            let value = data[i];
 
             if (value < 0x80) {
                 str += String.fromCharCode(value);
@@ -145,7 +144,7 @@ class Util {
                 i += 2;
             } else {
                 // surrogate pair
-                var charCode = ((value & 0x07) << 18 | (data[i + 1] & 0x3F) << 12 | (data[i + 2] & 0x3F) << 6 | data[i + 3] & 0x3F) - 0x010000;
+                let charCode = ((value & 0x07) << 18 | (data[i + 1] & 0x3F) << 12 | (data[i + 2] & 0x3F) << 6 | data[i + 3] & 0x3F) - 0x010000;
 
                 str += String.fromCharCode(charCode >> 10 | 0xD800, charCode & 0x03FF | 0xDC00);
                 i += 3;
@@ -155,9 +154,9 @@ class Util {
     }
 
     strToArrayBuffer(str) {
-        var buf = new ArrayBuffer(str.length * 2); // 2 bytes for each char
-        var bufView = new Uint16Array(buf);
-        for (var i = 0, strLen = str.length; i < strLen; i++) {
+        let buf = new ArrayBuffer(str.length * 2); // 2 bytes for each char
+        let bufView = new Uint16Array(buf);
+        for (let i = 0, strLen = str.length; i < strLen; i++) {
             bufView[i] = str.charCodeAt(i);
         }
         return buf;
@@ -173,16 +172,14 @@ class Util {
         let hexString = "";
         const separator = addSpace ? " " : "";
 
-        for (let i = 0; i < uint8Array.length; i++) {
-            const hex = uint8Array[i].toString(16).padStart(2, "0");
+        for (const uint8Element of uint8Array) {
+            const hex = uint8Element.toString(16).padStart(2, "0");
             hexString += hex + separator;
         }
 
         // Remove the trailing separator (space at the end)
         hexString = hexString.trimEnd(separator);
-        hexString = hexString.toUpperCase();
-
-        return hexString;
+        return hexString.toUpperCase();
     }
 
     /*
@@ -195,135 +192,17 @@ class Util {
         for (let i = 0; i < hexArray.length; i++) {
             formattedString += hexArray[i];
 
-            if ((i + 1) % 24 === 0) {
-                formattedString += '\n';
-            } else {
-                formattedString += ' ';
-            }
+            formattedString += (i + 1) % 24 === 0 ? '\n' : ' ';
         }
 
         return formattedString.trim();
     }
 
-    wrapTlv(tag, payLoad) {
-        if (payLoad.length < 0) {
-            return null;
-        }
-
-        const wrappedData = [];
-        wrappedData.push(tag & 0xFF);
-
-        if (payLoad.length <= 0x7F) {
-            wrappedData.push(payLoad.length & 0xFF);
-        } else if (payLoad.length <= 0xFF) {
-            wrappedData.push(0x81);
-            wrappedData.push(payLoad.length & 0xFF);
-        } else if (payLoad.length <= 0xFFFF) {
-            wrappedData.push(0x82);
-            wrappedData.push((payLoad.length >> 8) & 0xFF);
-            wrappedData.push(payLoad.length & 0xFF);
-        } else if (payLoad.length <= 0xFFFFFF) {
-            wrappedData.push(0x83);
-            wrappedData.push((payLoad.length >> 16) & 0xFF);
-            wrappedData.push((payLoad.length >> 8) & 0xFF);
-            wrappedData.push(payLoad.length & 0xFF);
-        } else if (payLoad.length <= 0xFFFFFFFF) {
-            wrappedData.push(0x84);
-            wrappedData.push((payLoad.length >> 24) & 0xFF);
-            wrappedData.push((payLoad.length >> 16) & 0xFF);
-            wrappedData.push((payLoad.length >> 8) & 0xFF);
-            wrappedData.push(payLoad.length & 0xFF);
-        } else {
-            return null;
-        }
-
-        // Append the data from payLoad to the wrappedData array.
-        wrappedData.push(...payLoad);
-
-        return wrappedData;
-    }
-
-    unwrapTlv(expectedTags, wrappedData, length, skip = false) {
-        console_ely.logFuncName(this.unwrapTlv.name);
-        if (wrappedData == null || wrappedData.length == 0) { return null; }
-        if (length == null) { length = wrappedData.length; }
-        if (!expectedTags.length || (length < 2)) {
-            console.log("ERROR: Invalid wrapped data length", 4);
-            return null;
-        }
-        var expectedTagSize = expectedTags.length;
-
-        for (var i = 0; i < length;) {
-            var berTagLen = wrappedData[i + expectedTagSize];
-            var dataLen = 0;
-            var tagLenSize = 0;
-
-            if (berTagLen == 0x81) {
-                tagLenSize = (expectedTagSize + 2);
-                dataLen = wrappedData[i + expectedTagSize + 1];
-            }
-            else if (berTagLen == 0x82) {
-                tagLenSize = (expectedTagSize + 3);
-                dataLen = wrappedData[i + expectedTagSize + 1];
-                dataLen = (dataLen << 8) + wrappedData[i + expectedTagSize + 2];
-            }
-            else if (berTagLen == 0x83) {
-                tagLenSize = (expectedTagSize + 4);
-                dataLen = wrappedData[i + expectedTagSize + 1];
-                dataLen = (dataLen << 8) + wrappedData[i + expectedTagSize + 2];
-                dataLen = (dataLen << 8) + wrappedData[i + expectedTagSize + 3];
-            }
-            else if (berTagLen == 0x84) {
-                tagLenSize = (expectedTagSize + 5);
-                dataLen = wrappedData[i + expectedTagSize + 1];
-                dataLen = (dataLen << 8) + wrappedData[i + expectedTagSize + 2];
-                dataLen = (dataLen << 8) + wrappedData[i + expectedTagSize + 3];
-                dataLen = (dataLen << 8) + wrappedData[i + expectedTagSize + 4];
-            }
-            else {
-                tagLenSize = (expectedTagSize + 1);
-                dataLen = wrappedData[i + expectedTagSize];
-            }
-
-            var k = 0;
-            for (var expectedTag of expectedTags) {
-                if (expectedTag === wrappedData[i + k]) {
-                    k++;
-                } else break;
-            }
-            if (k == expectedTagSize) {
-                console_ely.log("     " + this.uint8ArrayToHexString(expectedTags));
-                if (skip == false)
-                    return wrappedData.slice(i + tagLenSize, dataLen + tagLenSize + i);
-                else
-                    return wrappedData.slice(dataLen + tagLenSize + i);
-            }
-
-            i += (tagLenSize + dataLen);
-        }
-
-        return null;
-    }
-
-    unwrapTlvs(expectedTags, wrappedData, skip = false) {
-        for (var expectedTag of expectedTags) {
-            if (expectedTag.skip >= 0) {
-                wrappedData = wrappedData.slice(expectedTag.skip);
-            } else {
-                wrappedData = this.unwrapTlv(expectedTag, wrappedData, wrappedData.length, skip);
-            }
-            if (wrappedData == null) {
-                break;
-            }
-        }
-        return wrappedData;
-    }
-
     memcpy(destination, source, length, destIndex, srcIndex) {
         if (length >= 0) {
             // Convert source and destination to typed arrays
-            var src = new Uint8Array(source.buffer || source, source.byteOffset || srcIndex, length);
-            var dst = new Uint8Array(destination.buffer || destination, destination.byteOffset || destIndex, length);
+            let src = new Uint8Array(source.buffer || source, source.byteOffset || srcIndex, length);
+            let dst = new Uint8Array(destination.buffer || destination, destination.byteOffset || destIndex, length);
 
             // Copy bytes from source to destination
             dst.set(src);
@@ -341,52 +220,92 @@ class Util {
         );
     }
 
-    // find index of a subarray in an array
-    findIndex(array, subarray, index) {
-        index.val = -1;
-        if ((array.toString()).indexOf(subarray.toString()) > -1) {
-            for (let i = 0, j = 0; i < array.length; i++) {
-                for (j = 0; j < subarray.length; j++) {
-                    if (array[i + j] != subarray[j])
-                        break;
-                }
-                if (j == subarray.length) {
-                    index.val = i;
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
     appendUint8Arrays(existingArray, newData, length = 0) {
         console_ely.logFuncName(this.appendUint8Arrays.name);
         if (length === 0)
             length = newData.length;
-        let newArray = new Uint8Array(existingArray.length + length);
+        const newArray = new Uint8Array(existingArray.length + length);
         newArray.set(existingArray, 0);
         newArray.set(newData, existingArray.length);
         return newArray;
     }
 
-    fileSelectionHandler(listOfFiles) {
-        console_ely.logFuncName(this.fileSelectionHandler.name);
-        var byteArrayFile = [listOfFiles.index];
-        for (const file of listOfFiles) {
+    /**
+     * Reads a file and converts it into a byte array (Uint8Array).
+     * 
+     * @param {File} file - The file to be read, typically from an HTML file input element.
+     * @returns {Promise<Uint8Array>} A promise that resolves to a `Uint8Array` representing the file's content.
+     */
+    readFileAsArrayBuffer(file) {
+        return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.onload = function (event) {
-                byteArrayFile[listOfFiles.index] = new Uint8Array(event.target.result);
-            };
+            reader.onload = () => resolve(new Uint8Array(reader.result));
+            reader.onerror = () => reject(reader.error);
             reader.readAsArrayBuffer(file);
+        });
+    }
+
+    /**
+     * Processes the list of selected files and converts them into byte arrays.
+     * 
+     * @param {FileList|Array} listOfFiles - The list of files to be processed, typically from an HTML file input element.
+     * @returns {Promise<Uint8Array[]>} A promise that resolves to an array of `Uint8Array`, where each element represents the byte array of a file.
+     */
+    async fileSelectionHandler(listOfFiles) {
+        console_ely.logFuncName(this.fileSelectionHandler.name);
+        const byteArrayFile = [];
+
+        const filesArray = Array.from(listOfFiles);
+
+        if (filesArray.length > 0) {
+            // Read each file and store the result in byteArrayFile
+            for (let index = 0; index < filesArray.length; index++) {
+                byteArrayFile[index] = await this.readFileAsArrayBuffer(filesArray[index]);
+            }
         }
+
         return byteArrayFile;
+    }
+
+    /**
+     * Processes the selected files from the given file input element and retrieves their data as byte arrays.
+     * 
+     * @param {HTMLInputElement} fileInput - The file input element containing the selected files.
+     * @returns {Promise<Uint8Array[]|null>} A promise that resolves to an array of byte arrays representing the file data,
+     * or null if no files are selected.
+     */
+    async processAndRetrieveFileData(fileInput) {
+        const listOfFiles = fileInput.files;
+
+        // Return null if no files are selected
+        if (!listOfFiles || listOfFiles.length === 0) {
+            return null;
+        }
+
+        const byteArray = await this.fileSelectionHandler(listOfFiles);
+
+        // Access the byte arrays corresponding to each file
+        let fileData = null;
+        Array.from(listOfFiles).forEach((file, index) => {
+            fileData = byteArray[index];
+        });
+
+        return fileData;
     }
 
     async readDefaultCertificates(filename) {
         console_ely.logFuncName(this.readDefaultCertificates.name);
         try {
+            // Check filename presence
+            if (filename.search("/null") != -1) {
+                return null;
+            }
             const response = await fetch(filename);
-            let data = await response.arrayBuffer();
+            if (response.status == 404) {
+                return null;
+            }
+            const data = await response.arrayBuffer();
             return new Uint8Array(data);
         } catch (error) {
             console.error('Error reading file: ', error);
@@ -394,23 +313,57 @@ class Util {
         }
     }
 
+    getSetCertCookie(data, cookie) {
+        if (data) {
+            localStorage.setItem(cookie, data);
+            // NOTE: It will be saved as a string containing comma separated integers
+        } else if (localStorage.getItem(cookie)) {
+            let savedData = localStorage.getItem(cookie).split(",");
+            let outData = [];
+            for (let i = 0; i < savedData.length; i++)
+                outData[i] = parseInt(savedData[i]);
+            data = outData;
+        }
+        return data;
+    }
+
     isElyctisMultiSlotReader(readerName) {
-        let REGEX_MULTISLOT = /CL [Rr]{1}eader [A-F0-9]{16} [0-9]{1}/; // Uses Proprietary CCID driver
+        const REGEX_MULTISLOT = /CL [Rr]{1}eader [A-F0-9]{16} [0-9]{1}/; // Uses Proprietary CCID driver
         return (readerName.match(REGEX_MULTISLOT) != null);
     }
 
     isElyctisIdReader(readerName) {
-        let REGEX_IDREADER = /ELYCTIS CL [Rr]{1}eader [A-F0-9]{12} [0-9]{1}/; // Uses Microsoft CCID driver
+        const REGEX_IDREADER = /ELYCTIS CL [Rr]{1}eader [A-F0-9]{12} [0-9]{1}/; // Uses Microsoft CCID driver
         return (readerName.match(REGEX_IDREADER) != null);
     }
 
-    getPreferredReaderName(readers) {
-        for (var i = 0; i < readers.length; i++) {
-            if (readers[i].toLowerCase().match("ELYCTIS CL Reader".toLowerCase())) {
-                console_ely.log("Selected reader: " + readerName);
-                return readers[i];
-            }
+    selectElyctisReader(readers) {
+        const keyword1 = "ELYCTIS".toLowerCase();
+        const keyword2 = "CL ".toLowerCase();
+
+        // Check if readers is undefined or null
+        if (!readers) {
+            console.error("Error: readers is undefined or null");
+            return null;
         }
+
+        // Check if readers is a string and convert it to an array
+        if (typeof readers === 'string') {
+            readers = [readers];
+        }
+
+        // Ensure readers is an array before proceeding
+        if (!Array.isArray(readers)) {
+            console.error("Error: readers should be an array or a string");
+            return null;
+        }
+
+        for (const readerElement of readers) {
+            const reader = readerElement.toLowerCase();
+            if (reader.includes(keyword1) && reader.includes(keyword2))
+                return readerElement;
+        }
+        return null;
     }
 
     getVersionString(readerName, mj, mi, bld) {
@@ -420,44 +373,39 @@ class Util {
             mi = this.hexStrToIntStr(mi);
             bld = this.hexStrToIntStr(bld);
         } // else encoding in bcd
-        var version = "FW " + mj + "." + mi + "." + bld;
+        let version = `FW ${mj}.${mi}.${bld}`;
 
-        return (readerName + '\t\t' + version);
+        return (`${readerName}\t\t${version}`);
     }
 
     buildDate(d, m, y, format) {
-        var date = '';
-        var ylen = y.length;
-        var mlen = m.length;
-        var dlen = d.length;
-        switch (format) {
-            case 'yymmdd': // YEAR_FIRST_WITH_NO_SEPARATOR
-            case 'yyyymmdd':
-                date = date.padEnd(ylen, y).padEnd(ylen + mlen, m).padEnd(ylen + mlen + dlen, d);
-                break;
-            case 'yy/mm/dd': // YEAR_FIRST_WITH_SLASH_SEPARATOR
-            case 'yyyy/mm/dd':
-                date = date.padEnd(ylen, y).padEnd(ylen + 1, "/").padEnd(ylen + 1 + mlen, m).padEnd(ylen + 1 + mlen + 1, "/").padEnd(ylen + 1 + mlen + 1 + dlen, d);
-                break;
-            case 'yy-mm-dd': // YEAR_FIRST_WITH_HYPHEN_SEPARATOR
-            case 'yyyy-mm-dd':
-                date = date.padEnd(ylen, y).padEnd(ylen + 1, "-").padEnd(ylen + 1 + mlen, m).padEnd(ylen + 1 + mlen + 1, "-").padEnd(ylen + 1 + mlen + 1 + dlen, d);
-                break;
-            case 'ddmmyy': // YEAR_LAST_WITH_NO_SEPARATOR
-            case 'ddmmyyyy':
-                date = date.padEnd(dlen, d).padEnd(dlen + mlen, m).padEnd(dlen + mlen + ylen, y);
-                break;
-            default:
-            case 'dd/mm/yy': // YEAR_LAST_WITH_SLASH_SEPARATOR
-            case 'dd/mm/yyyy':
-                date = date.padEnd(dlen, d).padEnd(dlen + 1, "/").padEnd(dlen + 1 + mlen, m).padEnd(dlen + 1 + mlen + 1, "/").padEnd(dlen + 1 + mlen + 1 + ylen, y);
-                break;
-            case 'dd-mm-yy': // YEAR_LAST_WITH_HYPHEN_SEPARATOR
-            case 'dd-mm-yyyy':
-                date = date.padEnd(dlen, d).padEnd(dlen + 1, "-").padEnd(dlen + 1 + mlen, m).padEnd(dlen + 1 + mlen + 1, "-").padEnd(dlen + 1 + mlen + 1 + ylen, y);
-                break;
+        let date = '';
+        let ylen = y.length;
+        let mlen = m.length;
+        let dlen = d.length;
+        if (ylen && mlen && dlen) {
+            switch (format) {
+                case 'yymmdd': // YEAR_FIRST_WITH_NO_SEPARATOR
+                case 'yyyymmdd':
+                    return date.padEnd(ylen, y).padEnd(ylen + mlen, m).padEnd(ylen + mlen + dlen, d);
+                case 'yy/mm/dd': // YEAR_FIRST_WITH_SLASH_SEPARATOR
+                case 'yyyy/mm/dd':
+                    return date.padEnd(ylen, y).padEnd(ylen + 1, "/").padEnd(ylen + 1 + mlen, m).padEnd(ylen + 1 + mlen + 1, "/").padEnd(ylen + 1 + mlen + 1 + dlen, d);
+                case 'yy-mm-dd': // YEAR_FIRST_WITH_HYPHEN_SEPARATOR
+                case 'yyyy-mm-dd':
+                    return date.padEnd(ylen, y).padEnd(ylen + 1, "-").padEnd(ylen + 1 + mlen, m).padEnd(ylen + 1 + mlen + 1, "-").padEnd(ylen + 1 + mlen + 1 + dlen, d);
+                case 'ddmmyy': // YEAR_LAST_WITH_NO_SEPARATOR
+                case 'ddmmyyyy':
+                    return date.padEnd(dlen, d).padEnd(dlen + mlen, m).padEnd(dlen + mlen + ylen, y);
+                default:
+                case 'dd/mm/yy': // YEAR_LAST_WITH_SLASH_SEPARATOR
+                case 'dd/mm/yyyy':
+                    return date.padEnd(dlen, d).padEnd(dlen + 1, "/").padEnd(dlen + 1 + mlen, m).padEnd(dlen + 1 + mlen + 1, "/").padEnd(dlen + 1 + mlen + 1 + ylen, y);
+                case 'dd-mm-yy': // YEAR_LAST_WITH_HYPHEN_SEPARATOR
+                case 'dd-mm-yyyy':
+                    return date.padEnd(dlen, d).padEnd(dlen + 1, "-").padEnd(dlen + 1 + mlen, m).padEnd(dlen + 1 + mlen + 1, "-").padEnd(dlen + 1 + mlen + 1 + ylen, y);
+            }
         }
-
         return date;
     }
 
@@ -478,11 +426,7 @@ class Util {
 
     getPixelData(frameInfo, decodedBuffer) {
         if (frameInfo.bitsPerSample > 8) {
-            if (frameInfo.isSigned) {
-                return new Int16Array(decodedBuffer.buffer, decodedBuffer.byteOffset, decodedBuffer.byteLength / 2);
-            } else {
-                return new Uint16Array(decodedBuffer.buffer, decodedBuffer.byteOffset, decodedBuffer.byteLength / 2);
-            }
+            return frameInfo.isSigned ? new Int16Array(decodedBuffer.buffer, decodedBuffer.byteOffset, decodedBuffer.byteLength / 2) : new Uint16Array(decodedBuffer.buffer, decodedBuffer.byteOffset, decodedBuffer.byteLength / 2);
         } else {
             return decodedBuffer;
         }
@@ -492,14 +436,11 @@ class Util {
         let outOffset = 0;
         const bytesPerSample = (frameInfo.bitsPerSample <= 8) ? 1 : 2;
         let planeSize = frameInfo.width * frameInfo.height * bytesPerSample;
-        let shift = 0;
-        if (frameInfo.bitsPerSample > 8) {
-            shift = 8;
-        }
+        let shift = frameInfo.bitsPerSample > 8 ? 8 : 0;
         let inOffset = 0;
 
-        for (var y = 0; y < frameInfo.height; y++) {
-            for (var x = 0; x < frameInfo.width; x++) {
+        for (let y = 0; y < frameInfo.height; y++) {
+            for (let x = 0; x < frameInfo.width; x++) {
                 imageData.data[outOffset++] = pixelData[inOffset++] >> shift;
                 imageData.data[outOffset++] = pixelData[inOffset++] >> shift;
                 imageData.data[outOffset++] = pixelData[inOffset++] >> shift;
@@ -509,9 +450,9 @@ class Util {
     }
 
     grayToCanvas(frameInfo, pixelData, imageData) {
-        var outOffset = 0;
-        var planeSize = frameInfo.width * frameInfo.height;
-        var inOffset = 0;
+        let outOffset = 0;
+        let planeSize = frameInfo.width * frameInfo.height;
+        let inOffset = 0;
 
         let minMax = this.getMinMax(frameInfo, pixelData);
         //console.log(minMax);
@@ -519,18 +460,18 @@ class Util {
         //console.log('dynamicRange=', dynamicRange);
         let bitsOfData = 1;
         while (dynamicRange > 1) {
-            dynamicRange = dynamicRange >> 1;
+            dynamicRange >>= 1;
             bitsOfData++;
         }
         //console.log('bitsOfData = ', bitsOfData);
-        let bitShift = bitsOfData - 8;
+        const bitShift = bitsOfData - 8;
         const offset = -minMax.min;
         //console.log('bitShift=', bitShift);
         //console.log('offset=', offset);
 
         let value;
-        for (var y = 0; y < frameInfo.height; y++) {
-            for (var x = 0; x < frameInfo.width; x++) {
+        for (let y = 0; y < frameInfo.height; y++) {
+            for (let x = 0; x < frameInfo.width; x++) {
                 if (frameInfo.bitsPerSample <= 8) {
                     value = pixelData[inOffset++];
                 } else {
@@ -561,11 +502,11 @@ class Util {
         // Decode
         decoder.decodeSubResolution(decodeLevel, decodeLayer);
 
-        let resolutionAtLevel = decoder.calculateSizeAtDecompositionLevel(decodeLevel);
+        const resolutionAtLevel = decoder.calculateSizeAtDecompositionLevel(decodeLevel);
         frameInfo = decoder.getFrameInfo();
 
         // Get decoded data
-        var decodedBuffer = decoder.getDecodedBuffer();
+        let decodedBuffer = decoder.getDecodedBuffer();
         frameInfo.width = resolutionAtLevel.width;
         frameInfo.height = resolutionAtLevel.height;
         frameInfo = decoder.getFrameInfo();
@@ -574,21 +515,21 @@ class Util {
     }
 
     getDecodedImageData(image) {
-        var dataURL;
-        if (image.type == webapp_config.UNKNOWN) {
+        let dataURL;
+        if (image.type == IMGTYPE.UNKNOWN) {
             dataURL = '';
-        } else if (image.type == webapp_config.JP2) {
+        } else if (image.type == IMGTYPE.JP2) {
             // image format is JP2
-            var t0 = new Date().getTime();
-            var [rgbImage, decodedBuffer] = util.decodeJpeg2K(image.data);
-            console_ely.log("w x h: (" + rgbImage.width + " x " + rgbImage.height + ")");
-            console_ely.log('Timetaken to decode: ', ((new Date().getTime()) - t0) + ' ms');
+            let t0 = new Date().getTime();
+            let [rgbImage, decodedBuffer] = this.decodeJpeg2K(image.data);
+            console_ely.log(`w x h: (${rgbImage.width} x ${rgbImage.height})`);
+            console_ely.log('Timetaken to decode: ', `${(new Date().getTime()) - t0} ms`);
             const pixelData = this.getPixelData(rgbImage, decodedBuffer);
-            var canvas = document.createElement('canvas');
+            let canvas = document.createElement('canvas');
             canvas.width = rgbImage.width;
             canvas.height = rgbImage.height;
-            var ctx = canvas.getContext('2d');
-            var imageData = ctx.createImageData(rgbImage.width, rgbImage.height);
+            let ctx = canvas.getContext('2d');
+            let imageData = ctx.createImageData(rgbImage.width, rgbImage.height);
             if (rgbImage.componentCount > 1)
                 this.colorToCanvas(rgbImage, pixelData, imageData);
             else {
@@ -596,42 +537,27 @@ class Util {
             }
             ctx.putImageData(imageData, 0, 0);
             dataURL = canvas.toDataURL();
-        } else if (image.type == webapp_config.WSQ) {
-            dataURL = "data:image/jpeg;base64," + image.data;
+        } else if (image.type == IMGTYPE.WSQ) {
+            dataURL = `data:image/jpeg;base64,${image.data}`;
         } else {
             // image format is JPG, PNG
-            var buffer = util.hexToBase64(util.toHexString(image.data));
-            dataURL = "data:image/jpeg;base64," + buffer;
+            let buffer = this.hexToBase64(this.toHexString(image.data));
+            dataURL = `data:image/jpeg;base64,${buffer}`;
         }
         if (dataURL == '') { gui.appendStatusTextTag(image.type, "fail"); }
         else { gui.appendStatusTextTag(image.type, "success"); }
         return dataURL;
     }
 
-    getBioHeader(data) {
-        var header = { ver: null, type: null, subType: null, creationDate: null, validityPeriod: null,
-            creatorOfBrd: null, formatOwner: null, formatType: null };
-        var tagList = [[0xA1]];
-        var bht = this.unwrapTlvs (tagList, data);
-        header.ver = this.unwrapTlv([0x80], bht);
-        header.type = this.unwrapTlv([0x81], bht);
-        header.subType = this.unwrapTlv([0x82], bht);
-        header.creationDate = this.unwrapTlv([0x83], bht);
-        header.validityPeriod = this.unwrapTlv([0x85], bht);
-        header.creatorOfBrd = this.unwrapTlv([0x86], bht);
-        header.formatOwner = this.unwrapTlv([0x87], bht);
-        header.formatType = this.unwrapTlv([0x88], bht);
-        return header;
-    }
-    getBioSubTypeName (header) {
-        var type = header.type;
-        var subType = header.subType;
-        var name = '';
+    getBioSubTypeName(header) {
+        let type = header.type;
+        let subType = header.subType;
+        let name = '';
         if (type == 0x08) { // Mandatory field for fingerprint
             switch (subType & 0x03) {
                 case 0x01: { name += 'Right'; break }
                 case 0x02: { name += 'Left'; break }
-                default:   { name += 'Unknown'; break }
+                default: { name += 'Unknown'; break }
             }
             switch (subType & 0x1C) {
                 case 0x04: { name += '-Thumb'; break }
@@ -639,96 +565,17 @@ class Util {
                 case 0x0C: { name += '-Middle'; break }
                 case 0x10: { name += '-Ring'; break }
                 case 0x14: { name += '-Little'; break }
-                default:   { name += '-Unspecified'; break }
+                default: { name += '-Unspecified'; break }
             }
             name += ' finger';
         } else {
             switch (subType & 0x03) {
                 case 0x01: { name += 'Right'; break }
                 case 0x02: { name += 'Left'; break }
-                default:   { name += 'Unknown'; break }
+                default: { name += 'Unknown'; break }
             }
         }
         return name;
-    }
-
-    getImageDetails(data) {
-        const patternJp2 = [0x00, 0x00, 0x00, 0x0C, 0x6A];
-        const patternPng = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A];
-        const patternJpg = [0xFF, 0xD8, 0xFF];
-        const patternWsqSoi = [0xFF, 0xA0];
-        const patternWsqEoi = [0xFF, 0xA1];
-
-        var image = { header: {}, data: [], type: webapp_config.UNKNOWN };
-        image.header = this.getBioHeader(data);
-
-        let index = { val: -1 };
-        var type;
-        if (util.findIndex(data, patternJp2, index)) {
-            type = webapp_config.JP2;
-        } else if (util.findIndex(data, patternPng, index)) {
-            type = webapp_config.PNG;
-        } else if (util.findIndex(data, patternJpg, index)) {
-            type = webapp_config.JPG;
-        } else if ((util.findIndex(data, patternWsqSoi, index)) && (util.findIndex(data, patternWsqEoi, index))) {
-            type = webapp_config.WSQ;
-        } /*else if ((image.header.formatType != null) && (image.header.formatType == 0x02)) {
-            type = webapp_config.WSQ; // todo: WSQ decoder to be added
-            index.val = 0x2E; // offset at which WSQ SOI (FF A0) exists 
-        }*/
-        if (index.val != -1) {
-            image.type = type;
-            console_ely.log("image.type: " + image.type);
-            if (image.type == webapp_config.WSQ) {
-                var imgData = bioMini.retrieveWsqData(data);
-                if (imgData != null) {
-                    // TODO: If multiple FPs in a single template, this needs to be worked
-                    image.data = imgData[0];
-                }
-            } else
-                image.data = new Uint8Array(data.slice(index.val));
-        } else {
-            console_ely.log("Invalid image type");
-        }
-        return image;
-    }
-
-    async loadOpenPaceModule() {
-        return new Promise((resolve, reject) => {
-            scriptElement = document.createElement('script');
-            scriptElement.src = '/js/eactest.js';
-            scriptElement.onload = () => {
-                createModule().then(module => {
-                    Module = module;
-                    console.log('Script loaded successfully.');
-                    resolve("success");
-                });
-            };
-            document.body.appendChild(scriptElement);
-        });
-    }
-
-    async unloadOpenPaceModule() {
-        return new Promise((resolve) => {
-            if (scriptElement instanceof Node && scriptElement.parentNode === document.body) {
-                document.body.removeChild(scriptElement);
-                scriptElement = null;
-                Module = null;
-            } else {
-                console.log('No script to unload.');
-            }
-            resolve("success");
-        });
-    }
-
-    async reloadOpenPaceModule() {
-        var result = await this.unloadOpenPaceModule();
-        if (result === "success")
-            return await this.loadOpenPaceModule();
-        else {
-            console.log("Error: Unloading script failed.");
-            return "failed";
-        }
     }
 
     // stress Test
@@ -740,7 +587,7 @@ class Util {
     // stress Test
     startDelayedFunction() {
         stressTestLoopCount++;
-        console.log("stressTestLoopCount: " + stressTestLoopCount);
+        console.log(`stressTestLoopCount: ${stressTestLoopCount}`);
         timerId = setTimeout(this.loopStart, 2000);
     }
 }
