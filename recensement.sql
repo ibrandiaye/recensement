@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : dim. 12 jan. 2025 à 23:35
+-- Généré le : mer. 12 fév. 2025 à 12:34
 -- Version du serveur : 10.4.25-MariaDB
 -- Version de PHP : 8.1.10
 
@@ -227,7 +227,10 @@ CREATE TABLE `cartes` (
   `departement_id` bigint(20) UNSIGNED NOT NULL,
   `region_id` bigint(20) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `sexe` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `commune` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `localisation` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -7393,7 +7396,48 @@ INSERT INTO `communes` (`id`, `nom`, `departement_id`, `arrondissement_id`, `cre
 (536, 'BIGNONA', 18, 167, '2025-01-12 17:32:05', '2025-01-12 17:32:05'),
 (537, 'SAINT LOUIS', 19, 169, '2025-01-12 17:32:05', '2025-01-12 17:32:05'),
 (538, 'OUSSOUYE', 11, 168, '2025-01-12 17:32:05', '2025-01-12 17:32:05'),
-(539, 'GUINAW RAIL SUD', 8, 10, '2025-01-12 17:32:05', '2025-01-12 17:32:05');
+(539, 'GUINAW RAIL SUD', 8, 10, '2025-01-12 17:32:05', '2025-01-12 17:32:05'),
+(540, 'GOREE', 5, 128, '2025-02-10 11:52:09', '2025-02-10 11:52:09'),
+(541, 'BARGNY', 17, 129, '2025-02-10 11:52:35', '2025-02-10 11:52:35'),
+(542, 'SENDOU', 17, 129, '2025-02-10 11:53:00', '2025-02-10 11:53:00'),
+(543, 'DIOFIOR', 2, 133, '2025-02-10 11:53:23', '2025-02-10 11:53:23'),
+(544, 'SOKONE', 24, 134, '2025-02-10 11:53:48', '2025-02-10 11:53:48'),
+(545, 'KAHONE', 3, 141, '2025-02-10 11:54:14', '2025-02-10 11:54:14'),
+(546, 'DAHRA', 4, 149, '2025-02-10 11:54:43', '2025-02-10 11:54:43'),
+(547, 'OUROSSOGUI', 26, 152, '2025-02-10 11:55:08', '2025-02-10 11:55:08'),
+(548, 'RICHARD TOLL', 38, 154, '2025-02-10 11:55:37', '2025-02-10 11:55:37'),
+(549, 'NDIOUM', 37, 155, '2025-02-10 11:56:02', '2025-02-10 11:56:02'),
+(550, 'MARSSASSOUM', 34, 158, '2025-02-10 11:56:30', '2025-02-10 11:56:30'),
+(551, 'JOAL FADIOUTH', 14, 163, '2025-02-10 11:56:58', '2025-02-10 11:56:58'),
+(552, 'KHOMBOLE', 1, 164, '2025-02-10 11:57:34', '2025-02-10 11:57:34'),
+(553, 'POUT', 1, 164, '2025-02-10 11:57:59', '2025-02-10 11:57:59'),
+(554, 'MECKHE', 9, 165, '2025-02-10 11:58:23', '2025-02-10 11:58:23'),
+(555, 'THIONCK ESSYL', 18, 167, '2025-02-10 11:58:50', '2025-02-10 11:58:50');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `comptages`
+--
+
+CREATE TABLE `comptages` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `inscription` int(11) NOT NULL DEFAULT 0,
+  `modification` int(11) NOT NULL DEFAULT 0,
+  `changement` int(11) NOT NULL DEFAULT 0,
+  `radiation` int(11) NOT NULL DEFAULT 0,
+  `commune_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `semaine_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `comptages`
+--
+
+INSERT INTO `comptages` (`id`, `inscription`, `modification`, `changement`, `radiation`, `commune_id`, `created_at`, `updated_at`, `semaine_id`) VALUES
+(1, 50, 20, 10, 2, 1, '2025-01-30 10:57:43', '2025-01-30 10:57:43', 1);
 
 -- --------------------------------------------------------
 
@@ -7536,6 +7580,32 @@ INSERT INTO `inscriptions` (`id`, `centrevote_id`, `identification_id`, `created
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `lots`
+--
+
+CREATE TABLE `lots` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `numero` int(11) NOT NULL,
+  `nombre` int(11) NOT NULL,
+  `commune_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `verification` tinyint(1) NOT NULL DEFAULT 0,
+  `validation` tinyint(1) NOT NULL DEFAULT 0,
+  `retour` tinyint(1) NOT NULL DEFAULT 0,
+  `commentaire` text COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `lots`
+--
+
+INSERT INTO `lots` (`id`, `numero`, `nombre`, `commune_id`, `created_at`, `updated_at`, `verification`, `validation`, `retour`, `commentaire`) VALUES
+(1, 1, 11, 1, '2025-01-30 14:26:04', '2025-01-30 14:26:04', 0, 1, 0, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `migrations`
 --
 
@@ -7567,7 +7637,17 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (18, '2025_01_09_225312_create_changements_table', 5),
 (19, '2025_01_10_092959_create_modifications_table', 5),
 (20, '2025_01_10_093046_create_radiations_table', 5),
-(21, '2025_01_10_162756_update_table_add_column_to_radiations_table', 6);
+(21, '2025_01_10_162756_update_table_add_column_to_radiations_table', 6),
+(22, '2025_01_21_110500_create_lots_table', 7),
+(23, '2025_01_21_123755_create_comptages_table', 8),
+(24, '2025_01_21_142858_add_column_to_users_table', 8),
+(25, '2025_01_29_163718_create_semaines_table', 9),
+(26, '2025_01_30_095558_add_column_to_comptages_table', 10),
+(27, '2025_01_30_100850_add_column_to_comptages_table', 11),
+(28, '2025_01_30_143745_create_pointages_table', 12),
+(30, '2025_02_04_115853_add_column_to_lots_table', 13),
+(31, '2025_02_04_224515_add_column_to_users_table', 14),
+(32, '2025_02_11_205901_add_column_to_cartes_table', 15);
 
 -- --------------------------------------------------------
 
@@ -7636,6 +7716,37 @@ CREATE TABLE `personal_access_tokens` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `pointages`
+--
+
+CREATE TABLE `pointages` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `numero` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lot_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `pointages`
+--
+
+INSERT INTO `pointages` (`id`, `numero`, `lot_id`, `created_at`, `updated_at`) VALUES
+(3, '1234567890', 1, '2025-01-31 10:51:21', '2025-01-31 10:51:21'),
+(4, '1234567890', 1, '2025-01-31 10:52:30', '2025-01-31 10:52:30'),
+(5, '1234567890', 1, '2025-01-31 10:52:34', '2025-01-31 10:52:34'),
+(6, '1234567890', 1, '2025-01-31 11:08:15', '2025-01-31 11:08:15'),
+(7, '1234567890', 1, '2025-01-31 11:08:50', '2025-01-31 11:08:50'),
+(8, '1234567890', 1, '2025-01-31 11:09:05', '2025-01-31 11:09:05'),
+(9, '1234567890', 1, '2025-01-31 11:19:25', '2025-01-31 11:19:25'),
+(10, '1234567890', 1, '2025-01-31 11:20:44', '2025-01-31 11:20:44'),
+(11, '1234567890', 1, '2025-01-31 12:23:14', '2025-01-31 12:23:14'),
+(12, '1234567890', 1, '2025-01-31 12:23:22', '2025-01-31 12:23:22'),
+(13, '1234567890', 1, '2025-01-31 12:28:48', '2025-01-31 12:28:48');
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `radiations`
 --
 
@@ -7691,6 +7802,28 @@ INSERT INTO `regions` (`id`, `nom`, `created_at`, `updated_at`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `semaines`
+--
+
+CREATE TABLE `semaines` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `nom` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `debut` date NOT NULL,
+  `fin` date NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `semaines`
+--
+
+INSERT INTO `semaines` (`id`, `nom`, `debut`, `fin`, `created_at`, `updated_at`) VALUES
+(1, 'Semaine 1', '2025-01-01', '2025-01-08', '2025-01-29 16:52:24', '2025-01-29 16:52:24');
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `users`
 --
 
@@ -7704,15 +7837,21 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `role` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `departement_id` bigint(20) UNSIGNED DEFAULT NULL
+  `departement_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `arrondissement_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `region_id` bigint(20) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `role`, `departement_id`) VALUES
-(1, 'Ibra Ndiaye', 'ibra789ndiaye@gmail.com', NULL, '$2y$12$8sHsx7AAtqb0.uPJpPjPyubU2Y7nBwScogPf3utR6Rikzn6n/5/Ni', NULL, '2025-01-04 20:11:33', '2025-01-04 20:11:33', 'admin', NULL);
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `role`, `departement_id`, `arrondissement_id`, `region_id`) VALUES
+(1, 'Ibra Ndiaye', 'ibra789ndiaye@gmail.com', NULL, '$2y$12$8sHsx7AAtqb0.uPJpPjPyubU2Y7nBwScogPf3utR6Rikzn6n/5/Ni', NULL, '2025-01-04 20:11:33', '2025-01-04 20:11:33', 'admin', NULL, NULL, NULL),
+(2, 'Dakar', 'dakar@gmail.com', NULL, '$2y$12$5p/ITofGXAJQlHXbinYktuVZvjpHQEbdvNTURL/Z8.Bnm32sUIzWq', NULL, '2025-01-21 14:07:53', '2025-01-21 14:07:53', 'sous_prefet', 5, NULL, NULL),
+(3, 'DAKAR 1', 'dakar1@gmail.com', NULL, '$2y$12$j2MjbMAQU5acU7tPyH4U/OIttIPj56r3gIVdtlnMTgCw8x9E80KPO', NULL, '2025-01-21 14:34:32', '2025-01-21 14:34:32', 'sous_prefet', 5, 1, NULL),
+(4, 'Departement Dakar', 'departement@gmail.com', NULL, '$2y$12$Wy2aoQxGY2GomWEeDMtUHOs8AmDx1goiBCB44RPH7MWx1lNoOOMbm', NULL, '2025-01-30 12:39:38', '2025-02-10 12:11:39', 'prefet', 5, 128, NULL),
+(6, 'gouverneur', 'gouverneur@gmail.com', NULL, '$2y$12$KI97G7lr/LzzVcVVruY9gur3h9gGfnW/rB6AfLSeG0BE8m.ebnBru', NULL, '2025-02-04 22:56:40', '2025-02-04 22:56:40', 'gouverneur', NULL, NULL, 8);
 
 --
 -- Index pour les tables déchargées
@@ -7758,6 +7897,14 @@ ALTER TABLE `communes`
   ADD KEY `communes_arrondissement_id_foreign` (`arrondissement_id`);
 
 --
+-- Index pour la table `comptages`
+--
+ALTER TABLE `comptages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `commune_id` (`commune_id`),
+  ADD KEY `semaine_id` (`semaine_id`);
+
+--
 -- Index pour la table `departements`
 --
 ALTER TABLE `departements`
@@ -7786,6 +7933,13 @@ ALTER TABLE `inscriptions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `inscriptions_centrevote_id_index` (`centrevote_id`),
   ADD KEY `inscriptions_identification_id_index` (`identification_id`);
+
+--
+-- Index pour la table `lots`
+--
+ALTER TABLE `lots`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `lots_commune_id_foreign` (`commune_id`);
 
 --
 -- Index pour la table `migrations`
@@ -7822,6 +7976,13 @@ ALTER TABLE `personal_access_tokens`
   ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`);
 
 --
+-- Index pour la table `pointages`
+--
+ALTER TABLE `pointages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pointages_lot_id_index` (`lot_id`);
+
+--
 -- Index pour la table `radiations`
 --
 ALTER TABLE `radiations`
@@ -7835,12 +7996,20 @@ ALTER TABLE `regions`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Index pour la table `semaines`
+--
+ALTER TABLE `semaines`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Index pour la table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `users_email_unique` (`email`),
-  ADD KEY `users_departement_id_foreign` (`departement_id`);
+  ADD KEY `users_departement_id_foreign` (`departement_id`),
+  ADD KEY `users_arrondissement_id_foreign` (`arrondissement_id`),
+  ADD KEY `users_region_id_foreign` (`region_id`);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
@@ -7850,7 +8019,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pour la table `arrondissements`
 --
 ALTER TABLE `arrondissements`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=170;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31114;
 
 --
 -- AUTO_INCREMENT pour la table `cartes`
@@ -7874,7 +8043,13 @@ ALTER TABLE `changements`
 -- AUTO_INCREMENT pour la table `communes`
 --
 ALTER TABLE `communes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=540;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=556;
+
+--
+-- AUTO_INCREMENT pour la table `comptages`
+--
+ALTER TABLE `comptages`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `departements`
@@ -7901,10 +8076,16 @@ ALTER TABLE `inscriptions`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT pour la table `lots`
+--
+ALTER TABLE `lots`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT pour la table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT pour la table `modifications`
@@ -7919,6 +8100,12 @@ ALTER TABLE `personal_access_tokens`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT pour la table `pointages`
+--
+ALTER TABLE `pointages`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
 -- AUTO_INCREMENT pour la table `radiations`
 --
 ALTER TABLE `radiations`
@@ -7931,10 +8118,16 @@ ALTER TABLE `regions`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
+-- AUTO_INCREMENT pour la table `semaines`
+--
+ALTER TABLE `semaines`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Contraintes pour les tables déchargées
@@ -7973,6 +8166,13 @@ ALTER TABLE `communes`
   ADD CONSTRAINT `communes_departement_id_foreign` FOREIGN KEY (`departement_id`) REFERENCES `departements` (`id`);
 
 --
+-- Contraintes pour la table `comptages`
+--
+ALTER TABLE `comptages`
+  ADD CONSTRAINT `comptages_commune_id_foreign` FOREIGN KEY (`commune_id`) REFERENCES `communes` (`id`),
+  ADD CONSTRAINT `comptages_semaine_id_foreign` FOREIGN KEY (`semaine_id`) REFERENCES `semaines` (`id`);
+
+--
 -- Contraintes pour la table `departements`
 --
 ALTER TABLE `departements`
@@ -7993,11 +8193,23 @@ ALTER TABLE `inscriptions`
   ADD CONSTRAINT `inscriptions_identification_id_foreign` FOREIGN KEY (`identification_id`) REFERENCES `identifications` (`id`) ON DELETE CASCADE;
 
 --
+-- Contraintes pour la table `lots`
+--
+ALTER TABLE `lots`
+  ADD CONSTRAINT `lots_commune_id_foreign` FOREIGN KEY (`commune_id`) REFERENCES `communes` (`id`);
+
+--
 -- Contraintes pour la table `modifications`
 --
 ALTER TABLE `modifications`
   ADD CONSTRAINT `modifications_centrevote_id_foreign` FOREIGN KEY (`centrevote_id`) REFERENCES `centrevotes` (`id`),
   ADD CONSTRAINT `modifications_identification_id_foreign` FOREIGN KEY (`identification_id`) REFERENCES `identifications` (`id`) ON DELETE CASCADE;
+
+--
+-- Contraintes pour la table `pointages`
+--
+ALTER TABLE `pointages`
+  ADD CONSTRAINT `pointages_lot_id_foreign` FOREIGN KEY (`lot_id`) REFERENCES `lots` (`id`);
 
 --
 -- Contraintes pour la table `radiations`
@@ -8009,7 +8221,9 @@ ALTER TABLE `radiations`
 -- Contraintes pour la table `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `users_departement_id_foreign` FOREIGN KEY (`departement_id`) REFERENCES `departements` (`id`);
+  ADD CONSTRAINT `users_arrondissement_id_foreign` FOREIGN KEY (`arrondissement_id`) REFERENCES `arrondissements` (`id`),
+  ADD CONSTRAINT `users_departement_id_foreign` FOREIGN KEY (`departement_id`) REFERENCES `departements` (`id`),
+  ADD CONSTRAINT `users_region_id_foreign` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
