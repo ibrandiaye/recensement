@@ -3,21 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\CarteRepository;
+use App\Repositories\CommuneRepository;
 use App\Repositories\DepartementRepository;
 use App\Repositories\RegionRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CarteController extends Controller
 {
     protected $carteRepository;
     protected $regionRepository;
     protected $departementRepository;
+    protected $communeRepository;
 
     public function __construct(CarteRepository $carteRepository, RegionRepository $regionRepository,
-    DepartementRepository $departementRepository){
+    DepartementRepository $departementRepository,CommuneRepository $communeRepository){
         $this->carteRepository =$carteRepository;
         $this->regionRepository = $regionRepository;
         $this->departementRepository = $departementRepository;
+        $this->communeRepository = $communeRepository;
     }
 
     /**
@@ -27,7 +31,16 @@ class CarteController extends Controller
      */
     public function index()
     {
-        $cartes = $this->carteRepository->getAll();
+        //getByDepartement
+        $user = Auth::user();
+        if($user->role=="prefet")
+        {
+            $cartes = $this->carteRepository->getByDepartement($user->departement_id);
+        }
+        else
+        {
+            $cartes = $this->carteRepository->getAll();
+        }
         return view('carte.index',compact('cartes'));
     }
 
@@ -51,6 +64,17 @@ class CarteController extends Controller
      */
     public function store(Request $request)
     {
+        $user =Auth::user();
+        $communes = $this->communeRepository->getByDepartement($user->departement_id);
+        $localisation = false;
+        foreach ($communes as $key => $commune) {
+             if($commune->nom==$request->commune)
+             {
+                $localisation = true;
+             }
+        }
+        $departement = $this->departementRepository->getOnlyOne($user->departement_id);
+        $request->merge(["departement_id"=>$user->departement_id,"localisation"=>$localisation,'region_id'=>$departement->region_id]);
         $cartes = $this->carteRepository->store($request->all());
         return redirect('carte');
 

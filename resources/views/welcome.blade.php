@@ -232,6 +232,19 @@
                                 </ul>
                             </li>
                             @endif
+                            @if ( $user->role=="prefet")
+                            <li>
+                                <a href="javascript: void(0);" class="waves-effect waves-light">
+                                    <i class="mdi mdi-google-pages"></i>
+                                    <span> Carte </span>
+                                    <span class="menu-arrow"></span>
+                                </a>
+                                <ul class="nav-second-level" aria-expanded="false">
+                                    <li><a href="{{ route('carte.recenssement') }}">Ajouter Carte</a></li>
+                                    <li><a href="{{ route('carte.index') }}">Liste des Cartes</a></li>
+                                </ul>
+                            </li>
+                            @endif
                             @if ($user->role=="admin")
 
                             <li>

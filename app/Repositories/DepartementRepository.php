@@ -46,4 +46,10 @@ class DepartementRepository extends RessourceRepository{
         return DB::table("departements")
         ->get();
        }
+
+       public function getOnlyOne($departement){
+        return DB::table("departements")
+        ->where("id",$departement)
+        ->first();
+       }
 }

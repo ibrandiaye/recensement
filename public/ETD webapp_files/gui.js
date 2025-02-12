@@ -514,6 +514,17 @@ class Gui {
             $("#docType").text('');
             $("#issuer").text('');
             $("#optionalData").text('');
+
+            $("#firstName_input").val('');
+            $("#surName_input").val('');
+            $("#dob_input").val('');
+            $("#lieunaiss").val('');
+            $("#doe_input").val('');
+            $("#sex_input").val('');
+            $("#numcni_input").val('');
+            $("#numelec_input").val('');
+            $("#docNumber_input").val('');
+
         } else {
             $("#familyName-idl").text('');
             $("#givenName-idl").text('');
@@ -524,6 +535,16 @@ class Gui {
             $("#issuingAuthority-idl").text('');
             $("#docNumber-idl").text('');
             $("#categories-idl").text('');
+
+            $("#firstName_input").val('');
+            $("#surName_input").val('');
+            $("#dob_input").val('');
+            $("#lieunaiss").val('');
+            $("#doe_input").val('');
+            $("#sex_input").val('');
+            $("#numcni_input").val('');
+            $("#numelec_input").val('');
+            $("#docNumber_input").val('');
         }
         this.#isMrzValid = false;
         document.getElementById("fingerprintDisplay").style.display = 'none';
@@ -746,6 +767,16 @@ class Gui {
                 console.log(result.fields.issuingState); $("#issuer").text(result.fields.issuingState);
                 console.log(result.fields.optional1); $("#optionalData").text(result.fields.optional1);
                 document.getElementById("dg1EmrtdFields").style.display = 'block';
+
+                $("#firstName_input").val(result.fields.firstName);
+                $("#surName_input").val(result.fields.lastName);
+                $("#dob_input").val(util.buildDate( result.fields.birthDate.substring(4, 6),  result.fields.birthDate.substring(2, 4),  result.fields.birthDate.substring(0, 2), 'dd/mm/yyyy'));
+                $("#lieunaiss").val('');
+                $("#doe_input").val(util.buildDate( result.fields.expirationDate.substring(4, 6),  result.fields.expirationDate.substring(2, 4),  result.fields.expirationDate.substring(0, 2), 'dd/mm/yy'));
+                $("#sex_input").val(result.fields.sex);
+                $("#numcni_input").val('');
+                $("#numelec_input").val('');
+                $("#docNumber_input").val(result.fields.documentNumber);
             } catch (e) {
                 this.appendStatusTextTag ("Parsing KO", "fail");
                 this.modifyStatusImage ("cross.png");
@@ -825,6 +856,7 @@ class Gui {
     displayEmrtdAdditionalPersonalDetails(data) {
         var result = webApi.parseEmrtdDg11(data);
         console.log("dg11 parse data: ", result);
+        console.log("ibraaaaaaaaaaaaaaaaaa ");
         document.getElementById('dg11EmrtdFields').innerHTML = '';
         const newEntry =
             `<table>
@@ -834,7 +866,7 @@ class Gui {
                 </tr>
                 <tr>
                     <td style="text-align: right;"><elyLabel id="dg11EmrtdOtherNameLabel">Other names</elyLabel></td>
-                    <td><div id="dg11EmrtdOtherNames">${result.data.fields.otherNames}</div></td>
+                    <td><div id="">${result.data.fields.otherNames}</div></td>
                 </tr>
                 <tr>
                     <td style="text-align: right;"><elyLabel id="dg11EmrtdOtherNameLabel">Personal number</elyLabel></td>
@@ -883,6 +915,12 @@ class Gui {
             </table>`;
         document.getElementById('dg11EmrtdFields').innerHTML += newEntry;
         document.getElementById('additionalPersonalDetails').style.display = 'block';
+        $("numcni_input").val("dfdf");
+       document.getElementById('numcni_input').value =result.data.fields.personalNumber;
+       document.getElementById('lieunaiss').value =result.data.fields.placeOfBirth;
+
+       
+
     }
 
     displayEmrtdAdditionalDocumentDetails(data) {
@@ -924,6 +962,9 @@ class Gui {
         var result = webApi.parseEmrtdDg13(data);
         console.log("dg13 parse data: ", result);
         document.getElementById('dg13EmrtdFields').innerHTML = '';
+        document.getElementById('numelec_input').value =result.data.fields.number;
+        document.getElementById('commune_input').value =result.data.fields.municipality;
+        
         const newEntry =
             `<table>
                 <tr>

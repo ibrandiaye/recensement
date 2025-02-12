@@ -21,4 +21,9 @@ class CarteRepository extends RessourceRepository{
         ->delete();
        }
 
+   public function getByDepartement($departement)
+   {
+        return DB::table("cartes")->where("departement_id",$departement)->get();
+   }    
+
 }

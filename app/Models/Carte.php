@@ -9,6 +9,7 @@ class Carte extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'nom','prenom','datenaiss','lieunaiss','numelec','numcni','region_id','departement_id'
+        'nom','prenom','datenaiss','lieunaiss','numelec','numcni','departement_id','commune','localisation','region_id',
+        'sexe'
     ];
 }

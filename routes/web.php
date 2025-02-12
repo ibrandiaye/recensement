@@ -36,7 +36,7 @@ Route::get('/', [HomeController::class,'index'])->middleware(['auth']);
 
 Route::get('/teste', function () {
     return view('test');
-})->middleware(['auth']);
+})->name("carte.recenssement")->middleware(['auth']);
 Route::resource('region', RegionController::class)->middleware(['auth']);
 Route::resource('departement', DepartementController::class)->middleware(['auth']);
 Route::resource('arrondissement', ArrondissementController::class)->middleware(['auth']);
