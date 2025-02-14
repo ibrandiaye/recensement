@@ -89,6 +89,7 @@
                                 <option value="prefet">Prefet</option> 
                                 <option value="sous_prefet">Sous Prefet</option>
                                 <option value="gouverneur">gouverneur</option>
+                                <option value="superviseur">superviseur</option>
                             </select>
                         </div>
 

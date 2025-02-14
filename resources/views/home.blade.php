@@ -80,14 +80,17 @@
 <div class="row">
     <div class="col-12">
 
-    
+    @php
+        $user = Auth::user();
+    @endphp
+    @endphp
     <div class="card">
         <div class="card-header">
             Carte ELectorale
         </div>
         <div class="card-body">
             <div class="row">
-                @if (Auth::user()->role=="admin")
+                @if ($user->role=="admin" || $user->role=='superviseur')
                 <div class="col-lg-3">
                     <label>Region</label>
                     <select class="form-control" name="region_id" id="region_id" required="">
@@ -100,7 +103,7 @@
                 </div>
                 
                 @endif
-                @if (Auth::user()->role=="admin"  || Auth::user()->role=="gouverneur" )
+                @if ($user->role=="admin"  || $user->role=="gouverneur" || $user->role=='superviseur')
                 <div class="col-lg-3">
                     <label>Departement</label>
                     <select class="form-control" name="departement_id" id="departement_id" required="">
@@ -111,7 +114,7 @@
                     </select>
                 </div>
                 @endif
-                @if (Auth::user()->role=="admin" || Auth::user()->role=="prefet" || Auth::user()->role=="gouverneur" )
+                @if ($user->role=="admin" || $user->role=="prefet" || $user->role=="gouverneur" || $user->role=='superviseur')
                 <div class="col-lg-3">
                     <label>Arrondissement</label>
                     <select class="form-control" name="arrondissement_id" id="arrondissement_id" required="">

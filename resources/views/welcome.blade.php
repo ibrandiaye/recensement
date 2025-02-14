@@ -129,7 +129,7 @@
                               
                             </li>
                            
-                            @if ($user->role=="admin")
+                            @if ($user->role=="admin" )
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
                                     <i class="mdi mdi-google-pages"></i>
@@ -314,6 +314,7 @@
                                 </ul>
                             </li>
                             @endif
+                            @if ($user->role!="superviseur")
                             <li>
                                 <a href="{{ route('semaine.index') }}" class="waves-effect waves-light">
                                     <i class="mdi mdi-calendar"></i>
@@ -321,6 +322,7 @@
                                 </a>
                               
                             </li>
+                            @endif
 
                         </ul>
 

@@ -54,8 +54,8 @@
                             <td>{{ $carte->prenom }}</td>
                             <td>{{ $carte->nom}}</td>
                             <td>{{ $carte->sexe }}</td>
-                            <td>{{ $carte->date_naiss }} à  {{$carte->lieu_naiss}}</td>
-                            <td>{{ $carte->nin}}</td>
+                            <td>{{ $carte->datenaiss }} à  {{$carte->lieunaiss}}</td>
+                            <td>{{ $carte->numcni}}</td>
                             <td>
                                 <a href="{{ route('carte.edit', $carte->id) }}" role="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
                                 {!! Form::open(['method' => 'DELETE', 'route'=>['carte.destroy', $carte->id], 'style'=> 'display:inline', 'onclick'=>"if(!confirm('Êtes-vous sûr de vouloir supprimer cet enregistrement ?')) { return false; }"]) !!}
