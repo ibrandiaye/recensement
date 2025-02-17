@@ -72,4 +72,16 @@ public function getOneCommuneWithArrondissementdepartementAndRegion($id){
  {
     return DB::table("communes")->find($id);
  }
+
+ public function getWithRelation()
+ {
+    return DB::table("communes")
+    ->join("arrondissements","communes.arrondissement_id","=","arrondissements.id")
+    ->join("departements","communes.departement_id","=","departements.id")
+    ->join("regions","departements.region_id","=","regions.id")
+    ->select("arrondissements.nom as arrondissement","departements.nom as departement","communes.id","regions.nom as region","communes.nom")
+    ->orderBy("regions.nom")
+    ->get();
+
+ }
 }

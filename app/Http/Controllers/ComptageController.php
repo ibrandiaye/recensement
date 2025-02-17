@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\CommuneRepository;
 use App\Repositories\ComptageRepository;
+use App\Repositories\RenseignementRepository;
 use App\Repositories\SemaineRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,12 +14,14 @@ class ComptageController extends Controller
     protected $comptageRepository;
     protected $communeRepository;
     protected $semaineRepository;
+    protected $renseignementRepository;
 
     public function __construct(ComptageRepository $comptageRepository, CommuneRepository $communeRepository,
-    SemaineRepository $semaineRepository){
+    SemaineRepository $semaineRepository, RenseignementRepository $renseignementRepository){
         $this->comptageRepository =$comptageRepository;
         $this->communeRepository = $communeRepository;
         $this->semaineRepository = $semaineRepository;
+        $this->renseignementRepository = $renseignementRepository;
     }
 
     /**
@@ -59,7 +62,11 @@ class ComptageController extends Controller
         {
             return redirect()->back()->withErrors('Vous avez déja saisi la commune pour cette semaine ')->withInput();
         }
+        $user = Auth::user();
         $comptages = $this->comptageRepository->store($request->all());
+        $request->merge(["arrondissement_id"=>$user->arrondissement_id,"departement_id"=>$user->departement_id]);
+
+        $this->renseignementRepository->store($request->all());
         return redirect('comptage');
 
     }

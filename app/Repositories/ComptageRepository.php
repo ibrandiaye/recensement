@@ -435,4 +435,45 @@ class ComptageRepository extends RessourceRepository{
         ->groupBy('communes.nom')
         ->get();
     }
+
+    public function situationAncieneByNational($semaine)
+    {
+        return DB::table("comptages")
+        ->join("communes","comptages.commune_id","=","communes.id")
+        ->join("arrondissements","communes.arrondissement_id","=","arrondissements.id")
+        ->join("departements","arrondissements.departement_id","=","departements.id")
+        ->join("semaines","comptages.semaine_id","=","semaines.id")
+
+        ->select(
+            'communes.nom',
+            DB::raw('SUM(comptages.inscription) as inscription'),
+            DB::raw('SUM(comptages.modification) as modification'),
+            DB::raw('SUM(comptages.changement) as changement'),
+            DB::raw('SUM(comptages.radiation) as radiation')
+        )
+        ->whereDate("semaines.debut","<", $semaine) // Filtre par une date spécifique
+
+        ->groupBy('communes.nom')
+        ->get();
+    }
+    public function situationActuelleByNational($semaine)
+    {
+        return DB::table("comptages")
+        ->join("communes", "comptages.commune_id", "=", "communes.id")
+        ->join("arrondissements","communes.arrondissement_id","=","arrondissements.id")        
+        ->join("departements","arrondissements.departement_id","=","departements.id")
+
+        ->join("semaines","comptages.semaine_id","=","semaines.id")
+
+        ->select(
+            'communes.nom',
+            DB::raw('SUM(comptages.inscription) as inscription'),
+            DB::raw('SUM(comptages.modification) as modification'),
+            DB::raw('SUM(comptages.changement) as changement'),
+            DB::raw('SUM(comptages.radiation) as radiation')
+        )
+        ->whereDate("semaines.debut", $semaine) // Filtre par une date spécifique
+        ->groupBy('communes.nom')
+        ->get();
+    }
 }

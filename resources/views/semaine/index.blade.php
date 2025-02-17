@@ -70,6 +70,10 @@
                                 <a href="{{ route('message.departement', ["id"=>$user->departement_id,"date"=>$semaine->debut]) }}" role="button" class="btn btn-info"><i toolip="BORDEREAU DE TRANSMISSION" class="fas fa-file"></i></a>
                                 @elseif($user->role=='gouverneur')
                                 <a href="{{ route('message.region', ["id"=>$user->region_id,"date"=>$semaine->debut]) }}" role="button" class="btn btn-info"><i toolip="BORDEREAU DE TRANSMISSION" class="fas fa-file"></i></a>
+                                @elseif($user->role=='admin' || $user->role=='superviseur' )
+                                <a href="{{ route('message.national', ["date"=>$semaine->debut]) }}" role="button" class="btn btn-info"><i toolip="BORDEREAU DE TRANSMISSION" class="fas fa-file"></i></a>
+                                 
+                                <a href="{{ route('commune.renseigne', ["semaine"=>$semaine->id]) }}" role="button" class="btn btn-primary"><i toolip="Rapport" class="fas fa-database"></i></a>
 
                                 @endif
 

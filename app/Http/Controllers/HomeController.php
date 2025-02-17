@@ -354,4 +354,83 @@ class HomeController extends Controller
         return view("situation.impression_region",compact("region","semaine"));
 
     }
+
+    public function messageByNational($date)
+    {
+        $regions = $this->regionRepository->getALLWithRelation();
+        $situationSemaine = $this->comptageRepository->situationActuelleByNational($date);
+        $situationAncienne = $this->comptageRepository->situationAncieneByNational($date);
+       $semaine = $this->semaineRepository->getOneByDebut($date);
+        $data=array($situationSemaine,$situationAncienne);
+        $index = 0;
+     //  dd($situationSemaine,$situationSemaine,$departement);
+     foreach ($regions as $keyr => $region) {
+        foreach ($region->departements as $keyd => $departement) {
+            foreach ($departement->arrondissements as $keya => $arrondissement) {
+                foreach ($arrondissement->communes as $keyc => $commune) {
+                    $ligne = new \stdClass;
+                    $ligne->insant = 0;
+                    $ligne->inssem = 0;
+                    $ligne->cumulins = 0;
+    
+                    $ligne->modant = 0;
+                    $ligne->modsem = 0;
+                    $ligne->cumulmod = 0;
+    
+                    $ligne->chanant = 0;
+                    $ligne->chansem = 0;
+                    $ligne->cumulchan = 0;
+    
+                    $ligne->radant = 0;
+                    $ligne->radsem = 0;
+                    $ligne->cumulrad = 0;
+    
+                    $ligne->commune = $commune->nom;
+    
+                    foreach ($situationAncienne as $keysa => $situAnc) {
+                        if($situAnc->nom==$commune->nom)
+                        {
+                            $ligne->insant = $situAnc->inscription;
+                            $ligne->modant = $situAnc->modification;
+                            $ligne->chanant = $situAnc->changement;
+                            $ligne->radant = $situAnc->radiation;
+                            $ligne->cumulins =  $ligne->cumulins + $situAnc->inscription;
+                            $ligne->cumulmod =  $ligne->cumulmod + $situAnc->modification;
+                            $ligne->cumulchan =  $ligne->cumulchan + $situAnc->changement;
+                            $ligne->cumulrad =  $ligne->cumulrad + $situAnc->radiation;
+    
+    
+                        }
+    
+                    }
+                    foreach ($situationSemaine as $keyss => $situSem) {
+                        if($situSem->nom==$commune->nom)
+                        {
+                            $ligne->inssem = $situSem->inscription;
+                            $ligne->modsem = $situSem->modification;
+                            $ligne->chansem = $situSem->changement;
+                            $ligne->radsem = $situSem->radiation;
+                            $ligne->cumulins =  $ligne->cumulins + $situSem->inscription;
+                            $ligne->cumulmod =  $ligne->cumulmod + $situSem->modification;
+                            $ligne->cumulchan =  $ligne->cumulchan + $situSem->changement;
+                            $ligne->cumulrad =  $ligne->cumulrad + $situSem->radiation;
+    
+    
+                        }
+    
+                    }
+                   // $data[]=$ligne;
+                    $regions[$keyr]->departements[$keyd]->arrondissements[$keya]->communes[$keyc]->data = $ligne;
+                }
+               
+            }
+         }
+     }
+    
+        
+        //dd($departement);
+        return view("situation.impression_national",compact("regions","semaine"));
+
+    }
 }
+

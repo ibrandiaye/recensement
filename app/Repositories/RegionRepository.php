@@ -30,4 +30,12 @@ class RegionRepository extends RessourceRepository{
         ->get();
        }
 
+       public function getALLWithRelation()
+       {
+           return Region::with(["departements","departements.arrondissements","departements.arrondissements.communes"])
+           ->orderBy("nom")
+           ->get();
+       }
+       
+
 }

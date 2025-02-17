@@ -15,6 +15,7 @@ use App\Http\Controllers\ModificationController;
 use App\Http\Controllers\PointageController;
 use App\Http\Controllers\RadiationController;
 use App\Http\Controllers\RegionController;
+use App\Http\Controllers\RenseignementController;
 use App\Http\Controllers\SemaineController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -102,6 +103,10 @@ Route::get('/message/departement/{id}/{date}',[HomeController::class,'messageByD
 
 Route::get('/message/region/{id}/{date}',[HomeController::class,'messageByRegion'])->name('message.region')->middleware("auth");
 
+Route::get('/message/national/{date}',[HomeController::class,'messageByNational'])->name('message.national')->middleware("auth");
+
+
+
 Route::get('/pointage/create/{lot}',[PointageController::class,'create_lot'])->name('pointage.create.lot')->middleware("auth");
 
 
@@ -110,4 +115,6 @@ Route::get('/update/retour/{id}/{etat}',[LotController::class,'updateretour'])->
 Route::get('/update/validation/{id}/{etat}',[LotController::class,'updateValidation'])->name('update.validation')->middleware("auth");
 
 Route::get('/update/commentaire/{id}/{commentaire}',[LotController::class,'updateCommentaire'])->name('update.commentaire')->middleware("auth");
+
+Route::get('/commune/renseigne/{semaine}',[RenseignementController::class,'communeRenseigne'])->name('commune.renseigne')->middleware("auth");
 
