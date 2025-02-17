@@ -42,7 +42,7 @@ Route::resource('region', RegionController::class)->middleware(['auth']);
 Route::resource('departement', DepartementController::class)->middleware(['auth']);
 Route::resource('arrondissement', ArrondissementController::class)->middleware(['auth']);
 Route::resource('commune', CommuneController::class)->middleware(['auth']);
-Route::resource('user', UserController::class)->middleware(['auth']);
+Route::resource('user', UserController::class)->middleware(['auth','admin']);
 Route::resource('carte', CarteController::class)->middleware(['auth']);
 Route::resource('inscription', InscriptionController::class)->middleware(['auth']);
 Route::resource('identification', IdentificationController::class)->middleware(['auth']);

@@ -242,6 +242,9 @@
                             </li>
                             @endif
                             @if ( $user->role=="prefet")
+                            
+                            @endif
+                            @if ($user->role=="admin")
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
                                     <i class="mdi mdi-google-pages"></i>
@@ -253,9 +256,6 @@
                                     <li><a href="{{ route('carte.index') }}">Liste des Cartes</a></li>
                                 </ul>
                             </li>
-                            @endif
-                            @if ($user->role=="admin")
-
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
                                     <i class="mdi mdi-account"></i>
@@ -331,6 +331,16 @@
                                 </a>
                               
                             </li>
+                            @if ($user->role!="admin")
+                            <li>
+                                <a href="{{ route('modifier.motdepasse') }}" class="waves-effect waves-light">
+                                    <i class="mdi mdi-key"></i>
+                                    <span> Modifier Mot de passe </span>
+                                </a>
+                              
+                            </li>
+                            @endif
+                           
 
                         </ul>
 
