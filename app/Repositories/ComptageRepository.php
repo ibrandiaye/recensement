@@ -476,4 +476,8 @@ class ComptageRepository extends RessourceRepository{
         ->groupBy('communes.nom')
         ->get();
     }
+    public function getOneBySemaine($semaine)
+    {
+        return DB::table("comptages")->where("semaine_id",$semaine)->first();
+    }
 }

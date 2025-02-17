@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\ComptageRepository;
 use App\Repositories\SemaineRepository;
 use Illuminate\Http\Request;
 
 class SemaineController extends Controller
 {
     protected $semaineRepository;
-
-    public function __construct(SemaineRepository $semaineRepository){
+    protected $comptageRepository;
+    public function __construct(SemaineRepository $semaineRepository,ComptageRepository $comptageRepository){
         $this->semaineRepository =$semaineRepository;
+        $this->comptageRepository = $comptageRepository;
+        $this->middleware("admin")->except("index");
     }
 
     /**
@@ -93,8 +96,18 @@ class SemaineController extends Controller
      */
     public function destroy($id)
     {
-        $this->semaineRepository->destroy($id);
-        return redirect('semaine');
+        $comptage = $this->comptageRepository->getOneBySemaine($id);
+        if(empty($comptage))
+        {
+            $this->semaineRepository->destroy($id);
+            return redirect('semaine');
+        }
+        else
+        {
+            return redirect()->back()->withErrors('Impossible de supprimer. Il faut d\'abord supprimer les statistiques de cette semaine ')->withInput();
+
+        }
+        
     }
 
 }
