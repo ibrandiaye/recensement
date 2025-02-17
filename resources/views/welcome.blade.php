@@ -96,7 +96,7 @@
             </ul>
 
             <!-- LOGO -->
-            <div class="logo-box">
+            <div class="logo-box" style="background-color: white;">
                 <a href="index.html" class="logo text-center">
                     <span class="logo-lg">
                         <img src="{{ asset('logo/logo.png') }}" alt="" height="80">
