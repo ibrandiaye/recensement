@@ -26,10 +26,11 @@
                 <div class="col-md-8 col-lg-6 col-xl-5">
                     <div class="card">
 
-                        <div class="text-center account-logo-box">
+                        <div class="text-center account-logo-box" style="background-color: white;">
                             <div class="mt-2 mb-2">
                                 <a href="index.html" class="text-success">
-                                    <span><img src=" {{ asset('assets/images/logo.png') }} " alt="" height="36"></span>
+                                    <span>                        <img src="{{ asset('logo/logo.png') }}" alt="" height="150">
+                                    </span>
                                 </a>
                             </div>
                         </div>
