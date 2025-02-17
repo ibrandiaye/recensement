@@ -83,14 +83,13 @@
     @php
         $user = Auth::user();
     @endphp
-    @endphp
     <div class="card">
         <div class="card-header">
             Carte ELectorale
         </div>
         <div class="card-body">
             <div class="row">
-                @if ($user->role=="admin" || $user->role=='superviseur')
+                @if ($user->role=="admin" || $user->role=='superviseur' || $user->role=="correcteur")
                 <div class="col-lg-3">
                     <label>Region</label>
                     <select class="form-control" name="region_id" id="region_id" required="">
@@ -103,7 +102,7 @@
                 </div>
                 
                 @endif
-                @if ($user->role=="admin"  || $user->role=="gouverneur" || $user->role=='superviseur')
+                @if ($user->role=="admin"  || $user->role=="gouverneur" || $user->role=='superviseur' || $user->role=="correcteur")
                 <div class="col-lg-3">
                     <label>Departement</label>
                     <select class="form-control" name="departement_id" id="departement_id" required="">
@@ -114,7 +113,7 @@
                     </select>
                 </div>
                 @endif
-                @if ($user->role=="admin" || $user->role=="prefet" || $user->role=="gouverneur" || $user->role=='superviseur')
+                @if ($user->role=="admin" || $user->role=="prefet" || $user->role=="gouverneur" || $user->role=='superviseur' || $user->role=="correcteur")
                 <div class="col-lg-3">
                     <label>Arrondissement</label>
                     <select class="form-control" name="arrondissement_id" id="arrondissement_id" required="">

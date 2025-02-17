@@ -13,7 +13,7 @@ class ComptageRepository extends RessourceRepository{
     public function get()
     {
         $user = Auth::user();
-        if($user->role=="admin")
+        if($user->role=="admin" || $user->role=="correcteur")
         {
             return DB::table("comptages")
             ->join("communes","comptages.commune_id","=","communes.id")

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\CommuneRepository;
 use App\Repositories\ComptageRepository;
+use App\Repositories\RegionRepository;
 use App\Repositories\RenseignementRepository;
 use App\Repositories\SemaineRepository;
 use Illuminate\Http\Request;
@@ -15,13 +16,15 @@ class ComptageController extends Controller
     protected $communeRepository;
     protected $semaineRepository;
     protected $renseignementRepository;
+    protected $regionRepository;
 
     public function __construct(ComptageRepository $comptageRepository, CommuneRepository $communeRepository,
-    SemaineRepository $semaineRepository, RenseignementRepository $renseignementRepository){
+    SemaineRepository $semaineRepository, RenseignementRepository $renseignementRepository,RegionRepository $regionRepository){
         $this->comptageRepository =$comptageRepository;
         $this->communeRepository = $communeRepository;
         $this->semaineRepository = $semaineRepository;
         $this->renseignementRepository = $renseignementRepository;
+        $this->regionRepository = $regionRepository;
     }
 
     /**
@@ -32,6 +35,7 @@ class ComptageController extends Controller
     public function index()
     {
         $comptages = $this->comptageRepository->get();
+       // dd($comptages);
         return view('comptage.index',compact('comptages'));
     }
 
@@ -42,10 +46,21 @@ class ComptageController extends Controller
      */
     public function create()
     {
-        $communes = $this->communeRepository->getByArrondissement(Auth::user()->arrondissement_id);
-      //  dd(Auth::user()->arrondissement_id);
-      $semaines = $this->semaineRepository->getAll();
-        return view('comptage.add',compact('communes','semaines'));
+        $user = Auth::user();
+        $semaines = $this->semaineRepository->getAll();
+        if($user->role=="correcteur")
+        {
+            $regions = $this->regionRepository->getAllOnLy();
+            //  dd(Auth::user()->arrondissement_id);
+              return view('comptage.addc',compact('regions','semaines'));
+        }
+        else
+        {
+            $communes = $this->communeRepository->getByArrondissement($user->arrondissement_id);
+            //  dd(Auth::user()->arrondissement_id);
+              return view('comptage.add',compact('communes','semaines'));
+        }
+     
     }
 
     /**
@@ -64,7 +79,8 @@ class ComptageController extends Controller
         }
         $user = Auth::user();
         $comptages = $this->comptageRepository->store($request->all());
-        $request->merge(["arrondissement_id"=>$user->arrondissement_id,"departement_id"=>$user->departement_id]);
+        if($user->role!="correcteur")
+            $request->merge(["arrondissement_id"=>$user->arrondissement_id,"departement_id"=>$user->departement_id]);
 
         $this->renseignementRepository->store($request->all());
         return redirect('comptage');

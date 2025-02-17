@@ -34,7 +34,7 @@
         <div class="card-header  text-center">LISTE D'ENREGISTREMENT DES Comptages</div>
             <div class="card-body">
               
-                <table id="datatable-buttons" class="table table-bordered table-responsive-md table-striped text-center">
+                <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                     <thead>
                         <tr>
                             <th>#</th>

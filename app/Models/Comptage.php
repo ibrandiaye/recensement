@@ -10,7 +10,7 @@ class Comptage extends Model
     use HasFactory;
     protected $fillable = [
        /* 'debut','fin',*/'inscription','modification','changement','radiation','commune_id',
-        'arrondissement_id','semaine_id'];
+       /* 'arrondissement_id',*/'semaine_id'];
 
         public function commune()
         {

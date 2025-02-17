@@ -57,7 +57,7 @@ class HomeController extends Controller
         $changement = $this->comptageRepository->nbGroupByChangement();
 
         $radiation = $this->comptageRepository->nbGroupRadiation();
-        if($user->role=="admin" || $user->role=="superviseur")
+        if($user->role=="admin" || $user->role=="superviseur" || $user->role=="correcteur")
         {
             $regions = $this->regionRepository->getAll();
 
