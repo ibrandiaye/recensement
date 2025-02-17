@@ -3,13 +3,13 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>dropdown-toggle</title>
+    <title>Direction générale des Élections (DGE) </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Responsive bootstrap 4 admin template" name="description" />
     <meta content="Coderthemes" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ asset('logo/fav.ico') }}">
 
     <!-- App css -->
     <link href=" {{ asset('assets/css/bootstrap.min.css') }} " rel="stylesheet" type="text/css" id="bootstrap-stylesheet" />
