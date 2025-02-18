@@ -131,7 +131,6 @@
                         @endforeach
                     </select>
               
-                <div>
                     
                 </div>
             </div>
@@ -139,12 +138,35 @@
         </div>
     </div>
 </div>
-</div>
+<div>
+    <div class="row">
+        <div class="col-md-6">
+            <canvas id="myChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id="myChartbar"></canvas>
+        </div>
+    </div>
+  </div>
+  
 @endsection
 @section("js")
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
-    url_app = '{{ config('app.url') }}';
+      const ctx = document.getElementById('myChart');
+      const ctxbar = document.getElementById('myChartbar');
+      url_app = '{{ config('app.url') }}';
     url_api = '{{ config('app.api') }}';
+    inscription = {{$inscription}};
+    modification = {{$modification}};
+    changement = {{$changement}};
+    radiation = {{$radiation}};
+    let chart;
+    let myChartbar;
+    $(document).ready(function() {
+        char(inscription, modification, changement, radiation);
+    });
     $("#region_id").change(function () {
     // alert("ibra");
     var region_id =  $("#region_id").children("option:selected").val();
@@ -157,7 +179,10 @@
         $("#modification").empty();
         $("#changement").empty();
         $("#radiation").empty();
-
+        inscription = 0;
+        modification = 0;
+        changement =  0;
+        radiation = 0;
         $.ajax({
             type:'GET',
             url:url_app+'/departement/by/region/'+region_id,
@@ -186,6 +211,16 @@
                 $("#changement").append(data.changement);
                 $("#radiation").append(data.radiation);
 
+                inscription = data.inscription;
+                modification = data.modification;
+                changement =  data.changement;
+
+                radiation = data.radiation;
+                chart.destroy();
+                myChartbar.destroy();
+                char(inscription, modification, changement, radiation);
+                console.log(inscription);
+
             }
         });
     });
@@ -199,6 +234,10 @@
         $("#modification").empty();
         $("#changement").empty();
         $("#radiation").empty();
+        inscription = 0;
+        modification = 0;
+        changement =  0;
+        radiation = 0;
         $.ajax({
             type:'GET',
             url:url_app+'/commune/by/departement/'+departement_id,
@@ -247,6 +286,14 @@
                 $("#changement").append(data.changement);
                 $("#radiation").append(data.radiation);
 
+                inscription = data.inscription;
+                modification = data.modification;
+                changement =  data.changement;
+
+                radiation = data.radiation;
+                chart.destroy();
+                myChartbar.destroy();
+                char(inscription, modification, changement, radiation);
             }
         });
     });
@@ -258,6 +305,10 @@
         $("#modification").empty();
         $("#changement").empty();
         $("#radiation").empty();
+        inscription = 0;
+        modification = 0;
+        changement =  0;
+        radiation = 0;
         var arrondissement_id =  $("#arrondissement_id").children("option:selected").val();
      
         var commune = "<option value=''>Veuillez selectionner</option>";
@@ -291,6 +342,16 @@
                 $("#changement").append(data.changement);
                 $("#radiation").append(data.radiation);
 
+                inscription = data.inscription;
+                modification = data.modification;
+                changement =  data.changement;
+
+                radiation = data.radiation;
+                chart.destroy();
+                myChartbar.destroy();
+                char(inscription, modification, changement, radiation);
+
+
             }
         });
     });
@@ -306,6 +367,10 @@
         $("#modification").empty();
         $("#changement").empty();
         $("#radiation").empty();
+        inscription = 0;
+        modification = 0;
+        changement =  0;
+        radiation = 0;
         $.ajax({
             type:'GET',
             url:url_app+'/api/by/commune/'+commune_id,
@@ -318,9 +383,75 @@
                 $("#changement").append(data.changement);
                 $("#radiation").append(data.radiation);
 
+                inscription = data.inscription;
+                modification = data.modification;
+                changement =  data.changement;
+
+                radiation = data.radiation;
+                chart.destroy();
+                myChartbar.destroy();
+                char(inscription, modification, changement, radiation);
+
+
             }
         });
     });
+    function char(inscription, modification, changement, radiation)
+    {
+        
+            chart =   new Chart(ctx, {
+            type: 'pie',
+            data: {
+            labels: ['Inscription', 'Modification', 'Changement', 'Radiation'],
+            datasets: [{
+                label: 'nb personnes ',
+                data: [inscription, modification, changement, radiation],
+                borderWidth: 1,
+                backgroundColor: [
+                'rgb(161, 255, 165)',
+                'rgb(255, 252, 161)',
+                'rgb(103, 167, 253)',
+                'rgb(253, 103, 103)',
+                
+                ],
+            }]
+            },
+            options: {
+            scales: {
+                y: {
+                beginAtZero: true
+                }
+            }
+            }
+        });
+        myChartbar = new Chart(ctxbar, {
+            type: 'bar',
+            data: {
+            labels: ['Inscription', 'Modification', 'Changement', 'Radiation'],
+            datasets: [{
+                label: 'nb personnes ',
+                data: [inscription, modification, changement, radiation],
+                borderWidth: 1,
+                backgroundColor: [
+                'rgb(161, 255, 165)',
+                'rgb(255, 252, 161)',
+                'rgb(103, 167, 253)',
+                'rgb(253, 103, 103)',
+                
+                ],
+            }]
+            },
+            options: {
+            scales: {
+                y: {
+                beginAtZero: true
+                }
+            }
+            }
+        });
+    }
+
+  
 </script>
 @endsection
 
