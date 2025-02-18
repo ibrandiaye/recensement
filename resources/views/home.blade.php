@@ -140,12 +140,13 @@
 </div>
 <div>
     <div class="row">
-        <div class="col-md-4">
-            <canvas id="myChart"></canvas>
-        </div>
         <div class="col-md-8">
             <canvas id="myChartbar"></canvas>
         </div>
+        <div class="col-md-2">
+            <canvas id="myChart"></canvas>
+        </div>
+       
     </div>
   </div>
   
@@ -399,7 +400,7 @@
     function char(inscription, modification, changement, radiation)
     {
         
-            chart =   new Chart(ctx, {
+        /*    chart =   new Chart(ctx, {
             type: 'pie',
             data: {
             labels: ['Inscription', 'Modification', 'Changement', 'Radiation'],
@@ -423,7 +424,7 @@
                 }
             }
             }
-        });
+        });*/
         myChartbar = new Chart(ctxbar, {
             type: 'bar',
             data: {

@@ -44,7 +44,7 @@ class ComptageRepository extends RessourceRepository{
     }
     public function nbGroupByInscription(){
         $user = Auth::user();
-        if($user->role=="admin" || $user->role=='superviseur')
+        if($user->role=="admin" || $user->role=='superviseur' || $user->role=='correcteur')
         {
             return  DB::table("comptages")
             ->sum("inscription");
@@ -73,7 +73,7 @@ class ComptageRepository extends RessourceRepository{
     }
     public function nbGroupByChangement(){
         $user = Auth::user();
-        if($user->role=="admin" || $user->role=='superviseur')
+        if($user->role=="admin" || $user->role=='superviseur' || $user->role=='correcteur')
         {
             return  DB::table("comptages")
             ->sum("changement");
@@ -101,7 +101,7 @@ class ComptageRepository extends RessourceRepository{
     }
     public function nbGroupByModification(){
         $user = Auth::user();
-        if($user->role=="admin" || $user->role=='superviseur')
+        if($user->role=="admin" || $user->role=='superviseur' || $user->role=='correcteur')
         {
             return  DB::table("comptages")
             ->sum("modification");
@@ -131,7 +131,7 @@ class ComptageRepository extends RessourceRepository{
     }
     public function nbGroupRadiation(){
         $user = Auth::user();
-        if($user->role=="admin" || $user->role=='superviseur')
+        if($user->role=="admin" || $user->role=='superviseur' || $user->role=='correcteur')
         {
         return  DB::table("comptages")
         ->sum("radiation");
