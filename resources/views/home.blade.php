@@ -140,10 +140,10 @@
 </div>
 <div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <canvas id="myChart"></canvas>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
             <canvas id="myChartbar"></canvas>
         </div>
     </div>
