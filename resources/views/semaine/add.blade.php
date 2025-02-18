@@ -55,7 +55,7 @@
                     </div>
                     <div>
 
-                            <button type="submit" class="btn btn-success btn btn-lg "> ENREGISTRER</button>
+                            <button type="submit" id="enregistrer" class="btn btn-success btn btn-lg "> ENREGISTRER</button>
 
                     </div>
                 </div>
@@ -65,6 +65,23 @@
         </form>
     </div>
 </div>
+@endsection
+
+@section("js")
+<script>
+ $(document).ready(function() { 
+        $('#enregistrer').click(function() { 
+            $.blockUI(
+               { 
+                message: "<h3>Enregistrement en cours ...<h3>", 
+                css: { color: 'green', borderColor: 'green' } ,
+            }
+            ); 
+    
+            setTimeout($.unblockUI, 2000); 
+        }); 
+    });  
+</script>
 @endsection
 
 

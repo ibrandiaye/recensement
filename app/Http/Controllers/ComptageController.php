@@ -71,6 +71,14 @@ class ComptageController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'semaine_id' => 'required',
+            'commune_id' => 'required',
+            'inscription' => 'required|int',
+            'modification' => 'required|int',
+            'changement' => 'required|int',
+            'radiation' => 'required|int',
+        ]);
         $comptage = $this->comptageRepository->getOneBySemaineAndCommune($request->semaine_id,$request->commune_id);
        // dd($comptage);
         if($comptage)

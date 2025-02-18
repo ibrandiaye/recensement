@@ -518,6 +518,8 @@
    
        <!-- Datatables init -->
        <script src="{{ asset('assets/js/pages/datatables.init.js') }} "></script>
+       <script src="{{asset('assets/js/jquery.blockUI.js') }}"></script>
+
 
     @yield('js')
 

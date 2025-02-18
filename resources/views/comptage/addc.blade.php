@@ -128,7 +128,7 @@
                                    
                                 <div>
                                     <center>
-                                        <button type="submit" class="btn btn-success btn btn-lg "> ENREGISTRER</button>
+                                        <button id="enregistrer" type="submit" class="btn btn-success btn btn-lg "> ENREGISTRER</button>
                                     </center>
                                 </div>
                             </div>
@@ -279,6 +279,20 @@
 
        
 // Exemple d'utilisation
+
+$(document).ready(function() { 
+        $('#enregistrer').click(function() { 
+            $.blockUI(
+               { 
+                message: "<h3>Enregistrement en cours ...<h3>", 
+                css: { color: 'green', borderColor: 'green' } ,
+            }
+            ); 
+    
+            setTimeout($.unblockUI, 2000); 
+        }); 
+    }); 
+
 
     </script>
 @endsection
