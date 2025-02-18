@@ -48,7 +48,7 @@ class ComptageController extends Controller
     {
         $user = Auth::user();
         $semaines = $this->semaineRepository->getAll();
-        if($user->role=="correcteur")
+        if($user->role=="correcteur" || $user->role=="admin" )
         {
             $regions = $this->regionRepository->getAllOnLy();
             //  dd(Auth::user()->arrondissement_id);

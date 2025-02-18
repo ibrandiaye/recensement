@@ -228,7 +228,7 @@
                                 </ul>
                             </li>
                             @endif
-                            @if ($user->role=="sous_prefet" || $user->role=="prefet" || $user->role=="correcteur")
+                            @if ($user->role=="sous_prefet" || $user->role=="prefet" || $user->role=="correcteur" || $user->role=="admin")
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
                                     <i class="mdi mdi-google-pages"></i>
