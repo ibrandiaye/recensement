@@ -24,4 +24,11 @@ class RenseignementRepository extends RessourceRepository{
         ->where("semaine_id", $semaine) // Filtre par une date spécifique
         ->get();
     }
+    public function deleteBySemaineAndComptage($semaine,$commune)
+    {
+        return DB::table("renseignements")
+        ->where("semaine_id", $semaine) // Filtre par une date spécifique
+        ->where("commune_id", $commune)
+        ->delete();
+    }
 }

@@ -44,6 +44,8 @@ class DepartementRepository extends RessourceRepository{
     }
     public function getAllOnly(){
         return DB::table("departements")
+        ->orderBy("nom","asc")
+
         ->get();
        }
 

@@ -480,4 +480,8 @@ class ComptageRepository extends RessourceRepository{
     {
         return DB::table("comptages")->where("semaine_id",$semaine)->first();
     }
+    public function getOne($id)
+    {
+        return DB::table("comptages")->find($id);
+    }
 }

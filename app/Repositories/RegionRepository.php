@@ -27,6 +27,8 @@ class RegionRepository extends RessourceRepository{
     }
     public function getAllOnly(){
         return DB::table("regions")
+        ->orderBy("nom","asc")
+
         ->get();
        }
 

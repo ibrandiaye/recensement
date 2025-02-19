@@ -48,16 +48,14 @@
                                         </select>
                                     </div>
                                     <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label>Date Debut</label>
-                                            <input type="date" name="debut"  value="{{ $comptage->debut }}" class="form-control"  required>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label>Date Fin</label>
-                                            <input type="date" name="fin"  value="{{ $comptage->fin }}" class="form-control"  required>
-                                        </div>
+                                        <label> Semaine</label>
+                                        <select class="form-control" name="semaine_id" id="semaine_id" required="">
+                                           <option value="">Selectionnez</option>
+                                            @foreach ($semaines as $semaine)
+                                            <option value="{{$semaine->id}}" {{$comptage->semaine_id==$semaine->id ? 'selected' : ''}} >{{$semaine->nom}} de {{date('d/m/Y', strtotime($semaine->debut))}} à {{date('d/m/Y', strtotime($semaine->fin))}}</option>
+                                                @endforeach
+
+                                        </select>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">

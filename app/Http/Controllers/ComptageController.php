@@ -116,9 +116,19 @@ class ComptageController extends Controller
      */
     public function edit($id)
     {
-        $communes = $this->communeRepository->getByArrondissement(Auth::user()->arrondissement_id);
+        $user = Auth::user();
+        if($user->role=="prefet" || $user->role=="sous_prefet")
+        {
+            $communes = $this->communeRepository->getByArrondissement(Auth::user()->arrondissement_id);
+
+        }
+        else
+        {
+            $communes =$this->communeRepository->getAllOnLy();
+        }
         $comptage = $this->comptageRepository->getById($id);
-        return view('comptage.edit',compact('comptage','communes'));
+        $semaines = $this->semaineRepository->getAll();
+        return view('comptage.edit',compact('comptage','communes','semaines'));
     }
 
     /**
@@ -142,6 +152,8 @@ class ComptageController extends Controller
      */
     public function destroy($id)
     {
+        $comptage = $this->comptageRepository->getOne($id);
+        $this->renseignementRepository->deleteBySemaineAndComptage($comptage->semaine_id,$comptage->commune_id);
         $this->comptageRepository->destroy($id);
         return redirect('comptage');
     }
