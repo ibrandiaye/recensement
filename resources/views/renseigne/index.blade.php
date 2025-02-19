@@ -60,7 +60,7 @@
                                 
                                   <span class=" alert-success">Renseigner</span>
                                 @else
-                                <span class=" alert-danger">Non Renseigner</span>
+                                <span class=" alert-danger">Non rempli</span>
                                 @endif
 
                             
