@@ -35,7 +35,7 @@
             <div class="card-header">DEPARTEMENT D'ENREGISTREMENT DES UTILISATEURS</div>
             <div class="card-body">
                 
-                <table id="example1" class="table table-bordered table-responsive-md table-striped text-center">
+                <table id="datatable-buttons" class="table table-bordered table-responsive-md table-striped text-center">
                     <thead>
                         <tr>
                             <th>#</th>
