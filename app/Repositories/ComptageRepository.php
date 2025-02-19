@@ -121,7 +121,7 @@ class ComptageRepository extends RessourceRepository{
         elseif ($user->role=="gouverneur") {
             return  DB::table("comptages")
             ->join("communes","comptages.commune_id","=","communes.id")
-            ->where("communes.departement_id",$user->departement_id)
+           // ->where("communes.departement_id",$user->departement_id)
             ->join("departements","communes.departement_id","=","departements.id")
 
             ->where("departements.region_id",$user->region_id)
