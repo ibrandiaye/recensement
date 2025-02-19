@@ -97,7 +97,11 @@
                 </thead>
                 <tbody>
                     @php
-                     $totalr = 0;
+                        $totalr = 0;
+                        $totalIns = 0;
+                        $totalMod = 0;
+                        $totalChang = 0;
+                        $totalRad = 0;
                     @endphp
                      @foreach ($regions as $region)
                      @php
@@ -146,12 +150,16 @@
                                 $totald = $totald + $value->data->cumulrad + $value->data->cumulchan +  $value->data->cumulmod + $value->data->cumulins ;
                                 $totalr =  $totalr + $value->data->cumulrad + $value->data->cumulchan +  $value->data->cumulmod + $value->data->cumulins  ;
                                 $totalre =  $totalre + $value->data->cumulrad + $value->data->cumulchan +  $value->data->cumulmod + $value->data->cumulins  ;
-
+                                $totalIns = $totalIns + $value->data->cumulins;
+                                $totalChang = $totalChang + $value->data->cumulchan;
+                                $totalMod = $totalMod + $value->data->cumulmod;
+                                $totalRad = $totalRad + $value->data->cumulrad;
                              @endphp
                             </td>
 
                         </tr>
                         @endforeach
+                       
                         <tr>
                             <td>total</td>
                             <td colspan="15" style="text-align: right;">{{$totala   }}</td>
@@ -167,6 +175,22 @@
                         <td colspan="15" style="text-align: right;">{{$totalre }}</td>
                     </tr>
                     @endforeach
+                    <tr>
+                        <td>total Inscription</td>
+                        <td colspan="15" style="text-align: right;">{{$totalIns }}</td>
+                    </tr>
+                    <tr>
+                        <td>total Modification</td>
+                        <td colspan="15" style="text-align: right;">{{$totalMod }}</td>
+                    </tr>
+                    <tr>
+                        <td>total Changement </td>
+                        <td colspan="15" style="text-align: right;">{{$totalChang }}</td>
+                    </tr>
+                    <tr>
+                        <td>total Radiation</td>
+                        <td colspan="15" style="text-align: right;">{{$totalRad }}</td>
+                    </tr>
                     <tr>
                         <td>total  </td>
                         <td colspan="15" style="text-align: right;">{{$totalr }}</td>

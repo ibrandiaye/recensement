@@ -100,6 +100,10 @@
                 </thead>
                 @php
                  $total = 0;
+                 $totalIns = 0;
+                 $totalMod = 0;
+                 $totalChang = 0;
+                 $totalRad = 0;
                 @endphp
                 <tbody>
                  @foreach ($data as $value)
@@ -124,14 +128,34 @@
                           {{$value->cumulrad + $value->cumulchan +  $value->cumulmod + $value->cumulins }}
                           @php
                            $total = $total +$value->cumulrad + $value->cumulchan +  $value->cumulmod + $value->cumulins;
+                           $totalIns = $totalIns + $value->cumulins;
+                           $totalChang = $totalChang + $value->cumulchan;
+                           $totalMod = $totalMod + $value->cumulmod;
+                           $totalRad = $totalRad + $value->cumulrad;
                           @endphp
                         </td>
 
                     </tr>
                     @endforeach 
                     <tr>
+                        <td>total Inscription</td>
+                        <td colspan="15" style="text-align: right;">{{$totalIns }}</td>
+                    </tr>
+                    <tr>
+                        <td>total Modification</td>
+                        <td colspan="15" style="text-align: right;">{{$totalMod }}</td>
+                    </tr>
+                    <tr>
+                        <td>total Changement </td>
+                        <td colspan="15" style="text-align: right;">{{$totalChang }}</td>
+                    </tr>
+                    <tr>
+                        <td>total Radiation</td>
+                        <td colspan="15" style="text-align: right;">{{$totalRad }}</td>
+                    </tr>
+                    <tr>
                         <td>total</td>
-                        <td colspan="15" style="text-align: right;">{{$total            }}</td>
+                        <td colspan="15" style="text-align: right;">{{$total }}</td>
                     </tr>
 
                 </tbody>

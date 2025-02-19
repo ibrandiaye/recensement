@@ -99,7 +99,11 @@
                 </thead>
                 <tbody>
                     @php
-                     $totald = 0;
+                        $totald = 0;
+                        $totalIns = 0;
+                        $totalMod = 0;
+                        $totalChang = 0;
+                        $totalRad = 0;
                     @endphp
                     @foreach ($departement->arrondissements as $arrondissement)
                         <tr>
@@ -132,6 +136,10 @@
                               @php
                                 $totala = $totala +$value->data->cumulrad + $value->data->cumulchan +  $value->data->cumulmod + $value->data->cumulins  ;
                                 $totald = $totald + $value->data->cumulrad + $value->data->cumulchan +  $value->data->cumulmod + $value->data->cumulins ;
+                                $totalIns = $totalIns + $value->data->cumulins;
+                                $totalChang = $totalChang + $value->data->cumulchan;
+                                $totalMod = $totalMod + $value->data->cumulmod;
+                                $totalRad = $totalRad + $value->data->cumulrad;
                               @endphp
                             </td>
 
@@ -142,6 +150,22 @@
                             <td colspan="15" style="text-align: right;">{{$totala   }}</td>
                         </tr>
                     @endforeach
+                    <tr>
+                        <td>total Inscription</td>
+                        <td colspan="15" style="text-align: right;">{{$totalIns }}</td>
+                    </tr>
+                    <tr>
+                        <td>total Modification</td>
+                        <td colspan="15" style="text-align: right;">{{$totalMod }}</td>
+                    </tr>
+                    <tr>
+                        <td>total Changement </td>
+                        <td colspan="15" style="text-align: right;">{{$totalChang }}</td>
+                    </tr>
+                    <tr>
+                        <td>total Radiation</td>
+                        <td colspan="15" style="text-align: right;">{{$totalRad }}</td>
+                    </tr>
                     <tr>
                         <td>total</td>
                         <td colspan="15" style="text-align: right;">{{$totald }}</td>
