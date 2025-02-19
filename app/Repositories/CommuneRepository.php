@@ -84,4 +84,52 @@ public function getOneCommuneWithArrondissementdepartementAndRegion($id){
     ->get();
 
  }
+ public function getWithRelationByRegion($region_id)
+ {
+    return DB::table("communes")
+    ->join("arrondissements","communes.arrondissement_id","=","arrondissements.id")
+    ->join("departements","communes.departement_id","=","departements.id")
+    ->join("regions","departements.region_id","=","regions.id")
+    ->select("arrondissements.nom as arrondissement","departements.nom as departement","communes.id","regions.nom as region","communes.nom")
+    ->where("regions.id",$region_id)
+    ->orderBy("regions.nom")
+    ->get();
+
+ }
+ public function getWithRelationByDepartement($departement_id)
+ {
+    return DB::table("communes")
+    ->join("arrondissements","communes.arrondissement_id","=","arrondissements.id")
+    ->join("departements","communes.departement_id","=","departements.id")
+    ->join("regions","departements.region_id","=","regions.id")
+    ->select("arrondissements.nom as arrondissement","departements.nom as departement","communes.id","regions.nom as region","communes.nom")
+    ->where("departements.id",$departement_id)
+    ->orderBy("regions.nom")
+    ->get();
+
+ }
+ public function getWithRelationByArondissement($arrondissement_id)
+ {
+    return DB::table("communes")
+    ->join("arrondissements","communes.arrondissement_id","=","arrondissements.id")
+    ->join("departements","communes.departement_id","=","departements.id")
+    ->join("regions","departements.region_id","=","regions.id")
+    ->select("arrondissements.nom as arrondissement","departements.nom as departement","communes.id","regions.nom as region","communes.nom")
+    ->where("arrondissements.id",$arrondissement_id)
+    ->orderBy("regions.nom")
+    ->get();
+
+ }
+ public function getWithRelationByCommune($commune_id)
+ {
+    return DB::table("communes")
+    ->join("arrondissements","communes.arrondissement_id","=","arrondissements.id")
+    ->join("departements","communes.departement_id","=","departements.id")
+    ->join("regions","departements.region_id","=","regions.id")
+    ->select("arrondissements.nom as arrondissement","departements.nom as departement","communes.id","regions.nom as region","communes.nom")
+    ->where("communes.id",$commune_id)
+    ->orderBy("regions.nom")
+    ->get();
+
+ }
 }

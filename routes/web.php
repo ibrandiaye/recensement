@@ -118,3 +118,4 @@ Route::get('/update/commentaire/{id}/{commentaire}',[LotController::class,'updat
 
 Route::get('/commune/renseigne/{semaine}',[RenseignementController::class,'communeRenseigne'])->name('commune.renseigne')->middleware("auth");
 
+Route::post('/search/renseignement', [RenseignementController::class, 'seaerchCommuneRenseigne'])->name('search.renseignement')->middleware(['auth']);
