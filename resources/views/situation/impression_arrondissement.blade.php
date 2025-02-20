@@ -99,11 +99,23 @@
                     </tr>
                 </thead>
                 @php
-                 $total = 0;
-                 $totalIns = 0;
-                 $totalMod = 0;
-                 $totalChang = 0;
-                 $totalRad = 0;
+                    $total = 0;
+
+                    $totalinsant = 0;
+                    $totalinssem = 0;
+                    $totalcumulins = 0;
+
+                    $totalmodant = 0;
+                    $totalmodsem = 0;
+                    $totalcumulmod = 0;
+
+                    $totalchanant = 0;
+                    $totalchansem = 0;
+                    $totalcumulchan = 0;
+
+                    $totalradan = 0;
+                    $totalradsem = 0;
+                    $totalcumulrad = 0;
                 @endphp
                 <tbody>
                  @foreach ($data as $value)
@@ -127,34 +139,46 @@
                         <td>
                           {{$value->cumulrad + $value->cumulchan +  $value->cumulmod + $value->cumulins }}
                           @php
-                           $total = $total +$value->cumulrad + $value->cumulchan +  $value->cumulmod + $value->cumulins;
-                           $totalIns = $totalIns + $value->cumulins;
-                           $totalChang = $totalChang + $value->cumulchan;
-                           $totalMod = $totalMod + $value->cumulmod;
-                           $totalRad = $totalRad + $value->cumulrad;
+                            $total = $total +$value->cumulrad + $value->cumulchan +  $value->cumulmod + $value->cumulins;
+                            $totalinsant = $totalinsant + $value->insant;
+                            $totalinssem = $totalinssem + $value->inssem ;
+                            $totalcumulins = $totalcumulins + $value->cumulins;
+
+                            $totalmodant = $totalmodant+$value->modant ;
+                            $totalmodsem = $totalmodsem + $value->modsem;
+                            $totalcumulmod = $totalcumulmod + $value->cumulmod;
+
+                            $totalchanant = $totalchanant + $value->chanant ;
+                            $totalchansem = $totalchansem + $value->chansem;
+                            $totalcumulchan = $totalcumulchan + $value->cumulchan ;
+
+                            $totalradan = $totalradan + $value->radant;
+                            $totalradsem = $totalradsem + $value->radsem;
+                            $totalcumulrad = $totalcumulrad + $value->cumulrad;
                           @endphp
                         </td>
 
                     </tr>
                     @endforeach 
-                    <tr>
-                        <td>total Inscription</td>
-                        <td colspan="15" style="text-align: right;">{{$totalIns }}</td>
-                    </tr>
-                    <tr>
-                        <td>total Modification</td>
-                        <td colspan="15" style="text-align: right;">{{$totalMod }}</td>
-                    </tr>
-                    <tr>
-                        <td>total Changement </td>
-                        <td colspan="15" style="text-align: right;">{{$totalChang }}</td>
-                    </tr>
-                    <tr>
-                        <td>total Radiation</td>
-                        <td colspan="15" style="text-align: right;">{{$totalRad }}</td>
-                    </tr>
+                   
+                   
                     <tr>
                         <td>total</td>
+                        <td>{{ $totalinsant }}</td>
+                        <td>{{ $totalinssem }}</td>
+                        <td>{{ $totalcumulins }}</td>
+
+                        <td>{{ $totalmodant }}</td>
+                        <td>{{ $totalmodsem }}</td>
+                        <td>{{ $totalcumulmod }}</td>
+
+                        <td>{{ $totalchanant }}</td>
+                        <td>{{ $totalchansem }}</td>
+                        <td>{{ $totalcumulchan }}</td>
+
+                        <td>{{ $totalradan }}</td>
+                        <td>{{ $totalradsem }}</td>
+                        <td>{{ $totalcumulrad }}</td>
                         <td colspan="15" style="text-align: right;">{{$total }}</td>
                     </tr>
 

@@ -100,10 +100,22 @@
                 <tbody>
                     @php
                         $totald = 0;
-                        $totalIns = 0;
-                        $totalMod = 0;
-                        $totalChang = 0;
-                        $totalRad = 0;
+                        $totalinsant = 0;
+                        $totalinssem = 0;
+                        $totalcumulins = 0;
+
+                        $totalmodant = 0;
+                        $totalmodsem = 0;
+                        $totalcumulmod = 0;
+
+                        $totalchanant = 0;
+                        $totalchansem = 0;
+                        $totalcumulchan = 0;
+
+                        $totalradan = 0;
+                        $totalradsem = 0;
+                        $totalcumulrad = 0;
+                       
                     @endphp
                     @foreach ($departement->arrondissements as $arrondissement)
                         <tr>
@@ -111,6 +123,21 @@
                         </tr>
                         @php
                         $totala = 0;
+                        $totalainsant = 0;
+                        $totalainssem = 0;
+                        $totalacumulins = 0;
+
+                        $totalamodant = 0;
+                        $totalamodsem = 0;
+                        $totalacumulmod = 0;
+
+                        $totalachanant = 0;
+                        $totalachansem = 0;
+                        $totalacumulchan = 0;
+
+                        $totalaradan = 0;
+                        $totalaradsem = 0;
+                        $totalacumulrad = 0;
                        
                         @endphp
                         @foreach ($arrondissement->communes as $value)
@@ -136,10 +163,38 @@
                               @php
                                 $totala = $totala +$value->data->cumulrad + $value->data->cumulchan +  $value->data->cumulmod + $value->data->cumulins  ;
                                 $totald = $totald + $value->data->cumulrad + $value->data->cumulchan +  $value->data->cumulmod + $value->data->cumulins ;
-                                $totalIns = $totalIns + $value->data->cumulins;
-                                $totalChang = $totalChang + $value->data->cumulchan;
-                                $totalMod = $totalMod + $value->data->cumulmod;
-                                $totalRad = $totalRad + $value->data->cumulrad;
+                               
+                                $totalinsant = $totalinsant + $value->data->insant;
+                                $totalinssem = $totalinssem + $value->data->inssem ;
+                                $totalcumulins = $totalcumulins + $value->data->cumulins;
+
+                                $totalmodant = $totalmodant+$value->data->modant ;
+                                $totalmodsem = $totalmodsem + $value->data->modsem;
+                                $totalcumulmod = $totalcumulmod + $value->data->cumulmod;
+
+                                $totalchanant = $totalchanant + $value->data->chanant ;
+                                $totalchansem = $totalchansem + $value->data->chansem;
+                                $totalcumulchan = $totalcumulchan + $value->data->cumulchan ;
+
+                                $totalradan = $totalradan + $value->data->radant;
+                                $totalradsem = $totalradsem + $value->data->radsem;
+                                $totalcumulrad = $totalcumulrad + $value->data->cumulrad;
+
+                                $totalainsant = $totalainsant + $value->data->insant;
+                                $totalainssem = $totalainssem + $value->data->inssem ;
+                                $totalacumulins = $totalacumulins + $value->data->cumulins;
+
+                                $totalamodant = $totalamodant+$value->data->modant ;
+                                $totalamodsem = $totalamodsem + $value->data->modsem;
+                                $totalacumulmod = $totalacumulmod + $value->data->cumulmod;
+
+                                $totalachanant = $totalachanant + $value->data->chanant ;
+                                $totalachansem = $totalachansem + $value->data->chansem;
+                                $totalacumulchan = $totalacumulchan + $value->data->cumulchan ;
+
+                                $totalaradan = $totalaradan + $value->data->radant;
+                                $totalaradsem = $totalaradsem + $value->data->radsem;
+                                $totalacumulrad = $totalacumulrad + $value->data->cumulrad;
                               @endphp
                             </td>
 
@@ -147,27 +202,41 @@
                         @endforeach
                         <tr>
                             <td>total</td>
+                            <td>{{ $totalainsant }}</td>
+                        <td>{{ $totalainssem }}</td>
+                        <td>{{ $totalacumulins }}</td>
+
+                        <td>{{ $totalamodant }}</td>
+                        <td>{{ $totalamodsem }}</td>
+                        <td>{{ $totalacumulmod }}</td>
+
+                        <td>{{ $totalachanant }}</td>
+                        <td>{{ $totalachansem }}</td>
+                        <td>{{ $totalacumulchan }}</td>
+
+                        <td>{{ $totalaradan }}</td>
+                        <td>{{ $totalaradsem }}</td>
+                        <td>{{ $totalacumulrad }}</td>
                             <td colspan="15" style="text-align: right;">{{$totala   }}</td>
                         </tr>
                     @endforeach
-                    <tr>
-                        <td>total Inscription</td>
-                        <td colspan="15" style="text-align: right;">{{$totalIns }}</td>
-                    </tr>
-                    <tr>
-                        <td>total Modification</td>
-                        <td colspan="15" style="text-align: right;">{{$totalMod }}</td>
-                    </tr>
-                    <tr>
-                        <td>total Changement </td>
-                        <td colspan="15" style="text-align: right;">{{$totalChang }}</td>
-                    </tr>
-                    <tr>
-                        <td>total Radiation</td>
-                        <td colspan="15" style="text-align: right;">{{$totalRad }}</td>
-                    </tr>
-                    <tr>
+                   
                         <td>total</td>
+                        <td>{{ $totalinsant }}</td>
+                        <td>{{ $totalinssem }}</td>
+                        <td>{{ $totalcumulins }}</td>
+
+                        <td>{{ $totalmodant }}</td>
+                        <td>{{ $totalmodsem }}</td>
+                        <td>{{ $totalcumulmod }}</td>
+
+                        <td>{{ $totalchanant }}</td>
+                        <td>{{ $totalchansem }}</td>
+                        <td>{{ $totalcumulchan }}</td>
+
+                        <td>{{ $totalradan }}</td>
+                        <td>{{ $totalradsem }}</td>
+                        <td>{{ $totalcumulrad }}</td>
                         <td colspan="15" style="text-align: right;">{{$totald }}</td>
                     </tr>
               
