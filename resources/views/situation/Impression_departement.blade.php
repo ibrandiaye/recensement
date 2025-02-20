@@ -63,7 +63,7 @@
         </div>
         <div>
             <h4><b>EXPEDITEUR : </b>PREFET DU DEPARTEMENT  DE {{$departement->nom}} </h4>
-            <h4><b>DESTINATAIRE  : </b>GOUVERNEUR DU REGION DE {{$departement->region->nom}} </h4>
+            <h4><b>DESTINATAIRE  : </b>GOUVERNEUR REGION DE {{$departement->region->nom}} </h4>
             <h4><b>NUMERO : ..................................</b></h4>
         </div>
        
