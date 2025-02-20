@@ -20,10 +20,10 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-12"
+    <div class="col-12">
         {!! Form::model($arrondissement, ['method'=>'PATCH','route'=>['arrondissement.update', $arrondissement->id],'enctype'=>'multipart/form-data']) !!}
             @csrf
-             <div class="card ">
+             <div class="card">
                         <div class="card-header text-center">FORMULAIRE DE MODIFICATION D'une Arrondissement</div>
                             <div class="card-body">
                                 @if ($errors->any())
