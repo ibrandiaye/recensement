@@ -141,7 +141,7 @@
                     </tr>
                     @foreach ($departement->arrondissements as $arrondissement)
                         <tr>
-                            <td colspan="16">Arrondissement de {{$arrondissement->nom}}</td>
+                            <td colspan="16">@if($arrondissement->is_arrondissement) Arrondissement de @else  Departement de @endif{{$arrondissement->nom}}</td>
                         </tr>
                         @php
                         $totala = 0;

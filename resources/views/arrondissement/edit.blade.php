@@ -55,6 +55,14 @@
                                     </select>
                                 </div>
 
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Est Arrondissement</label>
+                                    <input type="number" name="is_arrondissement" class="form-control" value="{{$arrondissement->is_arrondissement}}"   required>
+                                    </div>
+
+                                </div>
+
                                 <div>
                                     <center>
                                         <button type="submit" class="btn btn-success btn btn-lg "> MODIFIER</button>

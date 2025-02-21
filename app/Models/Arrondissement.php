@@ -9,7 +9,7 @@ class Arrondissement extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'nom','departement_id'
+        'nom','departement_id','is_arrondissement'
     ];
     public function departement()
     {

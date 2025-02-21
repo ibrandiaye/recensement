@@ -6,7 +6,9 @@ use App\Models\Arrondissement;
 use App\Repositories\ArrondissementRepository;
 use App\Repositories\DepartementRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\SimpleExcel\SimpleExcelReader;
+use Vtiful\Kernel\Excel;
 
 class ArrondissementController extends Controller
 {
@@ -207,6 +209,39 @@ class ArrondissementController extends Controller
         $arrondissements = $this->arrondissementRepository->getArrondissementByNom($_GET['q']);
         return response()->json($arrondissements);
     } */
+
+    public function updateArrondissement(Request $request)
+    {
+        if (!$request->hasFile('file')) {
+            return response()->json(['error' => 'Aucun fichier trouvé'], 400);
+        }
+
+        $file = $request->file('file');
+        $filePath = public_path($file->hashName());
+        $file->move(public_path(), $file->hashName());
+
+        // 2. Lecture du fichier avec Spatie SimpleExcelReader
+        $reader = SimpleExcelReader::create($filePath);
+        $rows = $reader->getRows(); // Illuminate\Support\LazyCollection
+        // $rows est une Illuminate\Support\LazyCollection
+
+        // 4. On insère toutes les lignes dans la base de données
+      //  $rows->toArray());
+      $arrondissements = $this->arrondissementRepository->getAllOnLy();
+
+        foreach ($rows as $key => $arrondissement) {
+            foreach ($arrondissements as $key1 => $data) {
+                if($arrondissement["arrondissement"]==$data->nom){
+                    DB ::table("arrondissements")->where("nom",$data->nom)->update(["is_arrondissement"=>false]);
+                }
+            }
+
+        
+        }
+        return redirect()->back()->with('success', 'Données importées avec succès.');
+
+    }
+
 
     public function getByDepartement($departement)
     {

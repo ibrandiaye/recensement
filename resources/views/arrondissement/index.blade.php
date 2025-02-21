@@ -36,6 +36,11 @@
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalform2">
                     importer
                 </button>
+
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalform2m">
+                    Modifier
+                </button>
+                
                 <table id="datatable-buttons" class="table table-bordered table-responsive-md table-striped text-center">
                     <thead>
                         <tr>
@@ -104,4 +109,36 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="exampleModalform2m" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="{{ route('updateArrondissement') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+            <div class="modal-header">
+                <h5 class="modal-title">Modifier</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group no-margin">
+                            <label for="field-7" class="control-label">Document</label>
+                            <input type="file" name="file" class="form-control" required>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                <button type="submit" class="btn btn-primary">Valider</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 @endsection
