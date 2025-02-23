@@ -40,6 +40,7 @@
 
                 <div class="row">
                         @csrf
+                        <input type="hidden" name="semaine" value="{{$semaine}}">
                         <div class="col-lg-2">
                             <label>Region</label>
                             <select class="form-control" name="region_id" id="region_id" required="">

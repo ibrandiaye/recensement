@@ -144,15 +144,15 @@ class RenseignementController extends Controller
         $semaines = $this->renseignementRepository->getBySemaine($semaine);
         foreach ($communes as $key => $value) {
             $communes[$key]->renseigne = false;
-            foreach ($semaines as $key1 => $semaine) {
-                if($semaine->commune_id==$value->id)
+            foreach ($semaines as $key1 => $sema) {
+                if($sema->commune_id==$value->id)
                 {
                     $communes[$key]->renseigne = true;
                 }
             }
         }
 
-       // dd($communes);
+      // dd($semaine);
        return view('renseigne.index',compact('communes',"regions",
        "departements","arrondissements","region_id","departement_id","arrondissement_id","commune_id",'semaine'));
 
@@ -170,6 +170,8 @@ class RenseignementController extends Controller
         $communes =[];
 
         $semaines = $this->renseignementRepository->getBySemaine($request->semaine);
+        $semaine = $request->semaine;
+        //dd($semaines);
         if($request->commune_id)
         {
             $communes = $this->communeRepository->getWithRelationByCommune($request->commune_id);
@@ -191,8 +193,8 @@ class RenseignementController extends Controller
           
         foreach ($communes as $key => $value) {
             $communes[$key]->renseigne = false;
-            foreach ($semaines as $key1 => $semaine) {
-                if($semaine->commune_id==$value->id)
+            foreach ($semaines as $key1 => $semai) {
+                if($semai->commune_id==$value->id)
                 {
                     $communes[$key]->renseigne = true;
                 }
@@ -201,7 +203,7 @@ class RenseignementController extends Controller
 
        // dd($communes);
        return view('renseigne.index',compact('communes',"regions",
-       "departements","arrondissements","region_id","departement_id","arrondissement_id","commune_id"));
+       "departements","arrondissements","region_id","departement_id","arrondissement_id","commune_id","semaine"));
 
     }
 }
