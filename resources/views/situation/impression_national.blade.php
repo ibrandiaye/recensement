@@ -60,8 +60,8 @@
             <h4>MESSAGE DEPART</h4>
         </div>
         <div>
-            <h4><b>EXPEDITEUR : </b>MINISTERE INTERIEUR </h4>
-            <h4><b>DESTINATAIRE  : </b>MINISTERE INTERIEUR </h4>
+            <h4><b>EXPEDITEUR : </b>MINISTERE DE L'INTERIEUR </h4>
+            <h4><b>DESTINATAIRE  : </b>MINISTERE DE L'INTERIEUR </h4>
             <h4><b>NUMERO : ..................................</b></h4>
         </div>
        
@@ -367,5 +367,7 @@
        
       
 </body>
-
+<script>
+    window.print();
+</script>
 </html>
