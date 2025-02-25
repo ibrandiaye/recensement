@@ -477,7 +477,7 @@ class HomeController extends Controller
                 if($situationPasDepartement->nom==$dept->nom)
                 {
                     $depts[$key]->inscription  = $situationPasDepartement->inscription;
-                    $depts[$key]->modification = $situationPasDepartement->modification; 
+                    $depts[$key]->changement = $situationPasDepartement->changement; 
                     $depts[$key]->modification = $situationPasDepartement->modification;
                     $depts[$key]->radiation = $situationPasDepartement->radiation;
                 }
