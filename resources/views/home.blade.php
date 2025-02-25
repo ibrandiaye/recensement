@@ -149,7 +149,46 @@
        
     </div>
   </div>
-  
+   @if ($user->role=="admin")
+    <div class="row">
+        <div class="col-12">
+            <div class="card ">
+                <div class="card-header  text-center">LISTE D'ENREGISTREMENT DES Comptages</div>
+                    <div class="card-body">
+                    
+                        <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Departement</th>
+                                    <th>Inscription</th>
+                                    <th>Modification</th>
+                                    <th>Changement</th>
+                                    <th>Radiation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach ($situationPasDepartements as $comptage)
+                                <tr>
+                                    <td>{{ $comptage->nom }}</td>
+                                    <td>{{ $comptage->inscription }}</td>
+                                    <td>{{ $comptage->modification }}</td>
+                                    <td>{{ $comptage->changement }}</td>
+                                    <td>{{ $comptage->radiation }}</td>
+                                   
+        
+                                </tr>
+                                @endforeach
+        
+                            </tbody>
+                        </table>
+        
+        
+        
+                    </div>
+                </div>
+            </div>    
+        </div>
+    @endif
 @endsection
 @section("js")
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

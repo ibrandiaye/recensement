@@ -484,4 +484,43 @@ class ComptageRepository extends RessourceRepository{
     {
         return DB::table("comptages")->find($id);
     }
+
+    public function situationGroupByDepartement()
+    {
+        return DB::table("comptages")
+        ->join("communes","comptages.commune_id","=","communes.id")
+        ->join("departements","communes.departement_id","=","departements.id")
+        ->join("regions","departements.region_id","=","regions.id")
+
+        ->select(
+            'departements.nom',
+            DB::raw('SUM(comptages.inscription) as inscription'),
+            DB::raw('SUM(comptages.modification) as modification'),
+            DB::raw('SUM(comptages.changement) as changement'),
+            DB::raw('SUM(comptages.radiation) as radiation')
+        )
+        ->groupBy('departements.nom')
+        ->orderBy("regions.nom")
+        ->get();
+    }
+        
+/*
+        public function situationGroupByDepartement()
+    {
+        return DB::table("regions")
+        ->join("departements","departements.region_id","=","regions.id")
+        ->join("communes","communes.departement_id","=","departements.id")
+        ->join("comptages", "comptages.commune_id","=","communes.id")
+
+        ->select(
+            'departements.nom',
+            DB::raw('SUM(comptages.inscription) as inscription'),
+            DB::raw('SUM(comptages.modification) as modification'),
+            DB::raw('SUM(comptages.changement) as changement'),
+            DB::raw('SUM(comptages.radiation) as radiation')
+        )
+        ->groupBy('departements.nom')
+        ->orderBy("regions.nom")
+        ->get();
+    }*/
 }

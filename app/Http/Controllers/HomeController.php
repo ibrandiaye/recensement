@@ -75,10 +75,11 @@ class HomeController extends Controller
             $communes = $this->communeRepository->getByArrondissement($user->arrondissement_id);
 
         }
-       
+       $situationPasDepartements = $this->comptageRepository->situationGroupByDepartement();
+       //dd($situationPasDepartements);
 
         return view('home',compact("inscription","modification","changement","radiation","regions",
-    "departements","arrondissements","communes"));
+    "departements","arrondissements","communes","situationPasDepartements"));
     }
 
     public function statByCommune($commune)
