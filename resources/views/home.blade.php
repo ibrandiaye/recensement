@@ -156,9 +156,10 @@
                 <div class="card-header  text-center">LISTE D'ENREGISTREMENT DES Comptages</div>
                     <div class="card-body">
                     
-                        <table id="datatable-" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                                 <tr>
+                                    <td>#</td>
                                     <th>Departement</th>
                                     <th>Inscription</th>
                                     <th>Modification</th>
@@ -167,8 +168,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach ($situationPasDepartements as $comptage)
+                            @foreach ($situationPasDepartements as $key=> $comptage)
                                 <tr>
+                                    <td>{{ $key+1 }}</td>
                                     <td>{{ $comptage->nom }}</td>
                                     <td>{{ $comptage->inscription }}</td>
                                     <td>{{ $comptage->modification }}</td>
