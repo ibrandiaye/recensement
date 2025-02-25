@@ -10,6 +10,7 @@ use App\Repositories\RegionRepository;
 use App\Repositories\SemaineRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use stdClass;
 
 class HomeController extends Controller
 {
@@ -77,16 +78,36 @@ class HomeController extends Controller
         }
         if($user->role=="admin" )
         {
+            $depts = $this->departementRepository->getAllOnlyOrderByRegion();
             $situationPasDepartements = $this->comptageRepository->situationGroupByDepartement();
+            foreach ($depts as $key => $dept) {
+                $depts[$key] = new stdClass;
+                $depts[$key]->nom  = $dept->nom;
+                $depts[$key]->inscription  = 0;
+                $depts[$key]->modification = 0; 
+                $depts[$key]->changement = 0;
+                $depts[$key]->radiation = 0;
+                foreach ($situationPasDepartements as $key1 => $situationPasDepartement) {
+                    if($situationPasDepartement->nom==$dept->nom)
+                    {
+                        $depts[$key]->inscription  = $situationPasDepartement->inscription;
+                        $depts[$key]->modification = $situationPasDepartement->modification; 
+                        $depts[$key]->modification = $situationPasDepartement->modification;
+                        $depts[$key]->radiation = $situationPasDepartement->radiation;
+                    }
+                } 
+            }
+            
         }
         else
         {
            $situationPasDepartements=[]; 
+           $depts=[];
         }    
-       //dd($situationPasDepartements);
+      // dd($depts);
 
         return view('home',compact("inscription","modification","changement","radiation","regions",
-    "departements","arrondissements","communes","situationPasDepartements"));
+    "departements","arrondissements","communes","situationPasDepartements","depts"));
     }
 
     public function statByCommune($commune)
@@ -439,6 +460,30 @@ class HomeController extends Controller
         //dd($departement);
         return view("situation.impression_national",compact("regions","semaine"));
 
+    }
+
+    public function statByDepartement()
+    {
+        $depts = $this->departementRepository->getAllOnlyOrderByRegion();
+        $situationPasDepartements = $this->comptageRepository->situationGroupByDepartement();
+        foreach ($depts as $key => $dept) {
+            $depts[$key] = new stdClass;
+            $depts[$key]->nom  = $dept->nom;
+            $depts[$key]->inscription  = 0;
+            $depts[$key]->modification = 0; 
+            $depts[$key]->changement = 0;
+            $depts[$key]->radiation = 0;
+            foreach ($situationPasDepartements as $key1 => $situationPasDepartement) {
+                if($situationPasDepartement->nom==$dept->nom)
+                {
+                    $depts[$key]->inscription  = $situationPasDepartement->inscription;
+                    $depts[$key]->modification = $situationPasDepartement->modification; 
+                    $depts[$key]->modification = $situationPasDepartement->modification;
+                    $depts[$key]->radiation = $situationPasDepartement->radiation;
+                }
+            } 
+        }
+        return view("situation.impression_departement_1",compact("depts","situationPasDepartements"));
     }
 }
 

@@ -54,4 +54,11 @@ class DepartementRepository extends RessourceRepository{
         ->where("id",$departement)
         ->first();
        }
+       public function getAllOnlyOrderByRegion(){
+        return DB::table("departements")
+        ->join("regions","departements.region_id","=","regions.id")
+        ->select("departements.*")
+        ->orderBy("regions.nom","asc")
+        ->get();
+       }
 }

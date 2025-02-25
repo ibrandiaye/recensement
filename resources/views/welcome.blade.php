@@ -278,6 +278,14 @@
                                     <li><a href="{{ route('carte.index') }}">Liste des Cartes</a></li>
                                 </ul>
                             </li>
+                           
+                            <li>
+                                <a href="{{ route('stat.by.departement') }}" class="waves-effect waves-light">
+                                    <i class="mdi mdi-gauge"></i>
+                                    <span> Statistique par Departement </span>
+                                </a>
+                              
+                            </li>
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
                                     <i class="mdi mdi-google-pages"></i>

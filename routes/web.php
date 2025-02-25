@@ -123,3 +123,6 @@ Route::post('/search/renseignement', [RenseignementController::class, 'seaerchCo
 
 
 Route::post('/updateArrondissement', [ArrondissementController::class, 'updateArrondissement'])->name('updateArrondissement')->middleware(['auth','admin']);
+
+Route::get('/statbydepartement',[HomeController::class,'statByDepartement'])->name('stat.by.departement')->middleware("auth","admin");
+

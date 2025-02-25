@@ -490,7 +490,7 @@ class ComptageRepository extends RessourceRepository{
         return DB::table("comptages")
         ->join("communes","comptages.commune_id","=","communes.id")
         ->join("departements","communes.departement_id","=","departements.id")
-        ->join("regions","departements.region_id","=","regions.id")
+      //  ->join("regions","departements.region_id","=","regions.id")
 
         ->select(
             'departements.nom',
@@ -500,7 +500,7 @@ class ComptageRepository extends RessourceRepository{
             DB::raw('SUM(comptages.radiation) as radiation')
         )
         ->groupBy('departements.nom')
-        ->orderBy("regions.nom")
+      //  ->orderBy("regions.nom")
         ->get();
     }
         

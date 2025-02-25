@@ -168,7 +168,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach ($situationPasDepartements as $key=> $comptage)
+                            @foreach ($depts as $key=> $comptage)
                                 <tr>
                                     <td>{{ $key+1 }}</td>
                                     <td>{{ $comptage->nom }}</td>
