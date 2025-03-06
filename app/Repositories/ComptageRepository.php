@@ -503,6 +503,26 @@ class ComptageRepository extends RessourceRepository{
       //  ->orderBy("regions.nom")
         ->get();
     }
+    public function situationGroupByDepartementBySemaine($semaine)
+    {
+        return DB::table("comptages")
+        ->join("communes","comptages.commune_id","=","communes.id")
+        ->join("departements","communes.departement_id","=","departements.id")
+        ->join("semaines","comptages.semaine_id","=","semaines.id")
+
+
+        ->select(
+            'departements.nom',
+            DB::raw('SUM(comptages.inscription) as inscription'),
+            DB::raw('SUM(comptages.modification) as modification'),
+            DB::raw('SUM(comptages.changement) as changement'),
+            DB::raw('SUM(comptages.radiation) as radiation')
+        )
+        ->where("semaines.id","<=",$semaine)
+        ->groupBy('departements.nom')
+      //  ->orderBy("regions.nom")
+        ->get();
+    }
         
 /*
         public function situationGroupByDepartement()

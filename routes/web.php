@@ -126,3 +126,5 @@ Route::post('/updateArrondissement', [ArrondissementController::class, 'updateAr
 
 Route::get('/statbydepartement',[HomeController::class,'statByDepartement'])->name('stat.by.departement')->middleware("auth","admin");
 
+Route::get('/statbydepartement/and/semaine/{semaine}',[HomeController::class,'statByDepartementBySemaine'])->name('stat.by.departement.and.semaine')->middleware("auth","admin");
+

@@ -485,5 +485,29 @@ class HomeController extends Controller
         }
         return view("situation.impression_departement_1",compact("depts","situationPasDepartements"));
     }
+
+    public function statByDepartementBySemaine($semaine)
+    {
+        $depts = $this->departementRepository->getAllOnlyOrderByRegion();
+        $situationPasDepartements = $this->comptageRepository->situationGroupByDepartementBySemaine($semaine);
+        foreach ($depts as $key => $dept) {
+            $depts[$key] = new stdClass;
+            $depts[$key]->nom  = $dept->nom;
+            $depts[$key]->inscription  = 0;
+            $depts[$key]->modification = 0; 
+            $depts[$key]->changement = 0;
+            $depts[$key]->radiation = 0;
+            foreach ($situationPasDepartements as $key1 => $situationPasDepartement) {
+                if($situationPasDepartement->nom==$dept->nom)
+                {
+                    $depts[$key]->inscription  = $situationPasDepartement->inscription;
+                    $depts[$key]->changement = $situationPasDepartement->changement; 
+                    $depts[$key]->modification = $situationPasDepartement->modification;
+                    $depts[$key]->radiation = $situationPasDepartement->radiation;
+                }
+            } 
+        }
+        return view("situation.impression_departement_1",compact("depts","situationPasDepartements"));
+    }
 }
 
