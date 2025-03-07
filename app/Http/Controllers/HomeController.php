@@ -512,7 +512,7 @@ class HomeController extends Controller
 
     public function statByRegionBySemaine($semaine)
     {
-        $regions = $this->regionRepository->getAll();
+        $regions = $this->regionRepository->getRegionAsc();
         $situationPasDepartements = $this->comptageRepository->situationGroupByRegionBySemaine($semaine);
         foreach ($regions as $key => $region) {
             $regions[$key] = new stdClass;
