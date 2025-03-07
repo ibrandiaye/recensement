@@ -69,7 +69,8 @@
                                 
                                     <a href="{{ route('semaine.edit', $semaine->id) }}" role="button" class="btn btn-primary"><i class="fas fa-edit" title="modifier"></i></a>
                                     <a href="{{ route('stat.by.departement.and.semaine', $semaine->id) }}" role="button" class="btn btn-info" title="Situation par departement"><i class="fas fa-file"></i></a>
-
+                                    <a href="{{ route('stat.by.region.and.semaine', $semaine->id) }}" role="button" class="btn btn-warning" title="Situation par region"><i class="fas fa-file"></i></a>
+                                    
                                     {!! Form::open(['method' => 'DELETE', 'route'=>['semaine.destroy', $semaine->id], 'style'=> 'display:inline', 'onclick'=>"if(!confirm('Êtes-vous sûr de vouloir supprimer cet enregistrement ?')) { return false; }"]) !!}
                                     <button class="btn btn-danger" title="Supprimer"><i class="far fa-trash-alt" ></i></button>
                                     {!! Form::close() !!}

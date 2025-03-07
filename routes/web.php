@@ -128,3 +128,5 @@ Route::get('/statbydepartement',[HomeController::class,'statByDepartement'])->na
 
 Route::get('/statbydepartement/and/semaine/{semaine}',[HomeController::class,'statByDepartementBySemaine'])->name('stat.by.departement.and.semaine')->middleware("auth","admin");
 
+Route::get('/statbyregion/and/semaine/{semaine}',[HomeController::class,'statByRegionBySemaine'])->name('stat.by.region.and.semaine')->middleware("auth","admin");
+
