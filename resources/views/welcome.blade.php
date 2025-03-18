@@ -130,6 +130,7 @@
                         <ul class="metismenu" id="side-menu">
 
                             <li class="menu-title">Menu</li>
+                            @if ($user->role!="collecteur" )
                             <li>
                                 <a href="{{ route('home') }}" class="waves-effect waves-light">
                                     <i class="mdi mdi-gauge"></i>
@@ -137,7 +138,7 @@
                                 </a>
                               
                             </li>
-                           
+                           @endif
                             @if ($user->role=="admin" )
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
@@ -331,7 +332,7 @@
                                 </ul>
                             </li>
                             @endif
-                           
+                            @if ($user->role!="collecteur" )
                             <li>
                                 <a href="{{ route('semaine.index') }}" class="waves-effect waves-light">
                                     <i class="mdi mdi-calendar"></i>
@@ -339,7 +340,25 @@
                                 </a>
                               
                             </li>
+                            @endif
                             @if ($user->role!="admin")
+                          
+                            @endif
+                            @if ($user->role=="collecteur")
+                            <li>
+                                <a href="javascript: void(0);" class="waves-effect waves-light">
+                                    <i class="mdi mdi-google-pages"></i>
+                                    <span> Carte </span>
+                                    <span class="menu-arrow"></span>
+                                </a>
+                                <ul class="nav-second-level" aria-expanded="false">
+                                    <li><a href="{{ route('carte.create') }}">Ajouter Carte</a></li>
+                                    <li><a href="{{ route('carte.index') }}">Liste des Cartes dans le Departement</a></li>
+                                    <li><a href="{{ route('carteByLocalisationAnUser',$user->id) }}">Liste des Cartes hors departement</a></li>
+                                    
+                                </ul>
+                            </li>
+                            @endif
                             <li>
                                 <a href="{{ route('modifier.motdepasse') }}" class="waves-effect waves-light">
                                     <i class="mdi mdi-key"></i>
@@ -347,9 +366,6 @@
                                 </a>
                               
                             </li>
-                            @endif
-                           
-
                         </ul>
 
                     </div>

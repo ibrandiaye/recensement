@@ -130,3 +130,11 @@ Route::get('/statbydepartement/and/semaine/{semaine}',[HomeController::class,'st
 
 Route::get('/statbyregion/and/semaine/{semaine}',[HomeController::class,'statByRegionBySemaine'])->name('stat.by.region.and.semaine')->middleware("auth","admin");
 
+Route::get('/statbyregion/excel/and/semaine/{semaine}',[HomeController::class,'statByRegionBySemaineExcel'])->name('stat.by.region.and.semaine.excel')->middleware("auth");
+
+
+Route::post('/index/by/commune', [CarteController::class, 'indexByCommune'])->name( 'indexByCommune')->middleware(['auth']);
+
+Route::get('/carte/by/user/and/localisation/{user}',[CarteController::class,'carteByLocalisationAnUser'])->name('carteByLocalisationAnUser')->middleware("auth");
+
+

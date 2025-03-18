@@ -87,6 +87,7 @@
                                 <a href="{{ route('message.national', ["date"=>$semaine->debut]) }}" role="button" class="btn btn-info" title="Situation national"><i toolip="BORDEREAU DE TRANSMISSION" class="fas fa-file"></i></a>
                                  
                                 <a href="{{ route('commune.renseigne', ["semaine"=>$semaine->id]) }}" role="button" class="btn btn-primary" title="situation renseignement commune"><i toolip="Rapport" class="fas fa-database"></i></a>
+                                <a href="{{ route('stat.by.region.and.semaine.excel', ["semaine"=>$semaine->id]) }}" role="button" class="btn btn-primary" title="situation par region"><i toolip="Rapport" class="fas fa-file-excel"></i></a>
 
                                 @endif
 

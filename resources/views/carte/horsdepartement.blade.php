@@ -35,7 +35,7 @@
         <div class="card-header">DEMANDE D'ENREGISTREMENT DES CARTE</div>
             <div class="card-body">
                 <h4>Nombre de cartes collectés : {{$nbCarte}}</h4>
-                <form action="{{ route('indexByCommune') }}" method="post">
+               {{--  <form action="{{ route('indexByCommune') }}" method="post">
                     @csrf
                     <div class="row">
                         <div class="col-md-4">
@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     
-                </form>
+                </form> --}}
                 <table id="example1" class="table table-bordered table-responsive-md table-striped text-center">
                     <thead>
                         <tr>
