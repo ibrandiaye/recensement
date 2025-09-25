@@ -19,7 +19,7 @@
      <link href="{{ asset('assets/libs/datatables/scroller.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
      <link href="{{ asset('assets/libs/datatables/dataTables.colVis.css') }}" rel="stylesheet" type="text/css" />
      <link href="{{ asset('assets/libs/datatables/fixedColumns.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
- 
+
     <!-- App css -->
     <link href=" {{ asset('assets/css/bootstrap.min.css') }} " rel="stylesheet" type="text/css" id="bootstrap-stylesheet" />
     <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
@@ -51,7 +51,7 @@
                         <div class="dropdown-header noti-title">
                             <h6 class="text-overflow m-0">Bienvenue !</h6>
                         </div>
-{{-- 
+{{--
                         <!-- item-->
                         <a href="javascript:void(0);" class="dropdown-item notify-item">
                             <i class="mdi mdi-account-outline"></i>
@@ -73,7 +73,7 @@
                         <div class="dropdown-divider"></div> --}}
 
                         <!-- item-->
-                       
+
                         <a class="dropdown-item notify-item"  href="{{ route('logout') }}"
                         onclick="event.preventDefault();
                                       document.getElementById('logout-form').submit();">
@@ -82,11 +82,11 @@
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf
-                        </form> 
+                        </form>
 
                     </div>
                 </li>
-{{-- 
+{{--
                 <li class="dropdown notification-list">
                     <a href="javascript:void(0);" class="nav-link right-bar-toggle waves-effect">
                         <i class="mdi mdi-settings noti-icon"></i>
@@ -123,7 +123,7 @@
         <div class="left-side-menu">
 
                 <div class="slimscroll-menu">
-                  
+
                     <!--- Sidemenu -->
                     <div id="sidebar-menu">
 
@@ -135,9 +135,16 @@
                                     <i class="mdi mdi-gauge"></i>
                                     <span> Tableau de bords </span>
                                 </a>
-                              
+
                             </li>
-                           
+                             <li>
+                                <a href="{{ route('personne.index') }}" class="waves-effect waves-light">
+                                    <i class="mdi mdi-gauge"></i>
+                                    <span> Rejet </span>
+                                </a>
+
+                            </li>
+
                             @if ($user->role=="admin" )
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
@@ -242,7 +249,7 @@
                             </li>
                             @endif
                             @if ( $user->role=="prefet")
-                            
+
                             @endif
                             @if ($user->role=="admin")
                             <li>
@@ -278,13 +285,13 @@
                                     <li><a href="{{ route('carte.index') }}">Liste des Cartes</a></li>
                                 </ul>
                             </li>
-                           
+
                             <li>
                                 <a href="{{ route('stat.by.departement') }}" class="waves-effect waves-light">
                                     <i class="mdi mdi-gauge"></i>
                                     <span> Statistique par Departement </span>
                                 </a>
-                              
+
                             </li>
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
@@ -331,13 +338,13 @@
                                 </ul>
                             </li>
                             @endif
-                           
+
                             <li>
                                 <a href="{{ route('semaine.index') }}" class="waves-effect waves-light">
                                     <i class="mdi mdi-calendar"></i>
                                     <span> Message </span>
                                 </a>
-                              
+
                             </li>
                             @if ($user->role!="admin")
                             <li>
@@ -345,10 +352,10 @@
                                     <i class="mdi mdi-key"></i>
                                     <span> Modifier Mot de passe </span>
                                 </a>
-                              
+
                             </li>
                             @endif
-                           
+
 
                         </ul>
 
@@ -485,17 +492,17 @@
          function convertDateFormat(dateString) {
     // Séparer la date par le caractère "/"
     const parts = dateString.split('/');
-    
+
     // Vérifier que la date est au bon format
     if (parts.length !== 3) {
         throw new Error("Format de date invalide. Utilisez 'dd/MM/yyyy'.");
     }
-    
+
     // Réorganiser les parties de la date
     const day = parts[0];
     const month = parts[1];
     const year = parts[2];
-    
+
     // Retourner la date au format 'yyyy-MM-dd'
     return `${year}-${month}-${day}`;
 }
@@ -505,25 +512,25 @@
        <!-- Datatable plugin js -->
        <script src="{{ asset('assets/libs/datatables/jquery.dataTables.min.js') }}"></script>
        <script src="{{ asset('assets/libs/datatables/dataTables.bootstrap4.min.js') }}"></script>
-   
+
        <script src="{{ asset('assets/libs/datatables/dataTables.responsive.min.js') }}"></script>
        <script src="{{ asset('assets/libs/datatables/responsive.bootstrap4.min.js') }}"></script>
-   
+
        <script src="{{ asset('assets/libs/datatables/dataTables.buttons.min.js') }}"></script>
        <script src="{{ asset('assets/libs/datatables/buttons.bootstrap4.min.js') }}"></script>
-   
+
        <script src="{{ asset('assets/libs/datatables/buttons.html5.min.js') }}"></script>
        <script src="{{ asset('assets/libs/datatables/buttons.print.min.js') }}"></script>
-   
+
        <script src="{{ asset('assets/libs/datatables/dataTables.keyTable.min.js') }}"></script>
        <script src="{{ asset('assets/libs/datatables/dataTables.fixedHeader.min.js') }}"></script>
        <script src="{{ asset('assets/libs/datatables/dataTables.scroller.min.js') }}"></script>
        <script src="{{ asset('assets/libs/datatables/dataTables.fixedColumns.min.js') }}"></script>
-   
+
        <script src="{{ asset('assets/libs/jszip/jszip.min.js') }}"></script>
        <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
        <script src="{{ asset('assets/libs/pdfmake/vfs_fonts.js') }}"></script>
-   
+
        <!-- Datatables init -->
        <script src="{{ asset('assets/js/pages/datatables.init.js') }} "></script>
        <script src="{{asset('assets/js/jquery.blockUI.js') }}"></script>

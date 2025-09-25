@@ -12,6 +12,7 @@ use App\Http\Controllers\IdentificationController;
 use App\Http\Controllers\InscriptionController;
 use App\Http\Controllers\LotController;
 use App\Http\Controllers\ModificationController;
+use App\Http\Controllers\PersonneController;
 use App\Http\Controllers\PointageController;
 use App\Http\Controllers\RadiationController;
 use App\Http\Controllers\RegionController;
@@ -126,3 +127,5 @@ Route::post('/updateArrondissement', [ArrondissementController::class, 'updateAr
 
 Route::get('/statbydepartement',[HomeController::class,'statByDepartement'])->name('stat.by.departement')->middleware("auth","admin");
 
+
+Route::resource('personne', PersonneController::class)->middleware(['auth']);
