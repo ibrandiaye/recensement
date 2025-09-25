@@ -33,15 +33,53 @@ class CarteController extends Controller
     {
         //getByDepartement
         $user = Auth::user();
-        if($user->role=="prefet")
+
+        if($user->role=="prefet" || $user->role=="collecteur")
         {
             $cartes = $this->carteRepository->getByDepartement($user->departement_id);
+            $nbCarte = $this->carteRepository->countByDepartement($user->departement_id);
+            $communes = $this->communeRepository->getByDepartement($user->departement_id);
+           //dd($cartes);
         }
         else
         {
             $cartes = $this->carteRepository->getAll();
+            $nbCarte = $this->carteRepository->countAll();
+            $communes = $this->communeRepository->getAllOnLy();
+
+
         }
-        return view('carte.index',compact('cartes'));
+        return view('carte.index',compact('cartes','nbCarte','communes'));
+    }
+
+    public function carteByLocalisationAnUser($user)
+    {
+       
+      
+        $cartes = $this->carteRepository->getByUserAndLocalisation($user,false);
+        $nbCarte = $this->carteRepository->countByUserAndLocalisation($user,false);
+       
+        return view('carte.horsdepartement',compact('cartes','nbCarte'));
+    }
+    public function indexByCommune(Request $request)
+    {
+        //getByDepartement
+        $user = Auth::user();
+       // dd($request->commune_id);
+        $cartes = $this->carteRepository->getByCommune($request->commune_id);
+        $nbCarte = $this->carteRepository->countBycommune($request->commune_id);
+        if( $user->role=="collecteur")
+        {
+            
+            $communes = $this->communeRepository->getByDepartement($user->departement_id);
+        }
+        else
+        {
+            $communes = $this->communeRepository->getAllOnLy();
+
+
+        }
+        return view('carte.index',compact('cartes','nbCarte','communes'));
     }
 
     /**
@@ -64,20 +102,41 @@ class CarteController extends Controller
      */
     public function store(Request $request)
     {
-        $user =Auth::user();
-        $communes = $this->communeRepository->getByDepartement($user->departement_id);
-        $localisation = false;
-        foreach ($communes as $key => $commune) {
-             if($commune->nom==$request->commune)
-             {
-                $localisation = true;
-             }
-        }
-        $departement = $this->departementRepository->getOnlyOne($user->departement_id);
-        $request->merge(["departement_id"=>$user->departement_id,"localisation"=>$localisation,'region_id'=>$departement->region_id]);
-        $cartes = $this->carteRepository->store($request->all());
-        return redirect('carte');
+        $commune = $this->communeRepository->getOnlyByName($request->commune);
 
+        if($commune)
+        {
+            $user =Auth::user();
+            $communes = $this->communeRepository->getByDepartement($user->departement_id);
+            $localisation = false;
+            foreach ($communes as $key => $commu) {
+                 if($commu->nom==$request->commune)
+                 {
+                    $localisation = true;
+                 }
+            }
+           
+            $departement = $this->departementRepository->getOnlyOne($commune->departement_id);
+            $request->merge(["departement_id"=>$commune->departement_id,"localisation"=>$localisation,'region_id'=>$departement->region_id,
+        "commune_id"=>$commune->id]);
+            $cartes = $this->carteRepository->store($request->all());
+            //return redirect('carte');
+            if($localisation==false)
+            {
+                
+                return redirect()->back()->withErrors("Carte Enregistre mais appartenant à un commune d'un autre department  : ".$departement->nom);
+
+            }
+            else
+            {
+                return redirect()->back()->with("success","Carte enregistre avec succés");
+            }
+        }
+        else
+        {
+            return redirect()->back()->withErrors("Commune non trouvé");
+        }
+        
     }
 
     /**

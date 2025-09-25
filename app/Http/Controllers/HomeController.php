@@ -58,6 +58,11 @@ class HomeController extends Controller
         $changement = $this->comptageRepository->nbGroupByChangement();
 
         $radiation = $this->comptageRepository->nbGroupRadiation();
+        if($user->role=="collecteur")
+        {
+            return redirect("carte/create");
+        }
+        
         if($user->role=="admin" || $user->role=="superviseur" || $user->role=="correcteur")
         {
             $regions = $this->regionRepository->getAll();
@@ -484,6 +489,77 @@ class HomeController extends Controller
             } 
         }
         return view("situation.impression_departement_1",compact("depts","situationPasDepartements"));
+    }
+
+    public function statByDepartementBySemaine($semaine)
+    {
+        $depts = $this->departementRepository->getAllOnlyOrderByRegion();
+        $situationPasDepartements = $this->comptageRepository->situationGroupByDepartementBySemaine($semaine);
+        foreach ($depts as $key => $dept) {
+            $depts[$key] = new stdClass;
+            $depts[$key]->nom  = $dept->nom;
+            $depts[$key]->inscription  = 0;
+            $depts[$key]->modification = 0; 
+            $depts[$key]->changement = 0;
+            $depts[$key]->radiation = 0;
+            foreach ($situationPasDepartements as $key1 => $situationPasDepartement) {
+                if($situationPasDepartement->nom==$dept->nom)
+                {
+                    $depts[$key]->inscription  = $situationPasDepartement->inscription;
+                    $depts[$key]->changement = $situationPasDepartement->changement; 
+                    $depts[$key]->modification = $situationPasDepartement->modification;
+                    $depts[$key]->radiation = $situationPasDepartement->radiation;
+                }
+            } 
+        }
+        return view("situation.impression_departement_1",compact("depts","situationPasDepartements"));
+    }
+
+    public function statByRegionBySemaine($semaine)
+    {
+        $regions = $this->regionRepository->getRegionAsc();
+        $situationPasDepartements = $this->comptageRepository->situationGroupByRegionBySemaine($semaine);
+        foreach ($regions as $key => $region) {
+            $regions[$key] = new stdClass;
+            $regions[$key]->nom  = $region->nom;
+            $regions[$key]->inscription  = 0;
+            $regions[$key]->modification = 0; 
+            $regions[$key]->changement = 0;
+            $regions[$key]->radiation = 0;
+            foreach ($situationPasDepartements as $key1 => $situationPasDepartement) {
+                if($situationPasDepartement->nom==$region->nom)
+                {
+                    $regions[$key]->inscription  = $situationPasDepartement->inscription;
+                    $regions[$key]->changement = $situationPasDepartement->changement; 
+                    $regions[$key]->modification = $situationPasDepartement->modification;
+                    $regions[$key]->radiation = $situationPasDepartement->radiation;
+                }
+            } 
+        }
+        return view("situation.impression_region_1",compact("regions","situationPasDepartements"));
+    }
+    public function statByRegionBySemaineExcel($semaine)
+    {
+        $regions = $this->regionRepository->getRegionAsc();
+        $situationPasDepartements = $this->comptageRepository->situationGroupByRegionBySemaine($semaine);
+        foreach ($regions as $key => $region) {
+            $regions[$key] = new stdClass;
+            $regions[$key]->nom  = $region->nom;
+            $regions[$key]->inscription  = 0;
+            $regions[$key]->modification = 0; 
+            $regions[$key]->changement = 0;
+            $regions[$key]->radiation = 0;
+            foreach ($situationPasDepartements as $key1 => $situationPasDepartement) {
+                if($situationPasDepartement->nom==$region->nom)
+                {
+                    $regions[$key]->inscription  = $situationPasDepartement->inscription;
+                    $regions[$key]->changement = $situationPasDepartement->changement; 
+                    $regions[$key]->modification = $situationPasDepartement->modification;
+                    $regions[$key]->radiation = $situationPasDepartement->radiation;
+                }
+            } 
+        }
+        return view("situation.impression_region_excel",compact("regions","situationPasDepartements"));
     }
 }
 

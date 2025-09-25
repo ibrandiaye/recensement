@@ -72,6 +72,11 @@ public function getOneCommuneWithArrondissementdepartementAndRegion($id){
  {
     return DB::table("communes")->find($id);
  }
+ public function getOnlyByName($nom)
+ {
+    return DB::table("communes")->where("nom",$nom)->first();
+ }
+
 
  public function getWithRelation()
  {

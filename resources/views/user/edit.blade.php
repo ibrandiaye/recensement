@@ -87,7 +87,8 @@
                             <option value="gouverneur" {{$user->role=="gouverneur" ? 'selected' : ''}}>gouverneur</option>
                             <option value="superviseur" {{$user->role=="superviseur" ? 'selected' : ''}}>superviseur</option>                       
                             <option value="correcteur" {{$user->role=="correcteur" ? 'selected' : ''}}>correcteur</option>                        </select>
-                            
+                            <option value="collecteur" {{$user->role=="collecteur" ? 'selected' : ''}}>collecteur</option>
+
                         </select>
                         </select>
                     </div>

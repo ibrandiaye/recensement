@@ -91,7 +91,7 @@
                                 <option value="gouverneur">gouverneur</option>
                                 <option value="superviseur">superviseur</option>
                                 <option value="correcteur">correcteur</option>
-
+                                <option value="collecteur">collecteur</option>
                             </select>
                         </div>
 

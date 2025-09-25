@@ -1,8 +1,9 @@
 @extends('welcome')
 
+@section('title', '| Enregister Département')
+
 @section('css')
-    
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script src="{{ asset('ETD webapp_files/jquery-1.11.0.min.js') }}"></script>
+<script src="{{ asset('ETD webapp_files/jquery-1.11.0.min.js') }}"></script>
 <script src="{{ asset('ETD webapp_files/jquery.min.js') }}"></script>
 <script src="{{ asset('ETD webapp_files/webserial.js') }}"></script>
 <script src="{{ asset('ETD webapp_files/websocket.js') }}"></script>
@@ -48,172 +49,31 @@
     <!-- <script src="js/misc/require.js"></script> -->
     <link rel="manifest" href="https://www.elyctis.com/demo/elytraveldoc/ver/rc8.6/sen-cni/manifest.json">
 
-    <style>
-      html {
-        height: 100%;
-      }
-      body {
-        height: 100%;
-        margin: 0;
-      }
-      div {
-        font-family: 'Manrope', sans-serif;
-      }
-      .filler {
-        /* background-color: lightgoldenrodyellow; */
-        width: 100%;
-        height: 100%;
-        padding: 60px 0;
-        box-sizing: border-box;
-      }
-      .header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1030;
-      }
-      .footer {
-        bottom: 0;
-        left: 0;
-        position: fixed;
-        right: 0;
-        z-index: 30;
-        height: 55px;
-        font-size: 1.2rem;
-      }
-      .theme, .footer {
-        /* enable this for light */
-        background-color: #FFF;
-        color: #333;
+   
 
-        /* enable this for soft */
-        /*background-color: #EEE;
-        color: #222;*/
 
-        /* enable this for dark */
-        /*background-color: #222;
-        color: #EEE;*/
-      }
-      .details {
-        background-color: #111;
-        position:relative;
-        align-content:center;
-      }
 
-      .box-title {
-        text-shadow: 1px 1px 15px white;
-        font-weight: bolder;
-        color: #333;
-        /*color: #FF851B;*/ /* orange */
-        font-size: 1.1rem;
-      }
-      .elyBrowse {
-        /* margin-top: 10px; */
-        /* border: 1px #Ff951320 solid; */
-        /* border: 1px #20202020 solid; */
-        /* background-color: #FFFFFFA0;
-        border-radius: 6px; */
-        padding: 0.5rem;
-      }
-      elyLabel {
-        /* color: #Ff9513A0; */
-        font-size: small;
-        color: grey;
-        /* font-style: italic; */
-        /* font-weight: bold; */
-      }
-      table,
-      td,
-      th {
-        border: 0px none;
-        padding: 8px;
-        border-collapse: collapse;
-      }
-      .fp-image {
-        margin-top : 10px;
-        padding-top: 0.2rem;
-        margin-right: 10px;
-        padding-right: 0.2rem;
-      }
-      .MRZ {
-        padding-top: 1.25rem;
-        font-family: 'OCRB Regular', monospace;
-        background-color: #FFFFFFA0;
-        letter-spacing: 0.1rem;
-      }
-      .tag-info, .tag-success, .tag-fail, .tag-warning, .tag-pending {
-        padding: 0.3rem;
-        padding-top: 0.05rem;
-        padding-bottom: 0.15rem;
-        padding-right: 0.5rem;
-        margin-left: 10px;
-        border-radius: 10px;
-      }
-      .tag-info { background-color: #FFFFFF; }
-      .tag-success { background-color: #81C784; }
-      .tag-fail { background-color: #FF9E80; }
-      .tag-warning { background-color: #F9E231; }
-      .tag-pending { background-color: #80D7FF; }
+@endsection
 
-      /* Menu Button style */
-      .menu-button {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%; /* Makes the button round */
-        font-size: large;
-        font-weight: bolder;
-        background-color: #EF8105;
-        color: #fff;
-        border: none;
-        display: flex;
-        justify-content: center;
-        vertical-align: middle;
-        align-items: center;
-      }
-      .menu-button:hover {
-        background-color: #FF9513;
-        cursor: pointer;
-      }
+@section('content')
+<div class="row">
 
-      /* Close Button style */
-      .close {
-        position: fixed;
-        top: 5px;
-        right: 10px;
-        /* width: 35px;
-        height: 35px;
-        border-radius: 5%; */
-        font-size: large;
-        font-weight: bolder;
-        /* background-color: #EF8105;
-        color: #fff; */
-        color: #EF8105;
-        /* border: none; */
-      }
-
-      .close:hover,
-      .close:focus {
-        /* background-color: #FF9513; */
-        color: #FF9513;
-        cursor: pointer;
-      }
-    </style>
-  <style id="monica-reading-highlight-style">
-        .monica-reading-highlight {
-          animation: fadeInOut 1.5s ease-in-out;
-        }
-
-        @keyframes fadeInOut {
-          0%, 100% { background-color: transparent; }
-          30%, 70% { background-color: rgba(2, 118, 255, 0.20); }
-        }
-      </style>
-      @endsection
-
-      @section('content')
+  <div class="col-12">
+      <div class="page-title-box">
+          <div class="page-title-right">
+              <ol class="breadcrumb m-0">
+                  <li class="breadcrumb-item"><a href="javascript: void(0);">Tableau de bord</a></li>
+                  <li class="breadcrumb-item active"><a href="javascript: void(0);">Site </a></li>
+              </ol>
+          </div>
+          <h4 class="page-title">Enregistrer un Site</h4>
+      </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12" >
     <!--Header-->
-    <div class="section">
+    <div class="section" style="display: none;">
       <div class="container is-centered">
         <div class="columns">
           <div class="column">
@@ -236,35 +96,167 @@
         <!-- Blur background element -->
         <div id="backgroundElement" class="">
 
-          <!--Global columns-->
-          <div class="columns">
-            <!--Panel left column-->
-            <div class="column">
-              <!--Smartcard reader panel-->
-              <div class="box has-background-light">
-                <div class="box-title has-text-weight-bold">Device details</div>
+          <div class="row">
+            <div class="col-md-8">
+                <form action="{{ route('carte.store') }}" method="POST" enctype="multipart/form-data">
+                  @csrf
+                  <div class="card card-success">
+                  <div class="card-header  text-center">FORMULAIRE D'ENREGISTREMENT D'UN UTILISATEUR</div>
+                      <div class="card-body">
+                          @if ($errors->any())
+                              <div class="alert alert-danger">
+                                  <ul>
+                                      @foreach ($errors->all() as $error)
+                                          <li>{{ $error }}</li>
+                                      @endforeach
+                                  </ul>
+                              </div>
+                          @endif
+                          @if ($message = Session::get('success'))
+                          <div class="alert alert-success">
+                              <p>{{ $message }}</p>
+                          </div>
+                      @endif
+                          <div class="row">
+                            
+                            <div class="col-lg-6 ">
+                              <div class="form-group">
+                                  <label>Nom </label>
+                                  <input type="text" name="nom" id="surName_input"  value="{{ old('nom') }}" class="form-control"required>
+                              </div>
+                          </div>
+                          <div class="col-lg-6  ">
+                              <div class="form-group">
+                                  <label>Prenom </label>
+                                  <input type="text" name="prenom" id="firstName_input"  value="{{ old('prenom') }}" class="form-control"required>
+                              </div>
+                          </div>
+                          <div class="col-lg-6  ">
+                              <div class="form-group">
+                                  <label>Date de Naissance </label>
+                                  <input type="text" id="dob_input" name="datenaiss"  value="{{ old('datenaiss') }}" class="form-control"required>
+                              </div>
+                          </div>
+  
+                          <div class="col-lg-6  ">
+                              <div class="form-group">
+                                  <label>Lieu de Naissance </label>
+                                  <input type="text" id="lieunaiss" name="lieunaiss"  value="{{ old('lieunaiss') }}" class="form-control"required>
+                              </div>
+                          </div>
+                          <div class="col-lg-6  ">
+                            <div class="form-group">
+                                <label>Sexe </label>
+                                <input type="text" name="sexe" id="sex_input"  value="{{ old('sexe') }}" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-6  ">
+                          <div class="form-group">
+                              <label>Numero CNI </label>
+                              <input type="text" name="numcni" id="numcni_input"  value="{{ old('numcni') }}" class="form-control" required>
+                          </div>
+                      </div>
+                          <div class="col-lg-6  ">
+                              <div class="form-group">
+                                  <label>Date D'expiration </label>
+                                  <input type="text" id="doe_input" name="date_expiration"  value="{{ old('date_expiration') }}" class="form-control" required>
+                              </div>
+                          </div>
+                          <div class="col-lg-6  ">
+                            <div class="form-group">
+                                <label>Commune </label>
+                                <input type="text" name="commune" id="commune_input"  value="{{ old('commune') }}" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-6  ">
+                          <div class="form-group">
+                              <label>Numéro Electeur </label>
+                              <input type="text" name="numelec" id="numelec_input"  value="{{ old('numelec') }}" class="form-control"required>
+                          </div>
+                      </div>
+                          <div style="display: none;">
+                            <div class="col-lg-6  ">
+                              <div class="form-group">
+                                  <label>Date D'emission </label>
+                                  <input type="text" id="date_emission" name="date_emission"  value="{{ old('date_emission') }}" class="form-control">
+                              </div>
+                          </div>
+                           
+                          <div class="col-lg-6  ">
+                            <div class="form-group">
+                                <label>Numéro Carte </label>
+                                <input type="text" name="numcarte" id="docNumber_input"  value="{{ old('numcarte') }}" class="form-control" >
+                            </div>
+                        </div>
+                          
+                              <div class="col-lg-6  " >
+                                  <div class="form-group">
+                                      <label>Image </label>
+                                      <input type="text" id="photo_portrait" name="image"  value="{{ old('image') }}" class="form-control"  >
+                                  </div>
+                              </div>
+                              <div class="col-lg-6  " >
+                                  <div class="form-group">
+                                      <label>Mrz </label>
+                                      <input type="text" id="mrz" name="mrz"  value="{{ old('mrz') }}" class="form-control" >
+                                  </div>
+                              </div>
+                              <div class="col-lg-6  " >
+                                  <div class="form-group">
+                                      <label>Nationalite </label>
+                                      <input type="text" id="nationalite" name="nationalite"  value="{{ old('nationalite') }}" class="form-control" >
+                                  </div>
+                              </div>
+                          </div>
+                        
+                          </div>
+  
+                          <div>
+                              <br>
+                              <center>
+                                  <button type="submit" class="btn btn-success btn btn-lg "> ENREGISTRER</button>
+                              </center>
+                          </div>
+                      </div>
+  
+                  </div>
+  
+              </form>
+            </div>
+            <div class="col-md-4">
+              <div class="columns">
+                <!--Panel left column-->
                 <div class="column">
-                  <table>
-                    <tbody><tr>
-                      <td><elylabel id="scannerLabel">Scanner</elylabel></td>
-                      <td><div card="" id="scanner"></div></td>
-                    </tr>
-                    <tr>
-                      <td><elylabel id="scardReaderLabel">Reader</elylabel></td>
-                      <td><div id="scardReader"></div></td>
-                    </tr>
-                    <tr>
-                      <td><elylabel id="scardAtrLabel">ATR</elylabel></td>
-                      <td><div id="scardAtr"></div></td>
-                    </tr>
-                  </tbody></table>
-                  <div class="is-fullwidth has-text-right">
-                    <a class="button is-success is-light" id="connect" style="width: 250px; font-size: 20px;">Connect</a>
+                  <!--Smartcard reader panel-->
+                  <div class="box has-background-light">
+                    <div class="box-title has-text-weight-bold">Device details</div>
+                    <div class="column">
+                      <table>
+                        <tbody><tr>
+                          <td><elylabel id="scannerLabel">Scanner</elylabel></td>
+                          <td><div card="" id="scanner"></div></td>
+                        </tr>
+                        <tr>
+                          <td><elylabel id="scardReaderLabel">Reader</elylabel></td>
+                          <td><div id="scardReader"></div></td>
+                        </tr>
+                        <tr>
+                          <td><elylabel id="scardAtrLabel">ATR</elylabel></td>
+                          <td><div id="scardAtr"></div></td>
+                        </tr>
+                      </tbody></table>
+                      <div class="is-fullwidth has-text-right">
+                        <a class="button is-success is-light" id="connect" style="width: 250px; font-size: 20px;">Connect</a>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+              <img id="portraitDisplay" width="0" height="0">
             </div>
           </div>
+          <!--Global columns-->
+          
 
           <!--Document details-->
           <div class="box has-background-light">
@@ -272,10 +264,11 @@
             <div class="columns">
               <div class="column is-3">
                 <!--Portrait-->
-                <img id="portraitDisplay" width="0" height="0">
+                {{-- <img id="portraitDisplay" width="0" height="0"> --}}
                 <!--Signature-->
                 <img id="signatureDisplay" width="0" height="0">
               </div>
+
               <!--DG1 fields - eMRTD-->
               <div style="display:block" class="column is-fullwidth" id="dg1EmrtdFields">
                 <table>
@@ -321,6 +314,7 @@
                   </tr>
                 </tbody></table>
               </div>
+
               <!--DG1 fields - IDL-->
               <div style="display:none" class="column is-fullwidth" id="dg1IdlFields">
                 <table>
@@ -648,8 +642,40 @@
     </script>
 
 
-<div id="my-app"></div><script src="js/eactest.js"></script><div id="monica-content-root" class="monica-widget" style="pointer-events: auto;"><template shadowrootmode="open">
- 
-    
+<div id="my-app"></div><script src="{{ asset('js/eactest.js') }}"></script><div id="monica-content-root" class="monica-widget" style="pointer-events: auto;"><template shadowrootmode="open">
+
+
    </div>
+  </div>
+</div>
+@endsection
+
+@section("js")
+<script>
+      url_app = '{{ config('app.url') }}';
+      $("#service_id").change(function () {
+        // alert("ibra");
+        var service_id =  $("#service_id").children("option:selected").val();
+       
+            var employe = "<option value=''>Veuillez selectionner</option>";
+            $.ajax({
+                type:'GET',
+                url:url_app+'/employe/by/service/'+service_id,
+                data:'_token = <?php echo csrf_token() ?>',
+                success:function(data) {
+
+                    $.each(data,function(index,row){
+                        //alert(row.nomd);
+                        employe +="<option value="+row.id+">"+row.prenom +" " + row.nom+" " + row.titre+"</option>";
+
+                    });
+
+                    $("#employe_id").empty();
+                    $("#employe_id").append(employe);
+                }
+            });
+        });
+   
+</script>
+
 @endsection
