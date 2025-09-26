@@ -139,13 +139,13 @@
 
                                 </li>
                                  <li>
-                                <a href="{{ route('personne.index') }}" class="waves-effect waves-light">
-                                    <i class="mdi mdi-gauge"></i>
-                                    <span> Rejet </span>
-                                </a>
+                                    <a href="{{ route('personne.index') }}" class="waves-effect waves-light">
+                                        <i class="mdi mdi-gauge"></i>
+                                        <span> Rejet </span>
+                                    </a>
 
-                            </li>
-                            @endif
+                                    </li>
+                                @endif
                             @if ($user->role!="collecteur"  && $user->role!="rejet" )
                             <li>
                                 <a href="{{ route('home') }}" class="waves-effect waves-light">
@@ -157,6 +157,13 @@
 
 
                             @if ($user->role=="admin" )
+                            <li>
+                                <a href="{{ route('personne.index') }}" class="waves-effect waves-light">
+                                    <i class="mdi mdi-gauge"></i>
+                                    <span> Rejet </span>
+                                </a>
+
+                            </li>
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
                                     <i class="mdi mdi-google-pages"></i>
