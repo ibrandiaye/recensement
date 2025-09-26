@@ -130,7 +130,23 @@
                         <ul class="metismenu" id="side-menu">
 
                             <li class="menu-title">Menu</li>
-                            @if ($user->role!="collecteur" )
+                            @if($user->role=="rejet")
+                                 <li>
+                                    <a href="{{ route('home') }}" class="waves-effect waves-light">
+                                        <i class="mdi mdi-gauge"></i>
+                                        <span> Tableau de bords </span>
+                                    </a>
+
+                                </li>
+                                 <li>
+                                <a href="{{ route('personne.index') }}" class="waves-effect waves-light">
+                                    <i class="mdi mdi-gauge"></i>
+                                    <span> Rejet </span>
+                                </a>
+
+                            </li>
+                            @endif
+                            @if ($user->role!="collecteur"  && $user->role!="rejet" )
                             <li>
                                 <a href="{{ route('home') }}" class="waves-effect waves-light">
                                     <i class="mdi mdi-gauge"></i>
@@ -138,13 +154,7 @@
                                 </a>
 
                             </li>
-                             <li>
-                                <a href="{{ route('personne.index') }}" class="waves-effect waves-light">
-                                    <i class="mdi mdi-gauge"></i>
-                                    <span> Rejet </span>
-                                </a>
 
-                            </li>
 
                             @if ($user->role=="admin" )
                             <li>
@@ -249,9 +259,7 @@
                                 </ul>
                             </li>
                             @endif
-                            @if ( $user->role=="prefet")
 
-                            @endif
                             @if ($user->role=="admin")
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
@@ -339,11 +347,6 @@
                                 </ul>
                             </li>
                             @endif
-<<<<<<< HEAD
-
-=======
-                            @if ($user->role!="collecteur" )
->>>>>>> 1e3e43f6df8b2958687c73abf121652566fa67a1
                             <li>
                                 <a href="{{ route('semaine.index') }}" class="waves-effect waves-light">
                                     <i class="mdi mdi-calendar"></i>
@@ -377,12 +380,9 @@
                                 </a>
 
                             </li>
-<<<<<<< HEAD
-                            @endif
 
 
-=======
->>>>>>> 1e3e43f6df8b2958687c73abf121652566fa67a1
+
                         </ul>
 
                     </div>

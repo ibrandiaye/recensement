@@ -34,8 +34,8 @@
         <div class="card ">
             <div class="card-header">DEPARTEMENT D'ENREGISTREMENT DES UTILISATEURS</div>
             <div class="card-body">
-                
-                <table id="datatable-buttons" class="table table-bordered table-responsive-md table-striped text-center">
+
+                <table id="datatable-buttons" class="table table-bordered  table-striped text-center">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -76,7 +76,7 @@
                                             <form action="{{ route('user.password.update') }}" method="POST">
                                                 @csrf
                                             <div class="modal-body">
-                                                
+
                                                 <input type="hidden" name="id" value="{{$user->id}}">
                                                 <div class="row">
                                                     <div class="col-md-12">
@@ -86,7 +86,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group no-margin">
@@ -94,7 +94,7 @@
                                                             <input type="password" name="password_confirmation" class="form-control" id="field-3" placeholder="Address">                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>                                          
+                                            </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
                                                 <button type="submint" class="btn btn-primary">Modifier mot de passe</button>
@@ -102,7 +102,7 @@
                                             </form>
                                         </div>
                                     </div>
-                                </div> 
+                                </div>
 
                             </td>
 

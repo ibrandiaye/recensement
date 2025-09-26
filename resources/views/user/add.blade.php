@@ -60,7 +60,7 @@
                     </div>
                     <div class="col-lg-6">
                         <label>Region</label>
-                        <select class="form-control" name="region_id" id="region_id" required="">
+                        <select class="form-control" name="region_id" id="region_id" >
                             <option value="">Selectionnez</option>
                             @foreach ($regions as $region)
                             <option value="{{$region->id}}">{{$region->nom}}</option>
@@ -71,7 +71,7 @@
                         <div class="col-lg-6">
                             <label>Departement</label>
                             <select class="form-control" id="departement_id" name="departement_id" >
-                              
+
 
                             </select>
                         </div>
@@ -86,12 +86,13 @@
                             <select class="form-control" name="role" required="">
                                 <option value="">Selectionner</option>
                                 <option value="admin">Admin</option>
-                                <option value="prefet">Prefet</option> 
+                                <option value="prefet">Prefet</option>
                                 <option value="sous_prefet">Sous Prefet</option>
                                 <option value="gouverneur">gouverneur</option>
                                 <option value="superviseur">superviseur</option>
                                 <option value="correcteur">correcteur</option>
                                 <option value="collecteur">collecteur</option>
+                                  <option value="rejet">rejet</option>
                             </select>
                         </div>
 
@@ -117,7 +118,7 @@
       $("#region_id").change(function () {
         // alert("ibra");
         var region_id =  $("#region_id").children("option:selected").val();
-       
+
             var departement = "<option value=''>Veuillez selectionner</option>";
             $.ajax({
                 type:'GET',
@@ -153,7 +154,7 @@
 
                 });
 
-            
+
 
 
                 $("#arrondissement_id").append(arrondissement);

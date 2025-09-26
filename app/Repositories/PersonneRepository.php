@@ -52,7 +52,7 @@ class PersonneRepository extends RessourceRepository{
 
      public function countPersonne($user){
 
-        if($user->role=="admin" || $user->role=='superviseur' || $user->role=='correcteur')
+        if($user->role=="rejet" || $user->role=="admin" || $user->role=='superviseur' || $user->role=='correcteur')
         {
             return  DB::table("personnes")
             ->count();

@@ -6,6 +6,7 @@ use App\Repositories\ArrondissementRepository;
 use App\Repositories\CommuneRepository;
 use App\Repositories\ComptageRepository;
 use App\Repositories\DepartementRepository;
+use App\Repositories\PersonneRepository;
 use App\Repositories\RegionRepository;
 use App\Repositories\SemaineRepository;
 use Illuminate\Http\Request;
@@ -20,16 +21,17 @@ class HomeController extends Controller
      * @return void
      */
 
-    protected $comptageRepository; 
+    protected $comptageRepository;
     protected $regionRepository;
     protected $communeRepository;
     protected $departementRepository;
     protected $arrondissementRepository;
     protected $semaineRepository;
 
+    protected $personneRepository;
     public function __construct(ComptageRepository $comptageRepository,RegionRepository $regionRepository,CommuneRepository $communeRepository,
     DepartementRepository $departementRepository,ArrondissementRepository $arrondissementRepository,
-    SemaineRepository $semaineRepository)
+    SemaineRepository $semaineRepository,PersonneRepository $personneRepository)
     {
         $this->middleware('auth');
         $this->comptageRepository = $comptageRepository;
@@ -38,6 +40,7 @@ class HomeController extends Controller
         $this->departementRepository = $departementRepository;
         $this->arrondissementRepository= $arrondissementRepository;
         $this->semaineRepository  = $semaineRepository;
+        $this->personneRepository = $personneRepository;
     }
 
     /**
@@ -52,7 +55,9 @@ class HomeController extends Controller
         $arrondissements =[];
         $communes =[];
         $user = Auth::user();
-        $inscription = $this->comptageRepository->nbGroupByInscription();
+        if($user->role!='rejet')
+        {
+            $inscription = $this->comptageRepository->nbGroupByInscription();
         $modification = $this->comptageRepository->nbGroupByModification();
 
         $changement = $this->comptageRepository->nbGroupByChangement();
@@ -62,7 +67,7 @@ class HomeController extends Controller
         {
             return redirect("carte/create");
         }
-        
+
         if($user->role=="admin" || $user->role=="superviseur" || $user->role=="correcteur")
         {
             $regions = $this->regionRepository->getAll();
@@ -89,30 +94,62 @@ class HomeController extends Controller
                 $depts[$key] = new stdClass;
                 $depts[$key]->nom  = $dept->nom;
                 $depts[$key]->inscription  = 0;
-                $depts[$key]->modification = 0; 
+                $depts[$key]->modification = 0;
                 $depts[$key]->changement = 0;
                 $depts[$key]->radiation = 0;
                 foreach ($situationPasDepartements as $key1 => $situationPasDepartement) {
                     if($situationPasDepartement->nom==$dept->nom)
                     {
                         $depts[$key]->inscription  = $situationPasDepartement->inscription;
-                        $depts[$key]->modification = $situationPasDepartement->modification; 
+                        $depts[$key]->modification = $situationPasDepartement->modification;
                         $depts[$key]->modification = $situationPasDepartement->modification;
                         $depts[$key]->radiation = $situationPasDepartement->radiation;
                     }
-                } 
+                }
             }
-            
+
         }
         else
         {
-           $situationPasDepartements=[]; 
+           $situationPasDepartements=[];
            $depts=[];
-        }    
+        }
       // dd($depts);
 
         return view('home',compact("inscription","modification","changement","radiation","regions",
     "departements","arrondissements","communes","situationPasDepartements","depts"));
+        }
+        else
+        {
+
+            $nbPersonne = $this->personneRepository->countPersonne($user);
+            //dd($sommeByLocalite);
+            $tabStats = $this->personneRepository->getAllOnLy();
+            $regions = $this->regionRepository->getALLWithRelation();
+            foreach ($regions as $key => $region) {
+                foreach ($region->departements as $keyr => $departement) {
+
+                    foreach ($departement->arrondissements as $keya => $arrondissement) {
+                        foreach ($arrondissement->communes as $keyc => $commune) {
+                                foreach ($tabStats as $keytab => $tabStat) {
+                                    if($commune->id == $tabStat->commune_id)
+                                    {
+                                        $tabStats[$keytab]->{"region"} = $region->nom;
+                                        $tabStats[$keytab]->{"departement"} = $departement->nom;
+                                        $tabStats[$keytab]->{"arrondissement"} = $arrondissement->nom;
+                                        $tabStats[$keytab]->{"commune"} = $commune->nom;
+                                    }
+
+                                }
+
+                        }
+                    }
+                }
+            }
+            return view('homerejet',compact("regions","departements","arrondissements","communes","nbPersonne","tabStats"));
+
+        }
+
     }
 
     public function statByCommune($commune)
@@ -123,6 +160,9 @@ class HomeController extends Controller
 
     public function byRegion($id)
     {
+         $user = Auth::user();
+        if($user->role!='rejet')
+        {
         $inscription = $this->comptageRepository->nbGroupByInscriptionByRegion($id);
         $modification = $this->comptageRepository->nbGroupByModificationByRegion($id);
 
@@ -130,11 +170,21 @@ class HomeController extends Controller
 
         $radiation = $this->comptageRepository->nbGroupRadiationByRegion($id);
         $data = array('inscription'=>$inscription,'modification'=>$modification,'changement'=>$changement,'radiation'=>$radiation);
+        }
+        else
+        {
+            $personne = $this->personneRepository->countByRegion($id);
+
+            $data = array('personne'=>$personne);
+        }
         return response()->json($data);
 
     }
     public function byDepartement($id)
     {
+         $user = Auth::user();
+        if($user->role!='rejet')
+        {
         $inscription = $this->comptageRepository->nbGroupByInscriptionByDeoartement($id);
         $modification = $this->comptageRepository->nbGroupByModificationByDepartement($id);
 
@@ -142,11 +192,22 @@ class HomeController extends Controller
 
         $radiation = $this->comptageRepository->nbGroupRadiationByDepartement($id);
         $data = array('inscription'=>$inscription,'modification'=>$modification,'changement'=>$changement,'radiation'=>$radiation);
+        }
+        else
+        {
+            $personne = $this->personneRepository->countByDepartement($id);
+
+
+            $data = array('personne'=>$personne);
+        }
         return response()->json($data);
-       
+
     }
     public function byArrondissement($id)
     {
+         $user = Auth::user();
+        if($user->role!='rejet')
+        {
         $inscription = $this->comptageRepository->nbGroupByInscriptionByArrondissement($id);
         $modification = $this->comptageRepository->nbGroupByModificationByArrondissement($id);
 
@@ -154,11 +215,20 @@ class HomeController extends Controller
 
         $radiation = $this->comptageRepository->nbGroupRadiationByArrondissement($id);
         $data = array('inscription'=>$inscription,'modification'=>$modification,'changement'=>$changement,'radiation'=>$radiation);
+        }
+        else
+        {
+            $personne = $this->personneRepository->countByArrondissement($id);
+            $data = array('personne'=>$personne);
+        }
         return response()->json($data);
-       
+
     }
     public function byCommune($id)
     {
+         $user = Auth::user();
+        if($user->role!='rejet')
+        {
         $inscription = $this->comptageRepository->nbGroupByInscriptionByCommune($id);
         $modification = $this->comptageRepository->nbGroupByModificationByCommune($id);
 
@@ -166,9 +236,16 @@ class HomeController extends Controller
 
         $radiation = $this->comptageRepository->nbGroupRadiationByCommune($id);
         $data = array('inscription'=>$inscription,'modification'=>$modification,'changement'=>$changement,'radiation'=>$radiation);
+        }else
+        {
+            $personne = $this->personneRepository->countByCommune($id);
+
+
+            $data = array('personne'=>$personne,);
+        }
         return response()->json($data);
 
-       
+
     }
 
     public function messageByArrondissement($id,$date)
@@ -238,7 +315,7 @@ class HomeController extends Controller
       $semaine = $this->semaineRepository->getOneByDebut($date);
 
       return view("situation.impression_arrondissement",compact("data","arrondissement","semaine"));
-      
+
 
     }
 
@@ -307,7 +384,7 @@ class HomeController extends Controller
                // $data[]=$ligne;
                 $departement->arrondissements[$keya]->communes[$keyc]->data = $ligne;
             }
-           
+
         }
         //dd($departement);
         return view("situation.impression_departement",compact("departement","semaine"));
@@ -380,10 +457,10 @@ class HomeController extends Controller
                // $data[]=$ligne;
                 $region->departements[$keyd]->arrondissements[$keya]->communes[$keyc]->data = $ligne;
             }
-           
+
         }
      }
-        
+
         //dd($departement);
         return view("situation.impression_region",compact("region","semaine"));
 
@@ -406,21 +483,21 @@ class HomeController extends Controller
                     $ligne->insant = 0;
                     $ligne->inssem = 0;
                     $ligne->cumulins = 0;
-    
+
                     $ligne->modant = 0;
                     $ligne->modsem = 0;
                     $ligne->cumulmod = 0;
-    
+
                     $ligne->chanant = 0;
                     $ligne->chansem = 0;
                     $ligne->cumulchan = 0;
-    
+
                     $ligne->radant = 0;
                     $ligne->radsem = 0;
                     $ligne->cumulrad = 0;
-    
+
                     $ligne->commune = $commune->nom;
-    
+
                     foreach ($situationAncienne as $keysa => $situAnc) {
                         if($situAnc->nom==$commune->nom)
                         {
@@ -432,10 +509,10 @@ class HomeController extends Controller
                             $ligne->cumulmod =  $ligne->cumulmod + $situAnc->modification;
                             $ligne->cumulchan =  $ligne->cumulchan + $situAnc->changement;
                             $ligne->cumulrad =  $ligne->cumulrad + $situAnc->radiation;
-    
-    
+
+
                         }
-    
+
                     }
                     foreach ($situationSemaine as $keyss => $situSem) {
                         if($situSem->nom==$commune->nom)
@@ -448,20 +525,20 @@ class HomeController extends Controller
                             $ligne->cumulmod =  $ligne->cumulmod + $situSem->modification;
                             $ligne->cumulchan =  $ligne->cumulchan + $situSem->changement;
                             $ligne->cumulrad =  $ligne->cumulrad + $situSem->radiation;
-    
-    
+
+
                         }
-    
+
                     }
                    // $data[]=$ligne;
                     $regions[$keyr]->departements[$keyd]->arrondissements[$keya]->communes[$keyc]->data = $ligne;
                 }
-               
+
             }
          }
      }
-    
-        
+
+
         //dd($departement);
         return view("situation.impression_national",compact("regions","semaine"));
 
@@ -475,18 +552,18 @@ class HomeController extends Controller
             $depts[$key] = new stdClass;
             $depts[$key]->nom  = $dept->nom;
             $depts[$key]->inscription  = 0;
-            $depts[$key]->modification = 0; 
+            $depts[$key]->modification = 0;
             $depts[$key]->changement = 0;
             $depts[$key]->radiation = 0;
             foreach ($situationPasDepartements as $key1 => $situationPasDepartement) {
                 if($situationPasDepartement->nom==$dept->nom)
                 {
                     $depts[$key]->inscription  = $situationPasDepartement->inscription;
-                    $depts[$key]->changement = $situationPasDepartement->changement; 
+                    $depts[$key]->changement = $situationPasDepartement->changement;
                     $depts[$key]->modification = $situationPasDepartement->modification;
                     $depts[$key]->radiation = $situationPasDepartement->radiation;
                 }
-            } 
+            }
         }
         return view("situation.impression_departement_1",compact("depts","situationPasDepartements"));
     }
@@ -499,18 +576,18 @@ class HomeController extends Controller
             $depts[$key] = new stdClass;
             $depts[$key]->nom  = $dept->nom;
             $depts[$key]->inscription  = 0;
-            $depts[$key]->modification = 0; 
+            $depts[$key]->modification = 0;
             $depts[$key]->changement = 0;
             $depts[$key]->radiation = 0;
             foreach ($situationPasDepartements as $key1 => $situationPasDepartement) {
                 if($situationPasDepartement->nom==$dept->nom)
                 {
                     $depts[$key]->inscription  = $situationPasDepartement->inscription;
-                    $depts[$key]->changement = $situationPasDepartement->changement; 
+                    $depts[$key]->changement = $situationPasDepartement->changement;
                     $depts[$key]->modification = $situationPasDepartement->modification;
                     $depts[$key]->radiation = $situationPasDepartement->radiation;
                 }
-            } 
+            }
         }
         return view("situation.impression_departement_1",compact("depts","situationPasDepartements"));
     }
@@ -523,18 +600,18 @@ class HomeController extends Controller
             $regions[$key] = new stdClass;
             $regions[$key]->nom  = $region->nom;
             $regions[$key]->inscription  = 0;
-            $regions[$key]->modification = 0; 
+            $regions[$key]->modification = 0;
             $regions[$key]->changement = 0;
             $regions[$key]->radiation = 0;
             foreach ($situationPasDepartements as $key1 => $situationPasDepartement) {
                 if($situationPasDepartement->nom==$region->nom)
                 {
                     $regions[$key]->inscription  = $situationPasDepartement->inscription;
-                    $regions[$key]->changement = $situationPasDepartement->changement; 
+                    $regions[$key]->changement = $situationPasDepartement->changement;
                     $regions[$key]->modification = $situationPasDepartement->modification;
                     $regions[$key]->radiation = $situationPasDepartement->radiation;
                 }
-            } 
+            }
         }
         return view("situation.impression_region_1",compact("regions","situationPasDepartements"));
     }
@@ -546,18 +623,18 @@ class HomeController extends Controller
             $regions[$key] = new stdClass;
             $regions[$key]->nom  = $region->nom;
             $regions[$key]->inscription  = 0;
-            $regions[$key]->modification = 0; 
+            $regions[$key]->modification = 0;
             $regions[$key]->changement = 0;
             $regions[$key]->radiation = 0;
             foreach ($situationPasDepartements as $key1 => $situationPasDepartement) {
                 if($situationPasDepartement->nom==$region->nom)
                 {
                     $regions[$key]->inscription  = $situationPasDepartement->inscription;
-                    $regions[$key]->changement = $situationPasDepartement->changement; 
+                    $regions[$key]->changement = $situationPasDepartement->changement;
                     $regions[$key]->modification = $situationPasDepartement->modification;
                     $regions[$key]->radiation = $situationPasDepartement->radiation;
                 }
-            } 
+            }
         }
         return view("situation.impression_region_excel",compact("regions","situationPasDepartements"));
     }

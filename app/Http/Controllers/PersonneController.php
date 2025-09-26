@@ -57,19 +57,19 @@ class PersonneController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
+       /*  $user = Auth::user();
         if($user->role=="correcteur" || $user->role=="admin" )
-        {
+        { */
             $regions = $this->regionRepository->getAllOnLy();
             //  dd(Auth::user()->arrondissement_id);
               return view('personne.addc',compact('regions'));
-        }
+       /*  }
         else
         {
             $communes = $this->communeRepository->getByArrondissement($user->arrondissement_id);
             //  dd(Auth::user()->arrondissement_id);
               return view('personne.add',compact('communes',));
-        }
+        } */
 
     }
 
