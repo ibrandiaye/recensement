@@ -218,7 +218,7 @@ class RevisionController extends Controller
        $communes = $this->communeRepository->getAll();
         foreach ($rows as $key => $carte)
         {
-            foreach ($communes as $key1 => $commune)
+            /*foreach ($communes as $key1 => $commune)
             {
                 if($carte["commune"]==$commune->nom)
                 {
@@ -238,7 +238,19 @@ class RevisionController extends Controller
                         "motif" =>$carte['motif']
                     ]);
                 }
-            }
+            }*/
+                Revision::create([
+                        "commune"=>$carte['commune'],
+                        "nom"=>$carte["nom"],
+                        "prenom"=>$carte["prenom"],
+                        "numcni"=>$carte["cni"],
+                        "electeur"=>$carte["numelec"],
+                        "sexe"=>$carte["sexe"],
+                        "type"=>$carte["type"],
+                         "lieunaiss"=>$carte["lieunaiss"],
+                        "datenaiss"=>$carte["datenaiss"],
+                        "motif" =>$carte['motif']
+                    ]);
 
         }
         // 5. On supprime le fichier uploadé
