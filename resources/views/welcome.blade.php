@@ -164,6 +164,13 @@
                                 </a>
 
                             </li>
+                             <li>
+                                <a href="{{ route('revision.index') }}" class="waves-effect waves-light">
+                                    <i class="mdi mdi-gauge"></i>
+                                    <span> Revision </span>
+                                </a>
+
+                            </li>
                             <li>
                                 <a href="javascript: void(0);" class="waves-effect waves-light">
                                     <i class="mdi mdi-google-pages"></i>

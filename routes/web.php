@@ -17,6 +17,7 @@ use App\Http\Controllers\PointageController;
 use App\Http\Controllers\RadiationController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\RenseignementController;
+use App\Http\Controllers\RevisionController;
 use App\Http\Controllers\SemaineController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -129,3 +130,19 @@ Route::get('/statbydepartement',[HomeController::class,'statByDepartement'])->na
 
 
 Route::resource('personne', PersonneController::class)->middleware(['auth']);
+
+
+Route::resource('revision', RevisionController::class)->middleware(['auth']);
+Route::post('/importer/revision',[RevisionController::class,'importExcel'])->name("importer.revision")->middleware("auth");
+
+Route::get('/', function () {
+    $revision = null;
+    $erreur = "";
+    $nom = "";
+    $prenom = "";
+    $nin = "";
+    return view('revision',compact("revision",'erreur','nom','prenom','nin'));
+});
+
+Route::post('/chercher/revision',[RevisionController::class,'getByParametre'])->name("getByParametre");
+
