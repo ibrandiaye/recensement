@@ -31,9 +31,9 @@ class RevisionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //getByDepartement
+       /* //getByDepartement
         $user = Auth::user();
 
         if($user->role=="prefet" || $user->role=="collecteur")
@@ -50,8 +50,14 @@ class RevisionController extends Controller
             $communes = $this->communeRepository->getAllOnLy();
 
 
-        }
-        return view('revision.index',compact('revisions','nbRevision','communes'));
+        }*/
+            $nbRevision='';
+            $search = $request->input('search');
+            $revisions = Revision::where('numcni', 'like', "%$search%")
+                  ->paginate(10)
+                  ->appends(['search' => $search]);
+
+        return view('revision.index',compact('revisions'));
     }
 
     public function revisionByLocalisationAnUser($user)
@@ -189,6 +195,12 @@ class RevisionController extends Controller
     public function destroy($id)
     {
         $this->revisionRepository->destroy($id);
+        return redirect('revision');
+    }
+
+    public function destroyAll()
+    {
+        $this->revisionRepository->deleteAll();
         return redirect('revision');
     }
 

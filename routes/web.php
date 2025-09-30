@@ -146,3 +146,5 @@ Route::get('/', function () {
 
 Route::post('/chercher/revision',[RevisionController::class,'getByParametre'])->name("getByParametre");
 
+Route::get('/delete/all/revision',[RevisionController::class,'destroyAll'])->name('delete.all.revision')->middleware("auth","admin");
+

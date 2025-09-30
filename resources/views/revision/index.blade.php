@@ -3,6 +3,12 @@
 
 
 @section('content')
+<style>
+#pag p {
+    padding: 10px;
+}
+
+</style>
 <div class="row">
     <div class="col-sm-12">
         <div class="page-title-box">
@@ -58,9 +64,25 @@
                     </div>
 
                 </form> --}}
-                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalform2">
-                    importer
-                </button>
+                <div class="row">
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalform2">
+                            importer
+                        </button>
+                    </div>
+                     <div class="col-md-4">
+                        <a class="btn btn-danger" onclick="if(!confirm('Êtes-vous sûr de vouloir supprimer cet enregistrement ?')) { return false; }" href="{{ route('delete.all.revision') }}"> <i class="far fa-trash-alt"></i> Suprimer</a>
+
+                    </div>
+                     <div class="col-md-4">
+                        <form method="GET" action="{{ route('revision.index') }}">
+                                <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher Par nin...">
+                                <button type="submit" class="btn btn-info">Rechercher</button>
+                            </form>
+                    </div>
+                </div>
+
+
                 <table id="example1" class="table table-bordered table-responsive-md table-striped text-center">
                     <thead>
                         <tr>
@@ -97,6 +119,10 @@
 
                     </tbody>
                 </table>
+
+                 <div id="pag">
+                    {{ $revisions->links() }}
+                </div>
 
             </div>
     </div>

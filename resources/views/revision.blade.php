@@ -57,16 +57,16 @@
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <label>NIN</label>
-                                        <input type="text" class="form-control" id="nom" name="nin" value="{{ old('nin' ) ?? $nin }} " required>
+                                        <input type="text" class="form-control" id="nom" name="nin"  required>
                                     </div>
 
                                     <div class="col-lg-4">
                                         <label>Prenom</label>
-                                        <input type="text" class="form-control" value="{{ old('prenom') ?? $prenom }}" id="prenom" name="prenom" >
+                                        <input type="text" class="form-control"  id="prenom" name="prenom" >
                                     </div>
                                     <div class="col-lg-4">
                                         <label>Nom</label>
-                                        <input type="text" class="form-control" id="nom" name="nom" value="{{ old('nom' ) ?? $nom }}" >
+                                        <input type="text" class="form-control" id="nom" name="nom"  >
 
 
                                     </div>
