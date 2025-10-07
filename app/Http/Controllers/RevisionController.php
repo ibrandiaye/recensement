@@ -209,7 +209,7 @@ class RevisionController extends Controller
          /*  Excel::import(new CommuneImport,$request['file']);
        //  dd($data);
         return redirect()->back()->with('success', 'Données importées avec succès.'); */
-        ini_set('max_execution_time', 300);
+        ini_set('max_execution_time', 30000);
         $this->validate($request, [
             'file' => 'bail|required|file|mimes:xlsx'
         ]);
