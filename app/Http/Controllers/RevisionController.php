@@ -259,8 +259,8 @@ class RevisionController extends Controller
                         "electeur"=>$carte["numelec"],
                         "sexe"=>$carte["sexe"],
                         "type"=>$carte["type"],
-                         "lieunaiss"=>$carte["lieunaiss"],
-                        "datenaiss"=>$carte["datenaiss"],
+                         "lieunaiss"=>$carte["lieunaiss"] ?? null,
+                        "datenaiss"=>$carte["datenaiss"] ?? null,
                         "motif" =>$carte['motif']
                     ]);
 
