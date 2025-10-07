@@ -104,8 +104,8 @@
                                                 <h6> [ Etat Civil ]</h6>
                                                     Prenom : <strong>{{ $revision->prenom  }}</strong><br>
                                                     Nom : <strong>{{ $revision->nom  }}</strong><br>
-                                                    Date de Naissance : <strong>{{ $revision->datenaiss }}</strong><br>
-                                                    Lieu de Naissance : <strong>{{ $revision->lieunaiss }}</strong><br>
+                                                   {{--  Date de Naissance : <strong>{{ $revision->datenaiss }}</strong><br>
+                                                    Lieu de Naissance : <strong>{{ $revision->lieunaiss }}</strong><br> --}}
                                                 </div>
                                                 <div class="col-md-6">
                                                     <h6> [ Liste Electorale ]</h6>
