@@ -251,14 +251,31 @@ class RevisionController extends Controller
                     ]);
                 }
             }*/
+                $type = " ";
+                if($carte["type"]==1)
+                {
+                    $type = "inscription";
+                }
+                else if($carte["type"]==2)
+                {
+                    $type = "modification";
+                }
+                else if($carte["type"]==3)
+                {
+                    $type = "changement";
+                }
+                else if($carte["type"]==4)
+                {
+                    $type = "radiation";
+                }
                 Revision::create([
                         "commune"=>$carte['commune'],
                         "nom"=>$carte["nom"],
                         "prenom"=>$carte["prenom"],
                         "numcni"=>$carte["cni"],
                         "electeur"=>$carte["numelec"],
-                        "sexe"=>$carte["sexe"],
-                        "type"=>$carte["type"],
+                        "sexe"=>$carte["sexe"] ?? null,
+                        "type"=>$type,//$carte["type"],
                          "lieunaiss"=>$carte["lieunaiss"] ?? null,
                         "datenaiss"=>$carte["datenaiss"] ?? null,
                         "motif" =>$carte['motif']
