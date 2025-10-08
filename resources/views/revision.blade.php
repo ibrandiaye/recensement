@@ -90,15 +90,15 @@
                                             @endif
                                             @if(!empty($revision))
                                                 @if ($revision->type=="inscription")
-                                                    <p>Votre demande  d'inscription a été accepté</p>
+                                                    <p>Votre demande  d'inscription a été acceptée</p>
                                                 @elseif ($revision->type=="modification")
-                                                    <p>Votre demande de modification a été accepté</p>
+                                                    <p>Votre demande de modification a été acceptée</p>
                                                 @elseif ($revision->type=="changement")
-                                                    <p>Votre demande de changement de statut a été accepté</p>
+                                                    <p>Votre demande de changement de statut a été acceptée</p>
                                                  @elseif ($revision->type=="radiation")
-                                                    <p>Votre demande de radiation a été accepté</p>
+                                                    <p>Votre demande de radiation a été acceptée</p>
                                                   @elseif ($revision->type=="rejet")
-                                                    <p>Votre demande a rejeté pour motif :  {{ $revision->motif }}</p>
+                                                    <p>Votre demande a été rejetée pour motif :  {{ $revision->motif }}</p>
                                                 @endif
                                                 <div class="col-md-6">
                                                 <h6> [ Etat Civil ]</h6>

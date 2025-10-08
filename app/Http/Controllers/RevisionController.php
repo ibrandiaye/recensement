@@ -268,6 +268,14 @@ class RevisionController extends Controller
                 {
                     $type = "radiation";
                 }
+                else if($carte["type"]==5)
+                {
+                    $type = "rejet";
+                }
+                else
+                {
+                    $type = $carte["type"];
+                }
                 Revision::create([
                         "commune"=>$carte['commune'],
                         "nom"=>$carte["nom"],
